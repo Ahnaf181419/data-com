@@ -21,6 +21,7 @@ export default {
         { type: 'p', text: '**Multiplexing:** each source produces a signal in a similar frequency range. Inside the MUX they modulate different carriers ($f_1, f_2, f_3$), and the results are added into a composite signal.' },
         { type: 'math', tex: 's_1(t) + f_{c1} = M_1(t),\\ \\ s_2(t) + f_{c2} = M_2(t),\\ \\dots \\ \\to \\ \\text{composite}' },
         { type: 'p', text: '**Demultiplexing:** a series of filters splits the composite signal into its components. Each is passed to a demodulator that removes the carrier: $M_1(t) - f_{c1} = s_1(t)$.' },
+        { type: 'diagram', id: 'fdmsystem', props: { caption: 'Example 6.1: three 4 kHz voice channels shifted to 20–24, 24–28 and 28–32 kHz, then filtered and shifted back.' } },
       ],
     },
     {
@@ -37,7 +38,8 @@ export default {
       blocks: [
         { type: 'p', text: 'Lower-bandwidth lines are combined into higher-bandwidth lines (many leased lines → fewer but bigger channels). For analog lines, FDM is used.' },
         { type: 'table', head: ['Level', 'Made of', 'Voice channels', 'Bandwidth (slide)'], rows: [['Group', '12 voice channels × 4 kHz', '12', '48 kHz'], ['Supergroup', '5 groups', '60', '240 kHz'], ['Master group', '10 supergroups', '600', '2.52 MHz'], ['Jumbo group', '6 master groups', '3600', '16.984 MHz']] },
-        { type: 'note', text: 'The master and jumbo bandwidths on the slide include guard bands (10 × 240 kHz = 2.40 MHz without them; 6 × 2.52 MHz = 15.12 MHz).' },
+                { type: 'diagram', id: 'hierarchy' },
+{ type: 'note', text: 'The master and jumbo bandwidths on the slide include guard bands (10 × 240 kHz = 2.40 MHz without them; 6 × 2.52 MHz = 15.12 MHz).' },
       ],
     },
     {

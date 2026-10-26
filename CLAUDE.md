@@ -28,11 +28,15 @@ Live at https://ahnaf181419.github.io/data-com/ (GitHub Pages, deployed on every
 - `src/data/*.js` — one module per chapter; `syllabusData.js` lists them in study order.
   Module shape: `{ id, chapter, title, wave, sources, sections: [{ heading, blocks }], formulas, examples,
   flashcards, quiz, solvers }`. Block types: `p`, `list`, `math`, `table`, `note`, `constellation`,
-  `lab` (id in `components/Labs.jsx`), `diagram` (id in `components/Diagrams.jsx`).
+  `lab` (id in `components/Labs.jsx`), `diagram` (id in `components/Diagrams.jsx`; parameterised exam
+  diagrams such as `spectrum`, `delay`, `tdmframe` are in `components/ExamDiagrams.jsx`).
   Text uses `$inline math$` and `**bold**`.
 - `src/data/checks.js` — one "check yourself" question per lesson, keyed by module id + exact section heading.
   Every section needs one (a test enforces it).
-- `src/data/examPrep.js` (likely questions, traps), `src/data/pastPapers.js` (past finals with model answers).
+- `src/data/examPrep.js` (likely questions, traps), `src/data/pastPapers.js` (past finals with key-point answers).
+- `src/data/answerScripts.js` — the full exam-format answer for every past-paper item and likely question
+  (attached as `script`). Extra block types: `h` (step heading), `given`, `answer` (boxed final answer, every
+  past-paper script ends with one), `division` (CRC long division), `pre` (column working). Diagrams take `props`.
 - `src/lib/solvers.js` — pure calculators returning `{ result, steps }` (steps are LaTeX). UI configs in
   `components/Solvers.jsx`.
 - `src/lib/data.test.js` — every LaTeX string compiles with KaTeX, quiz answer indices are valid, checks exist,
