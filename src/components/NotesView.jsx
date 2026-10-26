@@ -1,5 +1,5 @@
 import { BlockMath, InlineMath } from 'react-katex';
-import { LABS } from './Labs.jsx';
+import { LABS, divideSteps } from './Labs.jsx';
 import { DIAGRAMS } from './Diagrams.jsx';
 
 // Renders text with $inline math$ and **bold**.
@@ -80,8 +80,61 @@ function Constellation() {
   );
 }
 
+// Modulo-2 long division laid out as it is written by hand.
+function LongDivision({ dividend, divisor, label }) {
+  const { steps, q, rem } = divideSteps(dividend, divisor);
+  const n = divisor.length;
+  const pad = (s, i) => ' '.repeat(i) + s;
+  return (
+    <div className="not-prose my-5">
+      {label && <p className="mb-1 font-sans text-sm text-ash">{label}</p>}
+      <pre className="overflow-x-auto rounded-xl border border-line bg-ink p-4 font-mono text-[0.98rem] leading-6 text-text">
+        <span className="text-gold">{pad(q, 2 * n + 2)}</span>
+        {'  ← quotient\n'}
+        <span className="text-ash">{divisor} ) </span>
+        {dividend}
+        {steps.map((s) => (
+          <span key={s.i}>
+            {'\n'}
+            <span className={s.use[0] === '1' ? 'text-gold' : 'text-ash'}>{pad(s.use, s.i + n + 3)}</span>
+            {'\n'}
+            {pad('─'.repeat(n), s.i + n + 3)}
+            {'\n'}
+            {pad(s.x.slice(1) + (dividend[s.i + n] ?? ''), s.i + 1 + n + 3)}
+          </span>
+        ))}
+        <span className="text-gold">{'  ← remainder ' + rem}</span>
+      </pre>
+    </div>
+  );
+}
+
 export function Block({ b }) {
   switch (b.type) {
+    case 'h':
+      return <h4 className="mb-1 mt-6 font-sans text-[0.8rem] font-semibold uppercase tracking-[0.12em] text-gold first:mt-0">{b.text}</h4>;
+    case 'given':
+      return (
+        <div className="my-3 rounded-lg border border-line bg-ink/60 px-4 py-2.5 font-sans text-[0.98rem] leading-relaxed">
+          <span className="mr-2 font-semibold text-ash">Given:</span>
+          {b.items.map((t, i) => (
+            <span key={i} className="mr-4 inline-block whitespace-nowrap">
+              <Rich text={t} />
+            </span>
+          ))}
+        </div>
+      );
+    case 'answer':
+      return (
+        <div className="my-4 rounded-xl border-2 border-gold/70 bg-gold/[0.07] px-4 py-3">
+          <span className="mr-2 font-sans text-sm font-bold text-gold">∴ Answer</span>
+          <Rich text={b.text} />
+        </div>
+      );
+    case 'division':
+      return <LongDivision dividend={b.dividend} divisor={b.divisor} label={b.label} />;
+    case 'pre':
+      return <pre className="not-prose my-4 overflow-x-auto rounded-xl border border-line bg-ink p-4 font-mono text-[0.98rem] leading-6 text-text">{b.lines.join('\n')}</pre>;
     case 'math':
       return <MathBlock tex={b.tex} />;
     case 'list': {
@@ -112,7 +165,7 @@ export function Block({ b }) {
     }
     case 'diagram': {
       const D = DIAGRAMS[b.id];
-      return <D />;
+      return <D {...b.props} />;
     }
     default:
       return (

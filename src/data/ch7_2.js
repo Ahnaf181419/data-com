@@ -31,6 +31,7 @@ export default {
     {
       heading: 'Propagation modes',
       blocks: [
+        { type: 'diagram', id: 'propagation' },
         { type: 'table', head: ['Mode', 'Frequency', 'Behaviour', 'Example'], rows: [['Ground wave', '< 3 MHz (30 Hz – 3 MHz: ELF, VF, VLF, LF, MF)', 'Follows the contour of the earth; travels considerable distances', 'AM radio'], ['Sky wave', '3 – 30 MHz (HF)', 'Reflected from the ionosphere; can hop back and forth between ionosphere and earth', 'International broadcast'], ['Line of sight', '> 30 MHz (30 MHz – 900 THz: VHF, UHF, SHF, EHF, infrared, optical)', 'Ground and sky wave do not work; antennas must be within effective LOS', 'Satellite, terrestrial microwave']] },
         { type: 'p', text: 'Above 30 MHz the ionosphere does not reflect signals, so satellites are reachable. On the ground, refraction extends the effective LOS beyond the optical horizon.' },
       ],

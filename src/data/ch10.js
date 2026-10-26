@@ -20,6 +20,7 @@ export default {
       heading: 'Redundancy and detection',
       blocks: [
         { type: 'p', text: 'Error detection decides whether received data is correct without a copy of the original. It uses **redundancy**: the sender adds extra bits (dataword → codeword) and the receiver checks and removes them. Methods: **parity check**, **CRC**, **checksum**.' },
+        { type: 'diagram', id: 'redundancy' },
         { type: 'p', text: '**Error correction** additionally needs the exact number of corrupted bits and, more importantly, their positions.' },
       ],
     },

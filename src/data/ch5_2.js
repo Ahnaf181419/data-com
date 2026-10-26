@@ -19,6 +19,7 @@ export default {
       blocks: [
         { type: 'list', items: ['The carrier amplitude follows the amplitude of the modulating signal; frequency and phase stay the same.', 'A positive signal gives proportionally high amplitude, a negative signal proportionally low amplitude.', 'The modulating signal becomes an **envelope** to the carrier.', 'Normally implemented with a simple multiplier (modulating signal × carrier from an oscillator).', 'The final signal is non-periodic, so its frequency domain is continuous.'] },
         { type: 'math', tex: 'B_{AM} = 2B' },
+        { type: 'diagram', id: 'modwave', props: { kind: 'am' } },
         { type: 'p', text: 'The AM bandwidth is twice the bandwidth $B$ of the modulating (audio) signal, centred on the carrier frequency.' },
       ],
     },
@@ -27,6 +28,7 @@ export default {
       blocks: [
         { type: 'list', items: ['Audio signal bandwidth is usually 5 kHz, so an AM station needs $2 \\times 5 = 10$ kHz.', 'The FCC (Federal Communications Commission) sets the AM spectrum and allows 10 kHz per station.', 'AM carrier frequencies: 530–1700 kHz.', 'Carriers must be at least 10 kHz apart. If one station uses 1100 kHz, the next cannot be lower than 1110 kHz.'] },
         { type: 'math', tex: '\\#\\text{stations} = \\frac{\\text{total BW}}{\\text{channel BW}} = \\frac{1700 - 530}{10} = 117' },
+        { type: 'diagram', id: 'spectrum', props: { segs: [{ label: 'St 1', fc: '535' }, { label: 'St 2', fc: '545' }, { label: 'St 3', fc: '555' }, { kind: 'gap', w: 1.5 }, { label: 'St 117', fc: '1695' }], spans: [{ from: 0, to: 5, label: '1170 kHz → 117 stations' }, { from: 0, to: 1, label: '10 kHz', row: 1 }], ticks: [[0, '530'], [1, '540'], [2, '550'], [3, '560'], [4, '1690'], [5, '1700']], unit: 'kHz', caption: 'AM band allocation: 10 kHz per station.' } },
         { type: 'math', tex: '\\text{St}_n\\text{ starts at } (n-1)\\times 10\\text{ kHz} + 530\\text{ kHz}, \\quad f_{c,n} = \\text{start} + 5\\text{ kHz}' },
       ],
     },
@@ -35,6 +37,7 @@ export default {
       blocks: [
         { type: 'list', items: ['The carrier frequency follows the amplitude of the modulating signal; amplitude and phase stay constant.', 'Positive signal → higher frequency, negative signal → lower frequency.', 'Normally implemented with a voltage-controlled oscillator (VCO), as with FSK.'] },
         { type: 'math', tex: 'B_{FM} = 2(1+\\beta)B, \\quad \\beta = 4\\ (\\text{common})' },
+        { type: 'diagram', id: 'modwave', props: { kind: 'fm' } },
         { type: 'p', text: 'The exact bandwidth is hard to determine and is found empirically. It is about 10 times the modulating signal’s bandwidth.' },
       ],
     },
@@ -43,6 +46,7 @@ export default {
       blocks: [
         { type: 'list', items: ['Stereo audio broadcast bandwidth is about 15 kHz.', '$B_{FM} = 2(1+4) \\times 15 = 150$ kHz, plus a 50 kHz guard band (unused frequencies so neighbours do not overlap) = **200 kHz** per station.', 'FM carriers range from 88 to 108 MHz, at least 200 kHz apart.', 'Total 20 MHz / 200 kHz = 100 possible stations, but the FCC allows only alternate allocations in an area, so only 50 operate at any one time.'] },
         { type: 'math', tex: '\\text{St}_n\\text{ starts at } (n-1) \\times 200\\text{ kHz} + 88\\text{ MHz}, \\quad f_{c,n} = \\text{start} + 100\\text{ kHz}' },
+        { type: 'diagram', id: 'spectrum', props: { segs: [{ label: 'St 1', fc: '88.1' }, { kind: 'empty', label: 'no station' }, { label: 'St 3', fc: '88.5' }, { kind: 'gap', w: 1.4 }, { label: 'St 99', fc: '107.7' }, { kind: 'empty', label: 'no st.' }], spans: [{ from: 0, to: 6, label: '20 MHz → 100 possible, 50 used' }, { from: 0, to: 1, label: '200 kHz', row: 1 }], ticks: [[0, '88'], [1, '88.2'], [2, '88.4'], [6, '108']], unit: 'MHz', caption: 'FM band allocation: alternate 200 kHz slots are left empty.' } },
       ],
     },
     {
@@ -50,6 +54,7 @@ export default {
       blocks: [
         { type: 'list', items: ['The carrier phase follows the amplitude of the modulating signal; amplitude and frequency stay constant.', 'PM is mathematically the same as FM with one difference:', 'In **FM**, the instantaneous change in carrier frequency is proportional to the **amplitude** of the modulating signal.', 'In **PM**, it is proportional to the **derivative** of the amplitude.', 'Implementation: the modulating signal passes through $d/dt$ and then a VCO.'] },
         { type: 'math', tex: 'B_{PM} = 2(1+\\beta)B, \\quad \\beta = 2\\ (\\text{most often})' },
+        { type: 'diagram', id: 'modwave', props: { kind: 'pm' } },
       ],
     },
   ],

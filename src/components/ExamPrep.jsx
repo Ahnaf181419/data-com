@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react';
-import { Rich } from './NotesView.jsx';
+import { Block, Rich } from './NotesView.jsx';
 import Quiz, { shuffle } from './Quiz.jsx';
 import { likely, traps } from '../data/examPrep.js';
 import papers from '../data/pastPapers.js';
 
 function Likely({ q, mod, onOpen }) {
   const [open, setOpen] = useState(false);
+  const [view, setView] = useState('script');
   return (
     <article className="rounded-2xl border border-line bg-panel p-5 sm:p-6">
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2 text-sm">
@@ -20,7 +21,26 @@ function Likely({ q, mod, onOpen }) {
       <h3 className="prose-read text-[1.18rem] leading-snug text-text">
         <Rich text={q.q} />
       </h3>
-      {open && (
+      {open && q.script && (
+        <div role="radiogroup" aria-label="Answer view" className="enter mt-4 inline-flex rounded-xl border border-line bg-ink p-1 text-sm">
+          {[
+            ['script', 'Exam answer'],
+            ['points', 'Key points'],
+          ].map(([v, l]) => (
+            <button key={v} role="radio" aria-checked={view === v} onClick={() => setView(v)} className={`press min-h-10 rounded-lg px-4 font-medium ${view === v ? 'bg-raise text-text' : 'text-ash'}`}>
+              {l}
+            </button>
+          ))}
+        </div>
+      )}
+      {open && q.script && view === 'script' && (
+        <div className="answer-sheet prose-read enter mt-4 text-text/90">
+          {q.script.map((b, i) => (
+            <Block key={i} b={b} />
+          ))}
+        </div>
+      )}
+      {open && (!q.script || view === 'points') && (
         <ol className="prose-read enter mt-4 list-decimal space-y-2 border-l-2 border-gold/50 pl-9 text-text/90">
           {q.answer.map((a, i) => (
             <li key={i}>
@@ -30,7 +50,7 @@ function Likely({ q, mod, onOpen }) {
         </ol>
       )}
       <button onClick={() => setOpen(!open)} className={`press mt-4 min-h-11 rounded-xl px-5 font-medium ${open ? 'border border-line text-ash' : 'bg-gold text-ink'}`}>
-        {open ? 'Hide model answer' : 'Show model answer'}
+        {open ? 'Hide answer' : q.script ? 'Show exam answer' : 'Show model answer'}
       </button>
     </article>
   );

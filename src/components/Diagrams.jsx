@@ -1,16 +1,6 @@
 // Static teaching diagrams redrawn from the slide figures.
-const G = 'var(--color-gold)', A = 'var(--color-ash)', L = 'var(--color-line)', T = 'var(--color-text)', R = 'var(--color-red)';
-
-function Fig({ caption, children, label }) {
-  return (
-    <figure className="not-prose my-7 rounded-2xl border border-line bg-panel p-4 font-sans">
-      <div role="img" aria-label={label}>
-        {children}
-      </div>
-      <figcaption className="mt-2 text-center text-sm text-ash">{caption}</figcaption>
-    </figure>
-  );
-}
+import { Fig, G, A, L, T, R } from './Fig.jsx';
+import EXAM_DIAGRAMS from './ExamDiagrams.jsx';
 
 const node = (x, y, k) => <circle key={k} cx={x} cy={y} r="7" fill="var(--color-raise)" stroke={G} strokeWidth="1.5" />;
 
@@ -120,10 +110,10 @@ function Fiber() {
   );
 }
 
-function Multistage() {
+function Multistage({ first = 'n × k', middle = 'N/n × N/n', last = 'k × n', stages = ['Stage 1', 'Stage 2 (k switches)', 'Stage 3'], caption }) {
   const s1 = [10, 68, 126], s2 = [36, 100], s3 = s1;
   return (
-    <Fig caption="Three stages: N/n crossbars of n × k, then k crossbars of (N/n) × (N/n), then N/n crossbars of k × n. Every first-stage switch links to every middle switch." label="Three-stage multistage switch">
+    <Fig caption={caption ?? 'Three stages: N/n crossbars of n × k, then k crossbars of (N/n) × (N/n), then N/n crossbars of k × n. Every first-stage switch links to every middle switch.'} label="Three-stage multistage switch">
       <svg viewBox="0 0 640 196" className="w-full">
         {s1.flatMap((y1, i) => s2.map((y2, j) => <line key={`a${i}${j}`} x1="200" y1={y1 + 20} x2="290" y2={y2 + 20} stroke={L} strokeWidth="1.5" />))}
         {s2.flatMap((y2, j) => s3.map((y3, i) => <line key={`b${i}${j}`} x1="350" y1={y2 + 20} x2="440" y2={y3 + 20} stroke={L} strokeWidth="1.5" />))}
@@ -134,7 +124,7 @@ function Multistage() {
             ))}
             <rect x="140" y={y} width="60" height="40" rx="6" fill="var(--color-raise)" stroke={G} />
             <text x="170" y={y + 25} textAnchor="middle" fontSize="12" fill={T}>
-              n × k
+              {first}
             </text>
           </g>
         ))}
@@ -142,7 +132,7 @@ function Multistage() {
           <g key={`m${y}`}>
             <rect x="290" y={y} width="60" height="40" rx="6" fill="var(--color-raise)" stroke={G} />
             <text x="320" y={y + 25} textAnchor="middle" fontSize="11" fill={T}>
-              N/n × N/n
+              {middle}
             </text>
           </g>
         ))}
@@ -150,14 +140,14 @@ function Multistage() {
           <g key={`r${y}`}>
             <rect x="440" y={y} width="60" height="40" rx="6" fill="var(--color-raise)" stroke={G} />
             <text x="470" y={y + 25} textAnchor="middle" fontSize="12" fill={T}>
-              k × n
+              {last}
             </text>
             {[8, 20, 32].map((d) => (
               <line key={d} x1="500" y1={y + d} x2="540" y2={y + d} stroke={A} />
             ))}
           </g>
         ))}
-        {[['Stage 1', 170], ['Stage 2 (k switches)', 320], ['Stage 3', 470]].map(([t, x]) => (
+        {stages.map((t, i) => [t, 170 + i * 150]).map(([t, x]) => (
           <text key={t} x={x} y="190" textAnchor="middle" fontSize="12" fill={A}>
             {t}
           </text>
@@ -173,4 +163,4 @@ function Multistage() {
   );
 }
 
-export const DIAGRAMS = { topologies: Topologies, muxdemux: MuxDemux, fiber: Fiber, multistage: Multistage };
+export const DIAGRAMS = { topologies: Topologies, muxdemux: MuxDemux, fiber: Fiber, multistage: Multistage, ...EXAM_DIAGRAMS };

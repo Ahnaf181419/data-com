@@ -6,7 +6,10 @@ import modules from '../data/syllabusData.js';
 import checks from '../data/checks.js';
 import { likely, traps } from '../data/examPrep.js';
 import papers from '../data/pastPapers.js';
+import { mod2div } from './solvers.js';
 
+const LABS = ['modulation', 'analog', 'fdm', 'tdm', 'crc', 'hamming', 'coding'];
+const DIAGRAMS = ['topologies', 'muxdemux', 'fiber', 'multistage', 'spectrum', 'hierarchy', 'qpskimpl', 'constellations', 'fdmsystem', 'delay', 'vcsetup', 'propagation', 'tst', 'waveform', 'tdmframe', 'modwave', 'datagramnet', 'redundancy'];
 const tex = (s) => katex.renderToString(s, { throwOnError: true });
 const inline = (text = '') => (text.match(/\$[^$]+\$/g) ?? []).forEach((m) => tex(m.slice(1, -1)));
 
@@ -64,7 +67,7 @@ test('exam prep points at real chapters and its math compiles', () => {
 });
 
 test('labs and diagrams referenced by lessons exist', () => {
-  const known = { lab: ['modulation', 'analog', 'fdm', 'tdm', 'crc', 'hamming', 'coding'], diagram: ['topologies', 'muxdemux', 'fiber', 'multistage'] };
+  const known = { lab: LABS, diagram: DIAGRAMS };
   for (const m of modules) for (const s of m.sections) for (const b of s.blocks) if (known[b.type]) assert.ok(known[b.type].includes(b.id), `${m.id}: ${b.type} ${b.id}`);
 });
 
@@ -76,4 +79,35 @@ test('past paper items point at real chapters and their math compiles', () => {
         assert.ok(ids.has(it.module), it.id);
         [it.q, ...it.answer].forEach(inline);
       }
+});
+
+// Checks one block of lesson or exam-script content: math compiles, diagrams exist, divisions are well formed.
+function checkBlock(b, where) {
+  if (b.type === 'math') tex(b.tex);
+  [b.text, ...(b.items ?? []), ...(b.head ?? []), ...(b.rows?.flat() ?? [])].forEach(inline);
+  if (b.type === 'diagram') assert.ok(DIAGRAMS.includes(b.id), `${where}: diagram ${b.id}`);
+  if (b.type === 'lab') assert.ok(LABS.includes(b.id), `${where}: lab ${b.id}`);
+  if (b.type === 'division') assert.match(b.dividend + b.divisor, /^[01]+$/, where);
+  if (b.type === 'pre') assert.ok(b.lines.length, where);
+}
+
+test('every past-paper item and likely question has a valid exam-script answer', () => {
+  for (const p of papers)
+    for (const set of p.sets)
+      for (const it of set.items) {
+        assert.ok(it.script?.length, `${p.title} ${it.id} has no script`);
+        assert.equal(it.script.at(-1).type, 'answer', `${p.title} ${it.id} ends with a boxed answer`);
+        it.script.forEach((b) => checkBlock(b, `${p.title} ${it.id}`));
+      }
+  for (const q of likely) {
+    assert.ok(q.script?.length, `likely: ${q.q}`);
+    q.script.forEach((b) => checkBlock(b, q.q));
+  }
+});
+
+test('CRC divisions in the exam scripts give the answers they print', () => {
+  const crc = papers[1].sets[2].items.find((it) => it.id === '3(a)').script.filter((b) => b.type === 'division');
+  assert.equal(mod2div(crc[0].dividend, crc[0].divisor).remainder, '1010');
+  assert.equal(mod2div(crc[1].dividend, crc[1].divisor).remainder, '0000');
+  assert.equal(crc[1].dividend, '1010011110' + '1010');
 });

@@ -1,6 +1,9 @@
 // CSE 2211 (AUST) semester finals: Fall 2024 (held 30/10/2025) and Spring 2025. Typed from the question papers.
 // Model answers use the class slides/notes; items marked `flagged` need the textbook method (not in the notes).
-export default [
+// `answer` is the key-point summary; the full exam-script answer for each item lives in answerScripts.js.
+import { paperScripts } from './answerScripts.js';
+
+const papers = [
   {
     title: 'Fall 2024 semester final',
     meta: '2.5 hours, 50 marks. Answer any 4 questions from each set.',
@@ -363,3 +366,8 @@ export default [
     ],
   },
 ];
+
+export default papers.map((paper) => {
+  const scripts = paperScripts[paper.title.replace(' semester final', '')];
+  return { ...paper, sets: paper.sets.map((set) => ({ ...set, items: set.items.map((it) => ({ ...it, script: scripts[it.id] })) })) };
+});

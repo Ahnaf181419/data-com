@@ -297,7 +297,7 @@ export function TdmLab({ mode: initial = 'sync' }) {
 }
 
 // ---------- CRC long division ----------
-function divideSteps(dividend, divisor) {
+export function divideSteps(dividend, divisor) {
   const n = divisor.length;
   const steps = [];
   let cur = dividend.slice(0, n);

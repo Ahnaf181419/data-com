@@ -1,7 +1,9 @@
 // Likely exam questions (flagged in the notes or worked on the slides) with model answers,
 // plus the traps that cost marks. Built only from the class slides and notes.
 
-export const likely = [
+import { likelyScripts } from './answerScripts.js';
+
+const likelyQuestions = [
   {
     module: 'ch5-1',
     flag: 'Notes: "derivation can come in exam"',
@@ -235,6 +237,9 @@ export const likely = [
     ],
   },
 ];
+
+// Each likely question gets the exam-script answer at the same index in answerScripts.js.
+export const likely = likelyQuestions.map((q, i) => ({ ...q, script: likelyScripts[i] }));
 
 export const traps = [
   { module: 'ch5-1', text: '$r$ is bits per **signal element**, and $S = N/r$, so the baud rate is never above the bit rate.' },
