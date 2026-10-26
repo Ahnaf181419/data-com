@@ -72,6 +72,7 @@ export default {
             ['Bus', 'Multipoint'],
           ],
         },
+        { type: 'diagram', id: 'topologies' },
         { type: 'p', text: '**Hybrid topologies** combine the basic ones: star with bus, star with ring (hubs, repeaters and stations), and ring with bus (taps and drop lines).' },
         { type: 'note', text: '802.11 is the protocol that describes how WiFi works.' },
       ],

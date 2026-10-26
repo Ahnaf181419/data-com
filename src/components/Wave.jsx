@@ -27,7 +27,7 @@ export default function Wave({ type, id }) {
   return (
     <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className="h-12 w-full" aria-hidden="true">
       <line x1="0" y1={H / 2} x2={W} y2={H / 2} stroke="var(--color-line)" strokeWidth="1" />
-      <path key={id} d={d} pathLength="1" className="trace" fill="none" stroke="var(--color-amber)" strokeWidth="2" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
+      <path key={id} d={d} pathLength="1" className="trace" fill="none" stroke="var(--color-gold)" strokeWidth="2" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
     </svg>
   );
 }

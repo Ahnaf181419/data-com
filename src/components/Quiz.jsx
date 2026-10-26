@@ -1,78 +1,71 @@
 import { useState } from 'react';
-import { Rich } from './NotesView.jsx';
+import { Choice } from './Learn.jsx';
 
-export default function Quiz({ module, best, onFinish }) {
+export const shuffle = (a) => {
+  const b = [...a];
+  for (let i = b.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [b[i], b[j]] = [b[j], b[i]];
+  }
+  return b;
+};
+
+// Runs a list of MCQs one at a time. Questions may carry a `tag` (chapter) for the breakdown.
+export default function Quiz({ questions, best, onFinish, renderResult }) {
+  const [round, setRound] = useState(0);
+  const [order, setOrder] = useState(() => questions);
   const [i, setI] = useState(0);
-  const [picked, setPicked] = useState(null);
-  const [score, setScore] = useState(0);
-  const total = module.quiz.length;
+  const [answers, setAnswers] = useState([]);
+  const total = order.length;
+  const score = answers.filter(Boolean).length;
 
   if (i === total) {
-    const restart = () => (setI(0), setPicked(null), setScore(0));
+    const restart = () => (setOrder(shuffle(questions)), setRound(round + 1), setI(0), setAnswers([]));
+    const pct = Math.round((score / total) * 100);
     return (
-      <div className="mx-auto max-w-xl rounded-2xl border border-line bg-panel p-8 text-center">
-        <p className="text-mute">Your score</p>
-        <p className="my-2 font-serif text-6xl tabular-nums text-amber">
-          {score}/{total}
+      <div className="enter mx-auto max-w-xl rounded-2xl border border-line bg-panel p-8 text-center">
+        <p className="text-ash">Your score</p>
+        <p className="display my-2 text-7xl tabular-nums text-gold">
+          {score}
+          <span className="text-4xl text-ash">/{total}</span>
         </p>
-        <p className="mb-6 text-mute">{best != null ? `Best so far: ${Math.max(best, score)}/${total}` : 'First attempt saved.'}</p>
-        <button onClick={restart} className="min-h-12 rounded-xl bg-amber px-6 font-semibold text-ink active:opacity-80">
-          Retake quiz
+        <p className="mb-6 text-ash">
+          {pct >= 80 ? 'Exam-ready on this set.' : pct >= 50 ? 'Getting there. Review the lessons you missed.' : 'Go back through the lessons, then try again.'}
+          {best != null && ` Best so far: ${Math.max(best, score)}/${total}.`}
+        </p>
+        {renderResult?.(order, answers)}
+        <button onClick={restart} className="press min-h-12 rounded-xl bg-gold px-6 font-semibold text-ink">
+          Retake (shuffled)
         </button>
       </div>
     );
   }
 
-  const q = module.quiz[i];
-  const answered = picked !== null;
-  const choose = (k) => {
-    if (answered) return;
-    setPicked(k);
-    if (k === q.answer) setScore((s) => s + 1);
-  };
+  const answered = answers.length > i;
   const next = () => {
-    if (i + 1 === total) onFinish(score);
-    setPicked(null);
+    if (i + 1 === total) onFinish?.(score, order, answers);
     setI(i + 1);
   };
 
   return (
     <div className="mx-auto max-w-2xl">
-      <div className="mb-4 flex items-center justify-between text-sm text-mute">
+      <div className="mb-3 flex items-center justify-between text-sm text-ash">
         <span className="tabular-nums">
           Question {i + 1} of {total}
         </span>
         <span className="tabular-nums">Score {score}</span>
       </div>
-      <div className="mb-5 h-1 overflow-hidden rounded-full bg-line">
-        <div className="h-full bg-amber transition-[width]" style={{ width: `${(i / total) * 100}%` }} />
+      <div className="mb-6 h-1 overflow-hidden rounded-full bg-line">
+        <div className="bar-fill h-full w-full bg-gold" style={{ transform: `scaleX(${i / total})` }} />
       </div>
-      <h2 className="prose-read mb-5 text-xl leading-snug">
-        <Rich text={q.q} />
-      </h2>
-      <div className="grid gap-3">
-        {q.options.map((o, k) => {
-          const state = !answered ? '' : k === q.answer ? 'border-good bg-good/10' : k === picked ? 'border-bad bg-bad/10' : 'opacity-60';
-          return (
-            <button key={k} onClick={() => choose(k)} disabled={answered} className={`flex min-h-14 items-center gap-3 rounded-xl border border-line bg-panel px-4 py-3 text-left text-[1.05rem] active:bg-raise ${state}`}>
-              <span className="grid size-7 shrink-0 place-items-center rounded-full border border-line text-sm text-mute">{'ABCD'[k]}</span>
-              <span>
-                <Rich text={o} />
-              </span>
-            </button>
-          );
-        })}
+      <div key={`${round}-${i}`} className="enter-next">
+        {order[i].tag && <p className="mb-2 text-sm text-ash">{order[i].tag}</p>}
+        <Choice item={order[i]} onAnswer={(ok) => setAnswers([...answers, ok])} />
       </div>
       {answered && (
-        <div className="mt-5" aria-live="polite">
-          <p className={`mb-1 font-semibold ${picked === q.answer ? 'text-good' : 'text-bad'}`}>{picked === q.answer ? 'Correct' : 'Not quite'}</p>
-          <p className="prose-read text-text/85">
-            <Rich text={q.explain} />
-          </p>
-          <button onClick={next} className="mt-5 min-h-12 w-full rounded-xl bg-amber px-6 font-semibold text-ink active:opacity-80">
-            {i + 1 === total ? 'See score' : 'Next question'}
-          </button>
-        </div>
+        <button onClick={next} className="press enter mt-6 min-h-12 w-full rounded-xl bg-gold px-6 font-semibold text-ink">
+          {i + 1 === total ? 'See score' : 'Next question'}
+        </button>
       )}
     </div>
   );

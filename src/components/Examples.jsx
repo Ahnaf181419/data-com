@@ -8,13 +8,13 @@ function Example({ ex }) {
     <section className="rounded-2xl border border-line bg-panel p-5 sm:p-6">
       <header className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
         <h3 className="text-lg font-semibold">{ex.title}</h3>
-        <span className="text-sm text-mute">{ex.source}</span>
+        <span className="text-sm text-ash">{ex.source}</span>
       </header>
       <p className="prose-read text-text/90">
         <Rich text={ex.question} />
       </p>
       {shown > 0 && (
-        <ol className="prose-read mt-4 list-decimal space-y-2 border-l-2 border-cyan/50 pl-9">
+        <ol className="prose-read mt-4 list-decimal space-y-2 border-l-2 border-gold/50 pl-9">
           {ex.steps.slice(0, shown).map((s, i) => (
             <li key={i}>
               <Rich text={s} />
@@ -24,12 +24,12 @@ function Example({ ex }) {
       )}
       {done && (
         <>
-          <p className="mt-4 rounded-lg bg-amber/10 px-4 py-3 text-[1.05rem]">
-            <span className="font-semibold text-amber">Answer: </span>
+          <p className="mt-4 rounded-lg bg-gold/10 px-4 py-3 text-[1.05rem]">
+            <span className="font-semibold text-gold">Answer: </span>
             <Rich text={ex.answer} />
           </p>
           {ex.note && (
-            <p className="mt-3 text-sm leading-relaxed text-mute">
+            <p className="mt-3 text-sm leading-relaxed text-ash">
               <Rich text={ex.note} />
             </p>
           )}
@@ -37,17 +37,17 @@ function Example({ ex }) {
       )}
       <div className="mt-4 flex flex-wrap gap-3">
         {!done && (
-          <button onClick={() => setShown(shown + 1)} className="min-h-12 rounded-xl bg-amber px-5 font-semibold text-ink active:opacity-80">
+          <button onClick={() => setShown(shown + 1)} className="min-h-12 rounded-xl bg-gold px-5 font-semibold text-ink active:opacity-80">
             {shown === 0 ? 'Show first step' : shown === ex.steps.length ? 'Show answer' : 'Next step'}
           </button>
         )}
         {!done && (
-          <button onClick={() => setShown(ex.steps.length + 1)} className="min-h-12 rounded-xl border border-line px-5 text-mute active:bg-raise">
+          <button onClick={() => setShown(ex.steps.length + 1)} className="min-h-12 rounded-xl border border-line px-5 text-ash active:bg-raise">
             Show all
           </button>
         )}
         {shown > 0 && (
-          <button onClick={() => setShown(0)} className="min-h-12 rounded-xl border border-line px-5 text-mute active:bg-raise">
+          <button onClick={() => setShown(0)} className="min-h-12 rounded-xl border border-line px-5 text-ash active:bg-raise">
             Hide steps
           </button>
         )}
@@ -58,10 +58,10 @@ function Example({ ex }) {
 
 export default function Examples({ module }) {
   if (!module.examples.length)
-    return <p className="rounded-xl border border-line bg-panel p-8 text-center text-mute">The slides and notes have no worked examples for this chapter. Use Flashcards or Quiz to practise it.</p>;
+    return <p className="rounded-xl border border-line bg-panel p-8 text-center text-ash">The slides and notes have no worked examples for this chapter. Use Flashcards or Quiz to practise it.</p>;
   return (
     <div className="grid grid-cols-[minmax(0,1fr)] gap-5">
-      <p className="text-mute">Try each one yourself first, then reveal the steps one at a time.</p>
+      <p className="text-ash">Try each one yourself first, then reveal the steps one at a time.</p>
       {module.examples.map((ex) => (
         <Example key={ex.title} ex={ex} />
       ))}

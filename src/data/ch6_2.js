@@ -28,6 +28,7 @@ export default {
         { type: 'math', tex: '\\text{frame size} = \\#\\text{output slots} \\times \\#\\text{bits per slot}' },
         { type: 'math', tex: '\\text{link rate} = \\#\\text{inputs} \\times \\text{rate per input}' },
         { type: 'math', tex: '\\text{frame rate} = \\frac{\\text{link rate}}{\\text{frame size}} = \\frac{1}{T}' },
+        { type: 'lab', id: 'tdm' },
       ],
     },
     {
@@ -71,6 +72,7 @@ export default {
       blocks: [
         { type: 'p', text: 'In synchronous TDM, an input with no data wastes its slot. Statistical TDM allocates slots **dynamically**: a line gets a slot only when it has a slot’s worth of data. The MUX checks lines in round-robin order and skips empty ones, so a frame has fewer slots than input lines.' },
         { type: 'table', head: ['', 'Synchronous TDM', 'Statistical TDM'], rows: [['Slots', 'Reserved per input, even if empty', 'Allocated only when there is data'], ['Addressing', 'None; position is the address', 'Each slot carries the destination address'], ['Sync bits', 'Needed', 'Not needed'], ['Link capacity', 'Sum of all inputs', 'Less than the sum, based on load statistics']] },
+        { type: 'lab', id: 'tdm', mode: 'stat' },
         { type: 'math', tex: 'n = \\log_2 N\\ \\text{address bits} \\quad (8\\text{ outputs} \\Rightarrow 3\\text{ bits})' },
         { type: 'p', text: '**Slot size:** the data-to-address ratio must be reasonable. 1 data bit with a 3-bit address is 300% overhead, so a block of data is usually many bytes while the address is a few bytes.' },
       ],

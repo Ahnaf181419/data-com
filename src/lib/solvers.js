@@ -296,3 +296,46 @@ export function hammingCheck(codeword) {
   steps.push(pos ? `\\text{error at position } ${pos} \\Rightarrow \\texttt{${corrected}}` : '\\text{all checks } 0 \\Rightarrow \\text{no error}');
   return { result: { pos, corrected }, steps };
 }
+
+// ---- Past-paper topics taught from the Forouzan method (not in the class slides/notes) ----
+
+// PCM quantization: L = 2^nb zones of height Δ between vmin and vmax; each sample is replaced by its zone's midpoint.
+export function pcmQuantize({ values, vmin, vmax, nb }) {
+  if (!(vmax > vmin)) throw new Error('Max voltage must be above min voltage.');
+  if (!Number.isInteger(nb) || nb < 1 || nb > 8) throw new Error('Bits per code word: use a whole number from 1 to 8.');
+  const L = 2 ** nb;
+  const delta = (vmax - vmin) / L;
+  const rows = values.map((v) => {
+    const code = Math.min(L - 1, Math.max(0, Math.floor((v - vmin) / delta)));
+    const norm = v / delta;
+    const quant = (vmin + (code + 0.5) * delta) / delta;
+    return { v, norm: +norm.toFixed(2), quant, error: +(quant - norm).toFixed(2), code, word: code.toString(2).padStart(nb, '0') };
+  });
+  return {
+    result: { L, delta, rows },
+    steps: [
+      `L = 2^{${nb}} = ${L}\\text{ levels}, \\quad \\Delta = \\frac{${vmax} - (${vmin})}{${L}} = ${fmt(delta)}\\text{ V}`,
+      ...rows.map((r) => `${r.v}\\text{ V} \\to \\tfrac{${r.v}}{${fmt(delta)}} = ${r.norm},\\ \\text{quantized } ${r.quant},\\ \\text{error } ${r.error},\\ \\text{code } ${r.code} = \\texttt{${r.word}}`),
+    ],
+  };
+}
+
+export const FOUR_B_FIVE_B = { '0000': '11110', '0001': '01001', '0010': '10100', '0011': '10101', '0100': '01010', '0101': '01011', '0110': '01110', '0111': '01111', '1000': '10010', '1001': '10011', '1010': '10110', '1011': '10111', '1100': '11010', '1101': '11011', '1110': '11100', '1111': '11101' };
+
+export function blockCode4B5B(bits) {
+  if (bits.length % 4) throw new Error('Input length must be a multiple of 4 bits.');
+  const groups = bits.match(/..../g);
+  const out = groups.map((g) => FOUR_B_FIVE_B[g]);
+  return { result: { groups, out, stream: out.join('') }, steps: [...groups.map((g, i) => `\\texttt{${g}} \\to \\texttt{${out[i]}}`), `\\text{output} = \\texttt{${out.join('\\,')}}`] };
+}
+
+// Differential Manchester: always a mid-bit transition; a transition at the START of the bit means 0, none means 1.
+// Returns [firstHalf, secondHalf] levels (1 = high, 0 = low) per bit, given the line level before the first bit.
+export function diffManchester(bits, startHigh = true) {
+  let level = startHigh ? 1 : 0;
+  return [...bits].map((b) => {
+    const first = b === '0' ? 1 - level : level;
+    level = 1 - first;
+    return [first, level];
+  });
+}

@@ -76,6 +76,7 @@ export default {
         { type: 'p', text: 'A constellation diagram shows the amplitude and phase of each signal element when two carriers are used. The **X-axis is the in-phase carrier** and the **Y-axis is the quadrature carrier**. A point’s distance from the origin is its amplitude and its angle is its phase.' },
         { type: 'constellation' },
         { type: 'list', items: ['**ASK (OOK)** – in-phase carrier only; two points on the X-axis: 0 at 0 V, 1 at 1 V (1-D).', '**BPSK** – in-phase carrier only, polar NRZ: 1 at +1, 0 at −1 (180° apart) (1-D).', '**QPSK** – both carriers; four points at 45°, 135°, −135°, −45° (2-D).'] },
+        { type: 'lab', id: 'modulation' },
       ],
     },
     {

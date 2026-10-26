@@ -1,4 +1,6 @@
 import { BlockMath, InlineMath } from 'react-katex';
+import { LABS } from './Labs.jsx';
+import { DIAGRAMS } from './Diagrams.jsx';
 
 // Renders text with $inline math$ and **bold**.
 export function Rich({ text }) {
@@ -22,7 +24,7 @@ function Table({ head, rows }) {
   return (
     <div className="my-5 overflow-x-auto rounded-lg border border-line">
       <table className="w-full border-collapse font-sans text-[0.95rem] leading-snug">
-        <thead className="bg-raise text-left text-mute">
+        <thead className="bg-raise text-left text-ash">
           <tr>
             {head.map((h, i) => (
               <th key={i} className="px-3 py-2.5 font-medium">
@@ -64,28 +66,28 @@ function Constellation() {
             {p.name === 'QPSK' && <circle r={Math.SQRT2} fill="none" stroke="var(--color-line)" strokeWidth="0.02" strokeDasharray="0.08 0.06" />}
             {p.pts.map(([x, y, l]) => (
               <g key={l}>
-                <circle cx={x} cy={-y} r="0.11" fill="var(--color-cyan)" />
+                <circle cx={x} cy={-y} r="0.11" fill="var(--color-gold)" />
                 <text x={x} y={-y + (y > 0 ? -0.25 : 0.42)} fontSize="0.3" fill="var(--color-text)" textAnchor="middle">
                   {l}
                 </text>
               </g>
             ))}
           </svg>
-          <figcaption className="text-center text-sm text-mute">{p.name}</figcaption>
+          <figcaption className="text-center text-sm text-ash">{p.name}</figcaption>
         </figure>
       ))}
     </div>
   );
 }
 
-function Block({ b }) {
+export function Block({ b }) {
   switch (b.type) {
     case 'math':
       return <MathBlock tex={b.tex} />;
     case 'list': {
       const L = b.ordered ? 'ol' : 'ul';
       return (
-        <L className={`my-4 space-y-2 pl-6 ${b.ordered ? 'list-decimal' : 'list-disc marker:text-amber'}`}>
+        <L className={`my-4 space-y-2 pl-6 ${b.ordered ? 'list-decimal' : 'list-disc marker:text-gold'}`}>
           {b.items.map((t, i) => (
             <li key={i} className="pl-1">
               <Rich text={t} />
@@ -98,12 +100,20 @@ function Block({ b }) {
       return <Table head={b.head} rows={b.rows} />;
     case 'note':
       return (
-        <aside className="my-5 rounded-lg border border-amber/30 bg-amber/[0.07] px-4 py-3 font-sans text-[0.98rem] leading-relaxed">
+        <aside className="my-5 rounded-r-xl border-l-2 border-red/70 bg-red/[0.06] px-4 py-3 font-sans text-[0.98rem] leading-relaxed">
           <Rich text={b.text} />
         </aside>
       );
     case 'constellation':
       return <Constellation />;
+    case 'lab': {
+      const Lab = LABS[b.id];
+      return <Lab mode={b.mode} />;
+    }
+    case 'diagram': {
+      const D = DIAGRAMS[b.id];
+      return <D />;
+    }
     default:
       return (
         <p className="my-4">
@@ -117,8 +127,8 @@ export default function NotesView({ module }) {
   return (
     <article className="prose-read text-text/90">
       {module.sections.map((s) => (
-        <section key={s.heading} className="mb-10">
-          <h2 className="mb-3 font-sans text-xl font-semibold tracking-tight text-text">{s.heading}</h2>
+        <section key={s.heading} id={s.heading} className="mb-12">
+          <h2 className="display mb-3 text-[1.7rem] font-medium leading-tight text-text">{s.heading}</h2>
           {s.blocks.map((b, i) => (
             <Block key={i} b={b} />
           ))}

@@ -11,6 +11,7 @@ export default {
         { type: 'p', text: 'Multiplexing is the set of techniques that allows the simultaneous transmission of multiple signals across a single data link (e.g. many WiFi users sharing one line to the ISP).' },
         { type: 'list', items: ['A **link** is the physical path.', 'A **channel** is the portion of a link that carries a transmission between a given pair of lines. One link can have $n$ channels.', 'The **MUX** combines $n$ lines into one stream (many-to-one); the **DEMUX** separates it back (one-to-many).'] },
         { type: 'p', text: 'Categories: **FDM** (analog), **WDM** (analog), **TDM** (digital).' },
+        { type: 'diagram', id: 'muxdemux' },
       ],
     },
     {
@@ -28,6 +29,7 @@ export default {
         { type: 'list', ordered: true, items: ['Are the input lines analog or digital?', 'If analog → fine, go to step 5.', 'If digital → convert to analog (ASK, FSK, PSK, QPSK, QAM).', 'Find every input line’s bandwidth using that technique’s formula.', 'Check: total input bandwidth ≤ link bandwidth.'] },
         { type: 'note', text: 'Analog inputs come with a bandwidth; digital inputs come with a bit rate. Bandwidth is a difference value, spectrum is a range (low to high).' },
         { type: 'math', tex: 'B_{link} = n \\times B_{ch} + (n-1) \\times B_{guard}' },
+        { type: 'lab', id: 'fdm' },
       ],
     },
     {

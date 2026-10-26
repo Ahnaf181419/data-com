@@ -11,6 +11,7 @@ export default {
         { type: 'p', text: 'Analog-to-analog conversion represents analog information with an analog signal. It is needed when the medium is bandpass in nature or only a bandpass channel is available, so the signal can be sent in a specific bandwidth.' },
         { type: 'math', tex: 's(t) = A\\sin(2\\pi f t + \\varphi)' },
         { type: 'p', text: 'Vary the amplitude → **AM**, the frequency → **FM**, the phase → **PM**. The carrier frequency $f_c$ always sits in the middle of the band.' },
+        { type: 'lab', id: 'analog' },
       ],
     },
     {

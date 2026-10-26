@@ -1,5 +1,7 @@
-// Content payload: built only from the CSE 2211 class slides and the two sets of class notes.
+// Content payload: built from the CSE 2211 class slides and the two sets of class notes.
+// Lessons a past paper asked about but the material does not cover are marked `flagged` / with a note.
 import ch1 from './ch1.js';
+import ch4x from './lineCoding.js';
 import ch5_1 from './ch5_1.js';
 import ch5_2 from './ch5_2.js';
 import ch6_1 from './ch6_1.js';
@@ -10,4 +12,4 @@ import ch7_2 from './ch7_2.js';
 import ch8 from './ch8.js';
 import ch10 from './ch10.js';
 
-export default [ch1, ch5_1, ch5_2, ch6_1, ch6_2, pcm, ch7_1, ch7_2, ch8, ch10];
+export default [ch1, ch4x, ch5_1, ch5_2, ch6_1, ch6_2, pcm, ch7_1, ch7_2, ch8, ch10];

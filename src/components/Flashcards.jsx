@@ -24,12 +24,12 @@ export default function Flashcards({ module, known, onToggleKnown }) {
   };
 
   const header = (
-    <div className="mb-4 flex flex-wrap items-center justify-between gap-3 text-sm text-mute">
+    <div className="mb-4 flex flex-wrap items-center justify-between gap-3 text-sm text-ash">
       <span>
         {known.length} of {module.flashcards.length} marked known
       </span>
       <label className="flex min-h-11 items-center gap-2">
-        <input type="checkbox" className="size-5 accent-amber" checked={hideKnown} onChange={(e) => (setHideKnown(e.target.checked), setI(0), setFlipped(false))} />
+        <input type="checkbox" className="size-5 accent-gold" checked={hideKnown} onChange={(e) => (setHideKnown(e.target.checked), setI(0), setFlipped(false))} />
         Hide known cards
       </label>
     </div>
@@ -39,7 +39,7 @@ export default function Flashcards({ module, known, onToggleKnown }) {
     return (
       <div>
         {header}
-        <p className="rounded-xl border border-line bg-panel p-8 text-center text-mute">You have marked every card in this module as known. Untick “Hide known cards” to review them again.</p>
+        <p className="rounded-xl border border-line bg-panel p-8 text-center text-ash">You have marked every card in this module as known. Untick “Hide known cards” to review them again.</p>
       </div>
     );
 
@@ -62,14 +62,14 @@ export default function Flashcards({ module, known, onToggleKnown }) {
           className={`card-3d relative grid min-h-72 touch-pan-y select-none ${flipped ? 'flipped' : ''}`}
         >
           <div className="face col-start-1 row-start-1 flex flex-col justify-between rounded-2xl border border-line bg-panel p-6 sm:p-8">
-            <span className="text-sm text-mute">Question</span>
+            <span className="text-sm text-ash">Question</span>
             <p className="prose-read my-6 text-center text-2xl leading-snug">
               <Rich text={card.front} />
             </p>
-            <span className="text-center text-sm text-mute">Tap to flip, swipe for next</span>
+            <span className="text-center text-sm text-ash">Tap to flip, swipe for next</span>
           </div>
-          <div className="face face-back col-start-1 row-start-1 flex flex-col justify-between rounded-2xl border border-amber/40 bg-raise p-6 sm:p-8">
-            <span className="text-sm text-amber">Answer</span>
+          <div className="face face-back col-start-1 row-start-1 flex flex-col justify-between rounded-2xl border border-gold/40 bg-raise p-6 sm:p-8">
+            <span className="text-sm text-gold">Answer</span>
             <p className="prose-read my-6 text-center text-xl leading-relaxed">
               <Rich text={card.back} />
             </p>
@@ -81,7 +81,7 @@ export default function Flashcards({ module, known, onToggleKnown }) {
         <button onClick={() => go(-1)} className="min-h-12 rounded-xl border border-line px-5 text-text active:bg-raise">
           Previous
         </button>
-        <span className="text-sm tabular-nums text-mute">
+        <span className="text-sm tabular-nums text-ash">
           {Math.min(i, deck.length - 1) + 1} / {deck.length}
         </span>
         <button onClick={() => go(1)} className="min-h-12 rounded-xl border border-line px-5 text-text active:bg-raise">
@@ -91,7 +91,7 @@ export default function Flashcards({ module, known, onToggleKnown }) {
       <button
         onClick={() => onToggleKnown(card.idx)}
         aria-pressed={isKnown}
-        className={`mt-3 min-h-12 w-full rounded-xl border px-5 font-medium ${isKnown ? 'border-good/50 bg-good/10 text-good' : 'border-line text-mute active:bg-raise'}`}
+        className={`mt-3 min-h-12 w-full rounded-xl border px-5 font-medium ${isKnown ? 'border-gold/50 bg-gold/10 text-gold' : 'border-line text-ash active:bg-raise'}`}
       >
         {isKnown ? 'Known ✓ (tap to unmark)' : 'I know this card'}
       </button>

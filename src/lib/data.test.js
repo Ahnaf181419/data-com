@@ -3,6 +3,9 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import katex from 'katex';
 import modules from '../data/syllabusData.js';
+import checks from '../data/checks.js';
+import { likely, traps } from '../data/examPrep.js';
+import papers from '../data/pastPapers.js';
 
 const tex = (s) => katex.renderToString(s, { throwOnError: true });
 const inline = (text = '') => (text.match(/\$[^$]+\$/g) ?? []).forEach((m) => tex(m.slice(1, -1)));
@@ -34,4 +37,43 @@ test('all LaTeX compiles', () => {
     m.flashcards.forEach((c) => [c.front, c.back].forEach(inline));
     m.quiz.forEach((q) => [q.q, q.explain, ...q.options].forEach(inline));
   }
+});
+
+test('every lesson has a valid check question', () => {
+  for (const m of modules)
+    for (const s of m.sections) {
+      const c = checks[m.id]?.[s.heading];
+      assert.ok(c, `missing check: ${m.id} / ${s.heading}`);
+      assert.ok(c.answer >= 0 && c.answer < c.options.length, `${m.id}: ${c.q}`);
+      [c.q, c.explain, ...c.options].forEach(inline);
+    }
+  const headings = new Set(modules.flatMap((m) => m.sections.map((s) => `${m.id}/${s.heading}`)));
+  for (const [id, byHeading] of Object.entries(checks)) for (const h of Object.keys(byHeading)) assert.ok(headings.has(`${id}/${h}`), `orphan check: ${id} / ${h}`);
+});
+
+test('exam prep points at real chapters and its math compiles', () => {
+  const ids = new Set(modules.map((m) => m.id));
+  for (const q of likely) {
+    assert.ok(ids.has(q.module), q.q);
+    [q.q, ...q.answer].forEach(inline);
+  }
+  for (const t of traps) {
+    assert.ok(ids.has(t.module), t.text);
+    inline(t.text);
+  }
+});
+
+test('labs and diagrams referenced by lessons exist', () => {
+  const known = { lab: ['modulation', 'analog', 'fdm', 'tdm', 'crc', 'hamming', 'coding'], diagram: ['topologies', 'muxdemux', 'fiber', 'multistage'] };
+  for (const m of modules) for (const s of m.sections) for (const b of s.blocks) if (known[b.type]) assert.ok(known[b.type].includes(b.id), `${m.id}: ${b.type} ${b.id}`);
+});
+
+test('past paper items point at real chapters and their math compiles', () => {
+  const ids = new Set(modules.map((m) => m.id));
+  for (const p of papers)
+    for (const set of p.sets)
+      for (const it of set.items) {
+        assert.ok(ids.has(it.module), it.id);
+        [it.q, ...it.answer].forEach(inline);
+      }
 });

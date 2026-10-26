@@ -44,6 +44,7 @@ export default {
       blocks: [
         { type: 'list', items: ['**Multimode step-index** – core density constant from centre to edge. Some beams go straight through; some hit the interface below the critical angle and are lost in the cladding; others reflect back and forth. The output pulse is the most distorted.', '**Multimode graded-index** – density is highest at the centre and decreases gradually to the edge, which bends beams back smoothly. Less distortion.', '**Single mode** – step-index fiber with a highly focused light source limiting beams to angles close to horizontal. Smaller diameter and much lower density, so the critical angle is close to 90° and propagation is almost horizontal. The pulse is almost undistorted.'] },
         { type: 'p', text: 'Multimode gets its name from multiple beams travelling through the core on different paths.' },
+        { type: 'diagram', id: 'fiber' },
       ],
     },
     {

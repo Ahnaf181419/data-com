@@ -21,7 +21,7 @@ export default function CheatSheet({ open, onClose, modules, currentId }) {
       key={id}
       onClick={() => setFilter(id)}
       aria-pressed={filter === id}
-      className={`min-h-10 shrink-0 rounded-full border px-4 text-sm ${filter === id ? 'border-amber bg-amber text-ink' : 'border-line text-mute active:bg-raise'}`}
+      className={`min-h-10 shrink-0 rounded-full border px-4 text-sm ${filter === id ? 'border-gold bg-gold text-ink' : 'border-line text-ash active:bg-raise'}`}
     >
       {label}
     </button>
@@ -38,7 +38,7 @@ export default function CheatSheet({ open, onClose, modules, currentId }) {
       <div className="flex h-full flex-col">
         <header className="flex items-center justify-between gap-3 border-b border-line px-5 pb-3 pt-[max(1rem,env(safe-area-inset-top))]">
           <h2 className="font-serif text-2xl">Formula sheet</h2>
-          <button onClick={onClose} className="min-h-11 rounded-xl border border-line px-4 text-mute active:bg-raise">
+          <button onClick={onClose} className="min-h-11 rounded-xl border border-line px-4 text-ash active:bg-raise">
             Close
           </button>
         </header>
@@ -49,8 +49,8 @@ export default function CheatSheet({ open, onClose, modules, currentId }) {
         <div className="flex-1 overflow-y-auto px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
           {shown.map((m) => (
             <section key={m.id} className="py-5">
-              <h3 className="mb-3 text-mute">
-                <span className="mr-2 font-serif text-amber">{m.chapter}</span>
+              <h3 className="mb-3 text-ash">
+                <span className="mr-2 font-serif text-gold">{m.chapter}</span>
                 {m.title}
               </h3>
               <div className="grid gap-3 md:grid-cols-2">
@@ -60,7 +60,7 @@ export default function CheatSheet({ open, onClose, modules, currentId }) {
                     <div className="overflow-x-auto">
                       <BlockMath math={f.tex} />
                     </div>
-                    {f.where && <p className="text-sm text-mute">{f.where}</p>}
+                    {f.where && <p className="text-sm text-ash">{f.where}</p>}
                   </div>
                 ))}
               </div>

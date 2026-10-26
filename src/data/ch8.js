@@ -70,6 +70,7 @@ export default {
         { type: 'p', text: 'With few middle switches it is **blocking**. The notes’ rule of thumb: below about 25% of the single-crossbar crosspoints, the switch is blocking.' },
         { type: 'p', text: '**Clos criterion** for a non-blocking multistage switch:' },
         { type: 'math', tex: 'n = \\sqrt{N/2}, \\qquad k \\ge 2n - 1' },
+        { type: 'diagram', id: 'multistage' },
       ],
     },
     {

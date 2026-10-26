@@ -104,3 +104,24 @@ test('Ch10 Hamming', () => {
   assert.equal(s.hammingCheck('10011000101').result.pos, 6); // Medha
   assert.equal(s.hammingCheck('10011100101').result.pos, 0);
 });
+
+test('Past paper: PCM quantization (Fall 2024 Q3e, Forouzan method)', () => {
+  const r = s.pcmQuantize({ values: [5.3, 12.7, -5.8, -17.4, 18.5], vmin: -20, vmax: 20, nb: 3 }).result;
+  assert.equal(r.delta, 5);
+  assert.deepEqual(r.rows.map((x) => x.word), ['101', '110', '010', '000', '111']);
+  assert.deepEqual(r.rows.map((x) => x.error), [0.44, -0.04, -0.34, -0.02, -0.2]);
+});
+
+test('Past paper: 4B/5B and differential Manchester (Fall 2024 Q2d)', () => {
+  const r = s.blockCode4B5B('010100010011000000010010').result;
+  assert.equal(r.stream, '010110100110101111100100110100');
+  // transition at start ⇒ 0; first 8 output bits 01011010 from a high line
+  assert.deepEqual(s.diffManchester('01011010', true), [[0, 1], [1, 0], [1, 0], [0, 1], [1, 0], [1, 0], [0, 1], [0, 1]]);
+});
+
+test('Past paper: multislot TDM and MFSK (Fall 2024 Q3c, Q3d)', () => {
+  const m = s.mfsk({ N: 3e6, r: 3, fc: 30e6 }).result;
+  assert.deepEqual([m.L, m.S, m.B, m.freqs[0], m.freqs[7]], [8, 1e6, 8e6, 26.5e6, 33.5e6]);
+  assert.equal(s.checksum([6, 10, 11, 4, 5]).result.checksum, 9);
+  assert.equal(s.hammingCheck('10011000101').result.pos, 6);
+});

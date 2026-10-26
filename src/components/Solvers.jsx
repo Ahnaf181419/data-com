@@ -16,6 +16,8 @@ const SOLVERS = {
   stations: [{ title: 'Station count and n-th station', fields: [['start', 'Band start', 'num', 530], ['end', 'Band end', 'num', 1700], ['channel', 'Channel width (same unit)', 'num', 10], ['n', 'Station number n', 'num', 3]], run: s.stationPlan }],
   fdm: [{ title: 'FDM link bandwidth', fields: [['n', 'Number of channels n', 'num', 5], ['bw', 'Bandwidth per channel', 'num', 100], ['guard', 'Guard band', 'num0', 10]], run: s.fdmLink }],
   tdm: [{ title: 'Synchronous TDM', fields: [['n', 'Number of inputs n', 'num', 4], ['rate', 'Rate per input (bps)', 'num', 2000], ['unitBits', 'Bits per slot', 'num', 8], ['syncBits', 'Sync bits per frame', 'num0', 1]], run: s.tdm }],
+  pcmq: [{ title: 'PCM quantization codes and normalized error', fields: [['values', 'Sample values (V), comma-separated', 'nums', '5.3, 12.7, -5.8, -17.4, 18.5'], ['vmin', 'Min voltage', 'any', -20], ['vmax', 'Max voltage', 'any', 20], ['nb', 'Bits per code word', 'num', 3]], run: s.pcmQuantize }],
+  block: [{ title: '4B/5B encoder', fields: [['bits', 'Data (multiple of 4 bits)', 'bits', '010100010011000000010010']], run: (v) => s.blockCode4B5B(v.bits) }],
   pcm: [{ title: 'PCM: sampling and quantization', fields: [['fh', 'Highest frequency fh (Hz)', 'num', 4000], ['N', 'Bit rate N (bps)', 'num', 64000]], run: s.pcm }],
   los: [
     { title: 'Max LOS distance', fields: [['h1', 'Antenna 1 height (m)', 'num0', 100], ['h2', 'Antenna 2 height (m)', 'num0', 0]], run: s.losDistance },
@@ -55,6 +57,15 @@ function parse([key, label, type], raw) {
     if (!rows.every((r) => /^[01]+$/.test(r) && r.length === rows[0].length)) throw new Error(`${label}: rows must be 0/1 and the same length.`);
     return rows;
   }
+  if (type === 'nums') {
+    const nums = t.split(/[\s,]+/).filter(Boolean).map(Number);
+    if (!nums.length || nums.some((x) => !Number.isFinite(x))) throw new Error(`${label}: enter numbers separated by commas.`);
+    return nums;
+  }
+  if (type === 'any') {
+    if (t === '' || !Number.isFinite(Number(t))) throw new Error(`${label}: enter a number.`);
+    return Number(t);
+  }
   if (type === 'list') {
     const nums = t.split(/[\s,]+/).filter(Boolean).map(Number);
     if (!nums.length || nums.some((x) => !Number.isInteger(x) || x < 0)) throw new Error(`${label}: enter whole numbers separated by commas.`);
@@ -78,7 +89,7 @@ function Solver({ cfg }) {
       <h3 className="mb-4 text-lg font-semibold">{cfg.title}</h3>
       <div className="grid gap-3 sm:grid-cols-2">
         {cfg.fields.map(([key, label, type, , options]) => (
-          <label key={key} className="grid gap-1 text-sm text-mute">
+          <label key={key} className="grid gap-1 text-sm text-ash">
             {label}
             {type === 'select' ? (
               <select value={vals[key]} onChange={(e) => setVals({ ...vals, [key]: e.target.value })} className="min-h-12 rounded-lg border border-line bg-ink px-3 text-base text-text">
@@ -90,7 +101,7 @@ function Solver({ cfg }) {
               <input
                 value={vals[key]}
                 onChange={(e) => setVals({ ...vals, [key]: e.target.value })}
-                inputMode={type.startsWith('num') ? 'decimal' : type === 'bits' ? 'numeric' : 'text'}
+                inputMode={type === 'num' || type === 'num0' ? 'decimal' : type === 'bits' ? 'numeric' : 'text'}
                 autoCapitalize="off"
                 autoCorrect="off"
                 spellCheck={false}
@@ -102,7 +113,7 @@ function Solver({ cfg }) {
       </div>
       <div className="mt-4 overflow-x-auto" aria-live="polite">
         {error ? (
-          <p className="text-bad">{error}</p>
+          <p className="text-red">{error}</p>
         ) : (
           <div className="math-block">
             {out.steps.map((t, i) => (
@@ -117,10 +128,10 @@ function Solver({ cfg }) {
 
 export default function Solvers({ module }) {
   const cfgs = module.solvers.flatMap((id) => SOLVERS[id]);
-  if (!cfgs.length) return <p className="rounded-xl border border-line bg-panel p-8 text-center text-mute">This chapter is all theory, with no calculations to solve. Use Flashcards or Quiz to practise it.</p>;
+  if (!cfgs.length) return <p className="rounded-xl border border-line bg-panel p-8 text-center text-ash">This chapter is all theory, with no calculations to solve. Use Flashcards or Quiz to practise it.</p>;
   return (
     <div className="grid grid-cols-[minmax(0,1fr)] gap-5">
-      <p className="text-mute">Each solver opens on an example from the slides or notes. Change the numbers to check your own working.</p>
+      <p className="text-ash">Each solver opens on an example from the slides or notes. Change the numbers to check your own working.</p>
       {cfgs.map((c) => (
         <Solver key={c.title} cfg={c} />
       ))}
