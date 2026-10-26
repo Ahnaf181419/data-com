@@ -241,6 +241,8 @@ export const traps = [
   { module: 'ch5-1', text: '$d = 0$ gives the **minimum** bandwidth and $d = 1$ the **maximum**. Read which one the question wants.' },
   { module: 'ch5-1', text: 'BFSK minimum: $2\\Delta f = S$, so $B_{min} = 2S$, not $S$. MFSK minimum is $L \\times S$.' },
   { module: 'ch5-1', text: 'BASK uses **unipolar** NRZ; BPSK uses **polar** NRZ.' },
+  { module: 'ch5-1', text: 'ASK can reach $B_{min} = N$, but FSK cannot: its carriers must be at least $S$ apart, so $B_{min} = 2S$ (Spring 2025 Q1b).' },
+  { module: 'ch6-2', text: 'Multilevel TDM combines slower lines first (six 200 kbps → three 400 kbps); multiple-slot TDM gives a fast line extra slots. Don’t mix them up (Fall 2024 Q3c vs Spring 2025 Q3d).' },
   { module: 'ch5-2', text: 'FM: 100 possible stations in 88–108 MHz, but only **50** operate at once in an area. AM: 117 stations.' },
   { module: 'ch5-2', text: 'β is 4 for FM but 2 for PM.' },
   { module: 'ch6-1', text: '$n$ channels need $n - 1$ guard bands, not $n$.' },

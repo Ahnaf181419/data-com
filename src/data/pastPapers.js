@@ -1,4 +1,4 @@
-// Fall 2024 semester final (exam held 30/10/2025), CSE 2211, AUST. Typed from the question paper.
+// CSE 2211 (AUST) semester finals: Fall 2024 (held 30/10/2025) and Spring 2025. Typed from the question papers.
 // Model answers use the class slides/notes; items marked `flagged` need the textbook method (not in the notes).
 export default [
   {
@@ -174,6 +174,188 @@ export default [
               '5.3 → 1.06 → 1.5, error +0.44, code 5 = 101. 12.7 → 2.54 → 2.5, error −0.04, code 6 = 110.',
               '−5.8 → −1.16 → −1.5, error −0.34, code 2 = 010. −17.4 → −3.48 → −3.5, error −0.02, code 0 = 000.',
               '18.5 → 3.70 → 3.5, error −0.20, code 7 = 111.',
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: 'Spring 2025 semester final',
+    meta: '2.5 hours, 50 marks. Answer any 4 questions from each set.',
+    sets: [
+      {
+        name: 'Question 1',
+        rule: 'Answer any 4 (5 × 4 = 20)',
+        items: [
+          {
+            id: '1(a)', marks: 5, module: 'ch5-1',
+            q: 'Describe with a neat diagram the implementation process of QPSK with the help of a constellation diagram.',
+            answer: [
+              'QPSK: $n_b = 2$, $L = 4$, so 2 bits ride on each signal element ($S = N/2$).',
+              'Diagram: NRZ-L bit stream → 2/1 converter → two branches. 1st bit × carrier $f_{c1}$ (0°): 1 → 0°, 0 → 180°. 2nd bit × carrier $f_{c2}$ (90° shifted): 1 → 90°, 0 → 270°. The two outputs are added (Σ).',
+              'Result (each $\\sqrt{V^2 + V^2} = \\sqrt2$ V): 00 → −135°, 10 → −45°, 01 → 135°, 11 → 45°.',
+              'Constellation: X-axis = in-phase carrier (1st bit), Y-axis = quadrature carrier (2nd bit); four points on a circle of radius $\\sqrt2$ at 45°, 135°, −135°, −45°.',
+              'Bandwidth: $B = (1+d)S$.',
+            ],
+          },
+          {
+            id: '1(b)', marks: 5, module: 'ch5-1',
+            q: 'The minimum bandwidth of an ASK signal could be equal to the bit rate. Explain why this is impossible for FSK.',
+            answer: [
+              'ASK: $B = (1+d)S$. With $d = 0$ and $r = 1$ ($S = N$): $B_{min} = S = N$, the bit rate.',
+              'BFSK uses two carriers $f_1 = f_c - \\Delta f$ and $f_2 = f_c + \\Delta f$, each needing $(1+d)S$: $B = (1+d)S + 2\\Delta f$.',
+              'For the modulator and demodulator to tell the two frequencies apart, the carriers must be at least $S$ apart: $2\\Delta f \\ge S$.',
+              'So even with $d = 0$: $B_{min} = S + S = 2S = 2N$. FSK always needs at least twice the bit rate, never just $N$.',
+            ],
+          },
+          {
+            id: '1(c)', marks: 5, module: 'ch6-2',
+            q: 'Distinguish between multilevel TDM, multiple-slot TDM and pulse-stuffed TDM.',
+            answer: [
+              'All three handle inputs with different data rates in synchronous TDM.',
+              'Multilevel: used when one rate is a multiple of the others. Slower lines are multiplexed first to match the faster ones (two 20 kbps → 40 kbps, then with three 40 kbps → 160 kbps).',
+              'Multiple-slot: a faster line gets more than one slot per frame, using a serial-to-parallel converter (a 50 kbps line becomes two 25 kbps slots → 125 kbps).',
+              'Pulse stuffing (bit padding): rates are not integer multiples, so dummy bits are added to slower lines to reach the dominant (highest) rate (46 kbps → 50 kbps).',
+            ],
+          },
+          {
+            id: '1(d)', marks: 5, module: 'ch6-1',
+            q: 'Define the analog hierarchy used by telephone companies and list its levels and their bandwidths.',
+            answer: [
+              'An FDM hierarchy (AT&T) that combines lower-bandwidth lines into higher-bandwidth lines, so many voice channels share fewer, larger channels.',
+              'Group: 12 voice channels × 4 kHz = 48 kHz.',
+              'Supergroup: 5 groups = 60 voice channels, 240 kHz.',
+              'Master group: 10 supergroups = 600 voice channels, 2.52 MHz (2.40 MHz + guard bands).',
+              'Jumbo group: 6 master groups = 3600 voice channels, 16.984 MHz (with guard bands).',
+            ],
+          },
+          {
+            id: '1(e)', marks: 5, module: 'ch8',
+            q: 'Describe with a neat diagram the setup phase of a virtual-circuit network using virtual-circuit identifiers. Also explain the delay associated with it.',
+            answer: [
+              'Global addresses of source and destination are used only in setup, to build switch table entries; the VCI (small, switch-local, changes per link) is used for data transfer.',
+              'Setup request (A → B): each switch records the incoming port and assigns an incoming VCI, and finds the outgoing port from its routing (global) table. E.g. switch 1: in (port 1, VCI 14) → out port 3.',
+              'Acknowledgment (B → A): the destination chooses the last VCI (e.g. 77); each switch fills in its outgoing VCI as the ack passes back. Tables: S1 1/14 → 3/66, S2 1/66 → 2/22, S3 2/22 → 3/77.',
+              'Delay: a one-time setup delay in two directions plus a one-time teardown delay in one direction. Through two switches: $3T + 3\\tau$ + setup delay + teardown delay (processing ignored).',
+              'If resources are reserved at setup, packets have no wait time at the switches.',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 2',
+        rule: 'Answer any 4 (3.5 × 4 = 14)',
+        items: [
+          {
+            id: '2(a)', marks: 3.5, module: 'ch5-2',
+            q: 'Illustrate the bandwidth allocation of AM according to FCC criteria, where the 530–1700 kHz spectrum gives 117 stations. Design the stations according to the spectrum.',
+            answer: [
+              'Audio $B = 5$ kHz → $B_{AM} = 2B = 10$ kHz per station (FCC allows 10 kHz).',
+              'Total $1700 - 530 = 1170$ kHz → $1170/10 = 117$ stations.',
+              'Station $n$: from $(n-1)\\times10 + 530$ kHz to 10 kHz higher, carrier in the middle.',
+              'Station 1: 530–540 kHz, $f_c = 535$ kHz. Station 2: 540–550 kHz, $f_c = 545$ kHz. … Station 117: 1690–1700 kHz, $f_c = 1695$ kHz.',
+              'Neighbouring carriers are 10 kHz apart so they do not interfere.',
+            ],
+          },
+          {
+            id: '2(b)', marks: 3.5, module: 'ch5-1',
+            q: 'In BFSK, show that the minimum bandwidth must be at least $2S$ for proper modulation and demodulation, where $S$ is the signal rate.',
+            answer: [
+              'Maximum bandwidth: $B = \\tfrac12(1+d)S + \\tfrac12(1+d)S + 2\\Delta f = (1+d)S + 2\\Delta f$ … (1).',
+              'The two carrier bands must not overlap: they can at most touch, so $2\\Delta f \\ge \\tfrac12(1+d)S + \\tfrac12(1+d)S = (1+d)S$.',
+              'Minimum, with $d = 0$ and $r = 1$: $2\\Delta f = S$ … (2).',
+              'Put (2) into (1): $B_{min} = (1+0)S + S = 2S$.',
+            ],
+          },
+          {
+            id: '2(c)', marks: 3.5, module: 'ch6-1',
+            q: 'Design an FDM configuration: four 4 kHz voice channels share a 22 kHz link from 30 to 52 kHz, with a 2 kHz guard band between channels.',
+            answer: [
+              'Check: $4 \\times 4 + (4-1) \\times 2 = 16 + 6 = 22$ kHz = link bandwidth ✓.',
+              'Channel 1: 30–34 kHz; guard 34–36.',
+              'Channel 2: 36–40 kHz; guard 40–42.',
+              'Channel 3: 42–46 kHz; guard 46–48.',
+              'Channel 4: 48–52 kHz. Each 0–4 kHz voice signal modulates its carrier to shift into its band; the receiver uses bandpass filters and demodulators to recover each one.',
+            ],
+          },
+          {
+            id: '2(d)', marks: 3.5, module: 'ch8',
+            q: 'A datagram network has 3 hosts, 1 switch and 1 router. Host 1 talks to host 2 via the switch, and host 2 talks to host 3 via the router. Draw the delay diagram.',
+            answer: [
+              'Draw a vertical time line for each device; time runs downward. Each hop has a transmission time $T$ (the height of the block) and a propagation time $\\tau$ (the slope of the line).',
+              'Host 1 → switch → host 2: $T$ + $\\tau$ to the switch, a wait $w_s$ at the switch, then $T$ + $\\tau$ to host 2. Delay $= 2T + 2\\tau + w_s$.',
+              'Host 2 → router → host 3: likewise, delay $= 2T + 2\\tau + w_r$.',
+              'This follows the slide pattern ($n$ switches → $(n+1)T + (n+1)\\tau + \\sum w$; two switches → $3T + 3\\tau + w_1 + w_2$). There is no setup or teardown in a datagram network; processing time is ignored.',
+            ],
+          },
+          {
+            id: '2(e)', marks: 3.5, module: 'ch10',
+            q: 'A receiver gets 10100011 10001001 11011101 11100111 10101010 with two-dimensional even parity. Is the pattern in error?',
+            answer: [
+              'Rows (each must have an even number of 1s): 10100011 → 4 ✓, 10001001 → 3 ✗, 11011101 → 6 ✓, 11100111 → 6 ✓, 10101010 (parity row) → 4 ✓.',
+              'Columns (all 5 rows): columns 1, 3, 4, 5 and 7 have an odd number of 1s ✗.',
+              'Parity fails, so the block is in error and is discarded (a burst of length 8 hit it).',
+              'The original block was 10101001 00111001 11011101 11100111 10101010 (slide example 4).',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 3',
+        rule: 'Answer any 4 (4 × 4 = 16)',
+        items: [
+          {
+            id: '3(a)', marks: 4, module: 'ch10',
+            q: 'Dataword 1010011110, divisor 10111. (i) Generate the codeword at the sender by binary division. (ii) Check the codeword at the receiver (assume no error).',
+            answer: [
+              'Divisor has 5 bits → append 4 zeros: 10100111100000.',
+              'Divide modulo-2 by 10111 (XOR; use 00000 when the leading bit is 0): quotient 1001101110, remainder 1010.',
+              'Codeword = 1010011110 1010 = 10100111101010.',
+              'Receiver: 10100111101010 ÷ 10111 → remainder (syndrome) 0000 → accept.',
+              'Step through it in the CRC lab or the Ch 10 solver.',
+            ],
+          },
+          {
+            id: '3(b)', marks: 4, module: 'ch5-1',
+            q: 'A 1 MHz (lowpass) medium must carry 10 independent channels of at least 10 Mbps each using QAM, with $d = 0$. Find the minimum bits per baud and the number of constellation points per channel.',
+            answer: [
+              'Bandwidth per channel = 1 MHz / 10 = 100 kHz.',
+              'QAM: $B = (1+d)S = S$ with $d = 0$, so $S = 100$ kbaud.',
+              '$r = N/S = 10\\text{ Mbps}/100\\text{ kbaud} = 100$ bits per baud.',
+              'Points $L = 2^r = 2^{100}$, i.e. $2^{100}$-QAM (shows how impractical this requirement is).',
+            ],
+          },
+          {
+            id: '3(c)', marks: 4, module: 'ch10',
+            q: 'A receiver gets 10011000101. Using the Hamming algorithm, find the bit in error and generate the correct code.',
+            answer: [
+              'Same as Fall 2024 Q3(b). Parity positions 1, 2, 4, 8.',
+              '$r_1$ (1,3,5,7,9,11) → 0, $r_2$ (2,3,6,7,10,11) → 1, $r_4$ (4,5,6,7) → 1, $r_8$ (8,9,10,11) → 0.',
+              'Syndrome $r_8 r_4 r_2 r_1 = 0110 = 6$ → bit 6 is wrong.',
+              'Corrected code 10011100101 (data 1001101).',
+            ],
+          },
+          {
+            id: '3(d)', marks: 4, module: 'ch6-2',
+            q: 'Ten sources, six at 200 kbps and four at 400 kbps, are combined with multilevel TDM and no sync bits. Find the frame size, frame rate, frame duration and output data rate.',
+            answer: [
+              'Multilevel: combine the six 200 kbps sources in pairs → three 400 kbps lines. Now there are seven 400 kbps inputs.',
+              'Frame size = 1 bit from each of the 7 inputs = 7 bits.',
+              'Frame rate = 400,000 frames/s (one bit per 400 kbps input per frame).',
+              'Frame duration = 1/400,000 s = 2.5 µs.',
+              'Output rate = 7 × 400 kbps = 2.8 Mbps (= 6 × 200 + 4 × 400).',
+            ],
+          },
+          {
+            id: '3(e)', marks: 4, module: 'ch8',
+            q: 'Five equal datagrams of one message take different paths (3200, 11,700, 12,200, 10,200, 10,700 km via switches {1,3,5}, {1,2,5}, {1,2,3,5}, {1,4,5}, {1,4,3,5}). Switch delays are 4, 11, 22, 9, 20 ms; speed $2\\times10^8$ m/s. Find the arrival order and each delay.',
+            answer: [
+              'Propagation: every 1000 km takes 5 ms at $2\\times10^8$ m/s. Delay = propagation + sum of switch delays on the path.',
+              'D1: 16 + (4 + 22 + 20) = 62 ms. D2: 58.5 + (4 + 11 + 20) = 93.5 ms.',
+              'D3: 61 + (4 + 11 + 22 + 20) = 118 ms. D4: 51 + (4 + 9 + 20) = 84 ms.',
+              'D5: 53.5 + (4 + 9 + 22 + 20) = 108.5 ms.',
+              'Arrival order: 1 → 4 → 2 → 5 → 3. Datagrams arrive out of order, as datagram networks allow.',
             ],
           },
         ],

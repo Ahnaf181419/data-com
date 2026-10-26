@@ -28,10 +28,12 @@ const SOLVERS = {
     { title: 'Multistage switch crosspoints', fields: [['N', 'Inputs N', 'num', 200], ['n', 'Stage-1 inputs n', 'num', 20], ['k', 'Middle switches k', 'num', 4]], run: s.multistage },
     { title: 'Clos non-blocking design', fields: [['N', 'Inputs N', 'num', 200]], run: s.clos },
   ],
+  datagram: [{ title: 'Datagram arrival order', fields: [['lengths', 'Path lengths (km), comma-separated', 'nums', '3200, 11700, 12200, 10200, 10700'], ['paths', 'Switches visited per datagram (e.g. 135, 125)', 'paths', '135, 125, 1235, 145, 1435'], ['delays', 'Delay of switch 1, 2, 3… (ms)', 'nums', '4, 11, 22, 9, 20']], run: s.datagramArrival }],
   delay: [{ title: 'Propagation and transmission delay', fields: [['D', 'Distance D (m)', 'num', 5e6], ['S', 'Speed S (m/s)', 'num', 2e8], ['L', 'Message L (bits)', 'num', 1000], ['R', 'Rate R (bps)', 'num', 1e6]], run: s.circuitDelay }],
   parity: [
     { title: 'Parity bit', fields: [['data', 'Data bits', 'bits', '1011'], ['mode', 'Parity', 'select', 'even', ['even', 'odd']]], run: (v) => s.parity(v.data, v.mode) },
     { title: '2-D parity (even)', fields: [['rows', 'Rows, space-separated', 'bitrows', '1100111 1011101 0111001 0101001']], run: (v) => s.parity2D(v.rows) },
+    { title: '2-D parity check at the receiver', fields: [['rows', 'Received rows incl. parity row, space-separated', 'bitrows', '10100011 10001001 11011101 11100111 10101010']], run: (v) => s.parity2DCheck(v.rows) },
   ],
   crc: [
     { title: 'CRC generator', fields: [['data', 'Dataword', 'bits', '1001'], ['div', 'Divisor', 'bits', '1011']], run: (v) => s.crcGenerate(v.data, v.div) },
@@ -56,6 +58,11 @@ function parse([key, label, type], raw) {
     const rows = t.split(/\s+/);
     if (!rows.every((r) => /^[01]+$/.test(r) && r.length === rows[0].length)) throw new Error(`${label}: rows must be 0/1 and the same length.`);
     return rows;
+  }
+  if (type === 'paths') {
+    const paths = t.split(/[\s,]+/).filter(Boolean);
+    if (!paths.length || paths.some((p) => !/^[1-9]+$/.test(p))) throw new Error(`${label}: write each path as switch numbers, e.g. 135.`);
+    return paths.map((p) => [...p].map(Number));
   }
   if (type === 'nums') {
     const nums = t.split(/[\s,]+/).filter(Boolean).map(Number);

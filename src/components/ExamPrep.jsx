@@ -102,9 +102,10 @@ function Mock({ modules, best, onFinish, onOpen }) {
 
 export default function ExamPrep({ modules, progress, onOpen, onMockFinish }) {
   const [tab, setTab] = useState('paper');
+  const [paperIdx, setPaperIdx] = useState(0);
   const byId = Object.fromEntries(modules.map((m) => [m.id, m]));
   const tabs = [
-    ['paper', 'Fall 2024 paper'],
+    ['paper', 'Past papers'],
     ['likely', 'Likely questions'],
     ['mock', 'Mock exam'],
     ['traps', 'Traps'],
@@ -123,12 +124,24 @@ export default function ExamPrep({ modules, progress, onOpen, onMockFinish }) {
         ))}
       </div>
       <div key={tab} className="enter mt-8">
+        {tab === 'paper' && (
+          <div role="radiogroup" aria-label="Paper" className="mb-6 inline-flex flex-wrap gap-1 rounded-xl border border-line bg-panel p-1">
+            {papers.map((p, i) => (
+              <button key={p.title} role="radio" aria-checked={paperIdx === i} onClick={() => setPaperIdx(i)} className={`press min-h-10 rounded-lg px-4 text-sm font-medium ${paperIdx === i ? 'bg-red text-ink' : 'text-ash'}`}>
+                {p.title.replace(' semester final', '')}
+              </button>
+            ))}
+          </div>
+        )}
         {tab === 'paper' &&
-          papers.map((paper) => (
+          [papers[paperIdx]].map((paper) => (
             <div key={paper.title} className="grid grid-cols-[minmax(0,1fr)] gap-5">
               <div>
                 <h2 className="display text-3xl">{paper.title}</h2>
-                <p className="mt-1 text-ash">{paper.meta} Questions marked in red need the textbook method because your slides and notes don’t cover them.</p>
+                <p className="mt-1 text-ash">
+                  {paper.meta}
+                  {paper.sets.some((set) => set.items.some((it) => it.flagged)) && ' Questions marked in red need the textbook method because your slides and notes don’t cover them.'}
+                </p>
               </div>
               {paper.sets.map((set) => (
                 <section key={set.name} className="grid grid-cols-[minmax(0,1fr)] gap-4">

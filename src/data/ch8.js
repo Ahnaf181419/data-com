@@ -125,5 +125,5 @@ export default {
     { q: 'A TSI with 4 time slots needs how many memory locations?', options: ['2', '4', '8', '16'], answer: 1, explain: 'One location per time slot.' },
     { q: 'Circuit-switch setup delay (request + ack) is:', options: ['$P_d + T_d$', '$2P_d + 2T_d$', '$3P_d$', '$T_d$'], answer: 1, explain: 'A request and an acknowledgment.' },
   ],
-  solvers: ['multistage', 'delay'],
+  solvers: ['multistage', 'delay', 'datagram'],
 };

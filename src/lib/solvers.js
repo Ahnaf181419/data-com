@@ -339,3 +339,37 @@ export function diffManchester(bits, startHigh = true) {
     return [first, level];
   });
 }
+
+// Receiver side of 2-D even parity: every row (incl. parity bit) and every column must hold an even number of 1s.
+export function parity2DCheck(rows) {
+  const badRows = rows.map((r, i) => (ones(r) % 2 ? i + 1 : 0)).filter(Boolean);
+  const badCols = [...rows[0]].map((_, c) => (rows.reduce((a, r) => a + +r[c], 0) % 2 ? c + 1 : 0)).filter(Boolean);
+  const ok = !badRows.length && !badCols.length;
+  return {
+    result: { badRows, badCols, ok },
+    steps: [
+      ...rows.map((r, i) => `\\text{row ${i + 1}: } \\texttt{${r}} \\to ${ones(r)}\\text{ ones}${ones(r) % 2 ? '\\ \\text{(odd ✗)}' : ''}`),
+      `\\text{odd columns: } ${badCols.length ? badCols.join(', ') : '\\text{none}'}`,
+      ok ? '\\text{all even} \\Rightarrow \\text{accept}' : '\\text{parity broken} \\Rightarrow \\text{error, discard the block}',
+    ],
+  };
+}
+
+// Datagrams on different paths: delay = path length / speed + sum of the delays of the switches visited.
+export function datagramArrival({ lengths, paths, delays, speed = 2e8 }) {
+  if (lengths.length !== paths.length) throw new Error('Give one path for each path length.');
+  if (paths.flat().some((k) => k > delays.length)) throw new Error('A path uses a switch with no delay given.');
+  const rows = lengths.map((km, i) => {
+    const prop = ((km * 1000) / speed) * 1000;
+    const sw = paths[i].reduce((a, k) => a + delays[k - 1], 0);
+    return { id: i + 1, prop, sw, total: prop + sw };
+  });
+  const order = [...rows].sort((a, b) => a.total - b.total).map((r) => r.id);
+  return {
+    result: { rows, order },
+    steps: [
+      ...rows.map((r, i) => `\\text{D${r.id}: } \\tfrac{${lengths[i]}\\text{ km}}{2\\times10^8} = ${fmt(r.prop)}\\text{ ms} + (${paths[i].map((k) => delays[k - 1]).join('+')}) = ${fmt(r.total)}\\text{ ms}`),
+      `\\text{arrival order: } ${order.join(' \\to ')}`,
+    ],
+  };
+}

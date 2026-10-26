@@ -125,3 +125,13 @@ test('Past paper: multislot TDM and MFSK (Fall 2024 Q3c, Q3d)', () => {
   assert.equal(s.checksum([6, 10, 11, 4, 5]).result.checksum, 9);
   assert.equal(s.hammingCheck('10011000101').result.pos, 6);
 });
+
+test('Past paper: Spring 2025 (2-D parity, CRC, datagrams)', () => {
+  const p = s.parity2DCheck(['10100011', '10001001', '11011101', '11100111', '10101010']).result;
+  assert.deepEqual([p.badRows, p.badCols, p.ok], [[2], [1, 3, 4, 5, 7], false]);
+  assert.equal(s.parity2DCheck(['11001111', '10111011', '01110010', '01010011', '01010101']).result.ok, true);
+  assert.deepEqual(s.crcGenerate('1010011110', '10111').result, { quotient: '1001101110', remainder: '1010', codeword: '10100111101010' });
+  const d = s.datagramArrival({ lengths: [3200, 11700, 12200, 10200, 10700], paths: [[1, 3, 5], [1, 2, 5], [1, 2, 3, 5], [1, 4, 5], [1, 4, 3, 5]], delays: [4, 11, 22, 9, 20] }).result;
+  assert.deepEqual(d.rows.map((r) => r.total), [62, 93.5, 118, 84, 108.5]);
+  assert.deepEqual(d.order, [1, 4, 2, 5, 3]);
+});

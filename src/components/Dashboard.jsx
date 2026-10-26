@@ -102,7 +102,7 @@ export default function Dashboard({ modules, progress, onOpen, onExam, onContinu
         <span>
           <span className="display block text-2xl text-text">Exam prep</span>
           <span className="mt-1 block text-ash">
-            The full Fall 2024 final with model answers, {likely.length} likely questions, a mock exam across every chapter, and the traps to avoid.
+            The Fall 2024 and Spring 2025 finals with model answers, {likely.length} likely questions, a mock exam across every chapter, and the traps to avoid.
           </span>
         </span>
         <span className="rounded-xl bg-red px-5 py-3 font-semibold text-ink">Open</span>
