@@ -115,9 +115,9 @@ export default function ExamPrep({ modules, progress, onOpen, onMockFinish }) {
       <p className="display text-lg text-red">Exam prep</p>
       <h1 className="display mt-1 text-5xl leading-[1.05] sm:text-6xl">Ace the final</h1>
       <p className="mt-3 max-w-prose text-ash">The questions your notes flag as likely, a mock exam across every chapter, and the mistakes that cost marks.</p>
-      <div role="tablist" aria-label="Exam prep sections" className="mt-7 flex gap-1 border-b border-line">
+      <div role="tablist" aria-label="Exam prep sections" className="mt-7 flex gap-1 overflow-x-auto border-b border-line">
         {tabs.map(([id, l]) => (
-          <button key={id} role="tab" aria-selected={tab === id} onClick={() => setTab(id)} className={`relative min-h-12 px-4 font-medium ${tab === id ? 'text-text' : 'text-ash'}`}>
+          <button key={id} role="tab" aria-selected={tab === id} onClick={() => setTab(id)} className={`relative min-h-12 shrink-0 whitespace-nowrap px-4 font-medium ${tab === id ? 'text-text' : 'text-ash'}`}>
             {l}
             <span className={`tab-ind absolute inset-x-3 -bottom-px h-0.5 rounded-full bg-red ${tab === id ? 'opacity-100' : 'scale-x-50 opacity-0'}`} />
           </button>

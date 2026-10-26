@@ -92,7 +92,7 @@ export default function Learn({ module, index, learned, onIndex, onLearned, onDo
                 onClick={() => go(k)}
                 aria-label={`Lesson ${k + 1}: ${sec.heading}${learned.includes(k) ? ' (understood)' : ''}`}
                 aria-current={k === i ? 'step' : undefined}
-                className="group flex h-8 flex-1 items-center"
+                className="group flex min-h-11 flex-1 items-center"
               >
                 <span className={`h-1.5 w-full rounded-full transition-colors duration-300 ${k === i ? 'bg-gold' : learned.includes(k) ? 'bg-gold/45' : 'bg-line'}`} />
               </button>
