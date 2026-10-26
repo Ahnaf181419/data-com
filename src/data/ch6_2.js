@@ -1,0 +1,127 @@
+export default {
+  id: 'ch6-2',
+  chapter: '6.2',
+  title: 'Multiplexing: TDM',
+  wave: 'tdm',
+  sources: ['ch6_2 slides', 'Raiyan notes pp. 42–58', 'Medha notes pp. 19–26'],
+  sections: [
+    {
+      heading: 'Time-Division Multiplexing',
+      blocks: [
+        { type: 'p', text: 'TDM is a digital process that lets several connections share the high bandwidth of one link. Instead of sharing a portion of the bandwidth as in FDM, **time is shared**: each connection occupies a portion of time on the link. Digital data from different sources are combined into one time-shared link.' },
+        { type: 'p', text: 'TDM has two schemes: **synchronous** and **statistical**.' },
+      ],
+    },
+    {
+      heading: 'Checklist for TDM math',
+      blocks: [
+        { type: 'list', ordered: true, items: ['Are the input lines analog or digital?', 'If analog → convert to digital with PCM (sampling, quantization, encoding).', 'Find the data rate of each input.', 'Check whether all input data rates are the same.', 'If not, apply a data rate management technique.'] },
+      ],
+    },
+    {
+      heading: 'Synchronous TDM',
+      blocks: [
+        { type: 'p', text: 'Each input connection gets an allotment in the output even if it is not sending data. Each input’s data flow is divided into units (1 bit or several bits), and the link combines one unit from each connection to make a **frame**. For $n$ inputs, a frame has at least $n$ time slots.' },
+        { type: 'note', text: 'In synchronous TDM the link data rate is $n$ times faster and the unit duration is $n$ times shorter. The frame duration equals the duration of one input unit.' },
+        { type: 'math', tex: '\\text{input slot} = T = \\frac{\\#\\text{bits per unit}}{\\text{input data rate}} = \\text{frame duration}' },
+        { type: 'math', tex: '\\text{output slot} = \\frac{T}{\\#\\text{inputs}}' },
+        { type: 'math', tex: '\\text{frame size} = \\#\\text{output slots} \\times \\#\\text{bits per slot}' },
+        { type: 'math', tex: '\\text{link rate} = \\#\\text{inputs} \\times \\text{rate per input}' },
+        { type: 'math', tex: '\\text{frame rate} = \\frac{\\text{link rate}}{\\text{frame size}} = \\frac{1}{T}' },
+      ],
+    },
+    {
+      heading: 'Interleaving',
+      blocks: [
+        { type: 'p', text: 'Taking a group of bits from each input line in turn is called **interleaving**. TDM can be pictured as two fast-rotating switches, one on each side, synchronized and rotating at the same speed in opposite directions. As the MUX switch opens in front of a connection, that connection can send one unit onto the path.' },
+      ],
+    },
+    {
+      heading: 'Data rate management',
+      blocks: [
+        { type: 'p', text: 'When inputs have different data rates, three strategies handle the mismatch:' },
+        { type: 'list', items: ['**Multilevel multiplexing** – used when one input rate is a multiple of the others. Example: two 20 kbps inputs are multiplexed into 40 kbps, which then joins three 40 kbps inputs for a 160 kbps output.', '**Multiple-slot allocation** – give a faster line more than one slot. A serial-to-parallel converter turns a 50 kbps line into two 25 kbps inputs (125 kbps output with three other 25 kbps lines).', '**Pulse stuffing** (bit padding / bit stuffing) – when rates are not integer multiples, make the highest rate dominant and add dummy bits to the slower lines. A 46 kbps input is stuffed to 50 kbps.'] },
+      ],
+    },
+    {
+      heading: 'Frame synchronization',
+      blocks: [
+        { type: 'p', text: 'So the receiver knows the bit boundaries, a known bit pattern (synchronization bits) is placed between frames, usually alternating 1, 0, 1, … The receiver looks for the expected bit and counts bits to the end of the frame. If the pattern is wrong there is an error.' },
+        { type: 'p', text: 'Sync bits are part of the transmission **overhead**: adding them raises the link data rate.' },
+      ],
+    },
+    {
+      heading: 'Digital signal (DS) hierarchy',
+      blocks: [
+        { type: 'table', head: ['Service', 'Line', 'Rate (Mbps)', 'Voice channels', 'Made of', 'Overhead'], rows: [['DS-0', '—', '0.064', '1', 'single 64 kbps channel', '—'], ['DS-1', 'T-1', '1.544', '24', '24 × DS-0', '8 kbps (1 bit/frame)'], ['DS-2', 'T-2', '6.312', '96', '4 × DS-1', '168 kbps (21 bits/frame)'], ['DS-3', 'T-3', '44.736', '672', '7 × DS-2 (28 DS-1)', '1.368 Mbps'], ['DS-4', 'T-4', '274.176', '4032', '6 × DS-3 (42 DS-2)', '16.128 Mbps']] },
+        { type: 'note', text: 'The DS-3 slide text says 44.376 Mbps (= 672 × 64 kbps + 1.368 Mbps), while the slide table and both notes show 44.736 Mbps.' },
+        { type: 'list', items: ['DS-0, DS-1… are service names; T-1 to T-4 are the lines that implement them, with matching capacities.', 'Only T-1 and T-3 are commercially available. DS-0 is not offered; it is a reference.', 'Europe uses **E lines**: E-1 2.048 Mbps (30 ch), E-2 8.448 (120), E-3 34.368 (480), E-4 139.264 (1920).'] },
+      ],
+    },
+    {
+      heading: 'T-1 for analog transmission',
+      blocks: [
+        { type: 'p', text: 'T lines are digital but can carry analog telephone signals if the signals are first sampled (PCM) and then time-division multiplexed. Instead of 24 twisted pairs to the exchange, an organization runs one T-1 line.' },
+        { type: 'math', tex: '\\text{frame} = 24 \\times 8 + 1 = 193\\text{ bits}, \\quad 193 \\times 8000 = 1.544\\text{ Mbps}' },
+        { type: 'p', text: 'Each slot holds one 8-bit sample from each channel, plus 1 sync bit; there are 8000 frames per second (one per sampling period).' },
+      ],
+    },
+    {
+      heading: 'Statistical TDM',
+      blocks: [
+        { type: 'p', text: 'In synchronous TDM, an input with no data wastes its slot. Statistical TDM allocates slots **dynamically**: a line gets a slot only when it has a slot’s worth of data. The MUX checks lines in round-robin order and skips empty ones, so a frame has fewer slots than input lines.' },
+        { type: 'table', head: ['', 'Synchronous TDM', 'Statistical TDM'], rows: [['Slots', 'Reserved per input, even if empty', 'Allocated only when there is data'], ['Addressing', 'None; position is the address', 'Each slot carries the destination address'], ['Sync bits', 'Needed', 'Not needed'], ['Link capacity', 'Sum of all inputs', 'Less than the sum, based on load statistics']] },
+        { type: 'math', tex: 'n = \\log_2 N\\ \\text{address bits} \\quad (8\\text{ outputs} \\Rightarrow 3\\text{ bits})' },
+        { type: 'p', text: '**Slot size:** the data-to-address ratio must be reasonable. 1 data bit with a 3-bit address is 300% overhead, so a block of data is usually many bytes while the address is a few bytes.' },
+      ],
+    },
+  ],
+  formulas: [
+    { label: 'Input slot / frame duration', tex: 'T = \\frac{\\text{bits per unit}}{\\text{input rate}}', where: '' },
+    { label: 'Output slot', tex: '\\frac{T}{n}', where: 'n = number of inputs' },
+    { label: 'Frame size', tex: 'n \\times \\text{bits per slot} \\ (+\\ \\text{sync bits})', where: '' },
+    { label: 'Link data rate', tex: 'n \\times \\text{input rate}', where: '+ overhead if sync bits' },
+    { label: 'Frame rate', tex: '\\frac{\\text{link rate}}{\\text{frame size}} = \\frac{1}{T}', where: '' },
+    { label: 'Overhead bits per frame', tex: '\\frac{\\text{overhead rate}}{\\text{frame rate}}', where: 'DS-1: 8k/8k = 1 bit' },
+    { label: 'T-1 rate', tex: '(24 \\times 8 + 1) \\times 8000 = 1.544\\text{ Mbps}', where: '' },
+    { label: 'Statistical TDM address', tex: 'n = \\log_2 N', where: 'N output lines' },
+  ],
+  examples: [
+    { title: 'Example 6.5', source: 'ch6_2 slides + notes', question: 'Three 1 kbps inputs, 1 bit at a time. Find the input slot, output slot and frame durations.', steps: ['Input slot $= 1/1000$ s $= 1$ ms (bit duration)', 'Output slot $= 1/3$ ms', 'Frame = 3 slots: $3 \\times \\frac13 = 1$ ms; frame size 3 bits', 'Link rate $= 3$ kbps; frame rate $= 3\\text{ kbps}/3\\text{ bits} = 1000$ frames/s'], answer: '1 ms, 1/3 ms, 1 ms' },
+    { title: 'Example 6.6', source: 'ch6_2 slides', question: 'Four 1 Mbps inputs, unit = 1 bit. Find the input bit duration, output bit duration, output bit rate and frame rate.', steps: ['Input bit duration $= 1/1\\text{ Mbps} = 1\\ \\mu$s', 'Output bit duration $= \\frac14\\ \\mu$s', 'Output rate $= 1/(\\frac14 \\mu s) = 4$ Mbps', 'Frame rate = input rate = 1,000,000 frames/s'], answer: '1 µs, ¼ µs, 4 Mbps, 10⁶ frames/s' },
+    { title: 'Example 6.7', source: 'ch6_2 slides', question: 'Four 1 kbps connections, unit = 1 bit. Find the bit duration before multiplexing, the link rate, the slot duration and the frame duration.', steps: ['Bit before multiplexing: $1/1\\text{ kbps} = 1$ ms', 'Link rate $= 4 \\times 1 = 4$ kbps', 'Slot $= \\frac14$ ms $= 250\\ \\mu$s (also $1/4$ kbps)', 'Frame $= 4 \\times 250\\ \\mu s = 1$ ms'], answer: '1 ms, 4 kbps, 250 µs, 1 ms' },
+    { title: 'Example 6.8', source: 'ch6_2 slides + Medha', question: 'Four channels each send 100 bytes/s, multiplexed 1 byte per channel. Find the frame size, frame duration, frame rate and link bit rate.', steps: ['Frame = 1 byte × 4 = 4 bytes = 32 bits', 'Frame rate = 100 frames/s, so frame duration = 1/100 s', 'Bit rate $= 100 \\times 32$'], answer: '32 bits, 10 ms, 100 frames/s, 3200 bps' },
+    { title: 'Example 6.9', source: 'ch6_2 slides', question: 'Four 100 kbps channels with a 2-bit time slot. Find the frame rate, frame duration, bit rate and bit duration.', steps: ['Link rate $= 4 \\times 100 = 400$ kbps', 'Frame $= 2 \\times 4 = 8$ bits; frame rate $= 400\\text{k}/8 = 50{,}000$ frames/s', 'Frame duration $= 1/50{,}000$ s $= 20\\ \\mu$s', 'Bit duration $= 1/400{,}000$ s'], answer: '50,000 frames/s, 20 µs, 400 kbps, 2.5 µs' },
+    { title: 'Example 6.10 (sync bit)', source: 'ch6_2 slides + notes', question: 'Four sources each create 250 8-bit characters/s. The unit is a character and 1 sync bit is added per frame. Find all rates and sizes.', steps: ['Source rate $= 250 \\times 8 = 2000$ bps = 2 kbps', 'Character duration $= 1/250$ s = 4 ms = frame duration', 'Frame rate = 250 frames/s', 'Frame $= 4 \\times 8 + 1 = 33$ bits', 'Link rate $= 250 \\times 33 = 8250$ bps', 'Overhead $= 8250 - 8000 = 250$ bps'], answer: '2 kbps, 4 ms, 250 frames/s, 4 ms, 33 bits, 8250 bps' },
+    { title: 'Example 6.11 (multislot)', source: 'ch6_2 slides + notes', question: 'Multiplex a 100 kbps channel and a 200 kbps channel. Find the frame rate, frame duration and link rate.', steps: ['Give 1 slot to the first channel and 2 slots to the second (split into 2 × 100 kbps).', 'Frame = 3 bits; frame rate = 100,000 frames/s (1 bit from the first channel each frame)', 'Frame duration $= 1/100{,}000$ s $= 10\\ \\mu$s; output slot $= T/3$', 'Link rate $= 100{,}000 \\times 3$'], answer: '100,000 frames/s, 10 µs, 300 kbps' },
+    { title: 'DS-1 overhead', source: 'Raiyan pp. 56–57, Medha p. 25', question: 'Show where the DS-1 overhead comes from.', steps: ['$24 \\times \\text{DS-0} = 24 \\times 64 = 1536$ kbps; table says 1544 kbps', 'Overhead $= 1544 - 1536 = 8$ kbps', 'Without overhead: frame $= 24 \\times 8 = 192$ bits; frame rate $= 1536\\text{k}/192 = 8000$ frames/s', 'Overhead bits/frame $= 8\\text{k}/8\\text{k} = 1$ bit', 'Frame $= 193$ bits; rate $= 8000 \\times 193$'], answer: '1 overhead bit per frame, 1.544 Mbps' },
+    { title: 'DS-2 overhead', source: 'Raiyan pp. 57–58, Medha p. 26', question: 'Find the DS-2 overhead bits per frame.', steps: ['$96 \\times 64 = 6144$ kbps; table 6312 kbps → overhead 168 kbps', 'Frame without overhead $= 96 \\times 8 = 768$ bits; frame rate $= 6144\\text{k}/768 = 8000$', 'Overhead bits $= 168\\text{k}/8\\text{k} = 21$ bits', 'Frame $= 768 + 21 = 789$ bits; rate $= 8000 \\times 789$'], answer: '21 bits per frame, 6.312 Mbps' },
+  ],
+  flashcards: [
+    { front: 'FDM vs TDM', back: 'FDM shares bandwidth (analog). TDM shares time (digital).' },
+    { front: 'In synchronous TDM, frame duration equals…', back: 'The duration of one input unit (input time slot).' },
+    { front: 'Synchronous TDM link rate', back: 'n times faster than each input; unit duration n times shorter.' },
+    { front: 'Three data rate management strategies', back: 'Multilevel multiplexing, multiple-slot allocation, pulse stuffing.' },
+    { front: 'Pulse stuffing', back: 'Add dummy bits to slower lines so all match the dominant (highest) rate. Also called bit padding or bit stuffing.' },
+    { front: 'Why sync bits?', back: 'So the receiver knows frame and bit boundaries. They add overhead.' },
+    { front: 'T-1 frame', back: '24 × 8 + 1 = 193 bits; 8000 frames/s → 1.544 Mbps.' },
+    { front: 'DS-1 / DS-2 overhead per frame', back: 'DS-1: 1 bit (8 kbps). DS-2: 21 bits (168 kbps).' },
+    { front: 'E-1 rate', back: '2.048 Mbps, 30 channels.' },
+    { front: 'Statistical TDM addressing', back: 'Each slot carries the destination address: $n = \\log_2 N$ bits.' },
+    { front: 'Statistical vs synchronous: sync bits?', back: 'Statistical TDM frames need no synchronization bits.' },
+    { front: 'Interleaving', back: 'Taking a unit from each input in turn, like a rotating switch.' },
+  ],
+  quiz: [
+    { q: 'Four 1 kbps inputs, 1 bit per slot. The output slot duration is:', options: ['1 ms', '250 µs', '4 ms', '25 µs'], answer: 1, explain: '$1\\text{ ms}/4$.' },
+    { q: 'Example 6.10: frame size with one sync bit?', options: ['32 bits', '33 bits', '34 bits', '40 bits'], answer: 1, explain: '$4\\times8 + 1$.' },
+    { q: 'A 46 kbps line padded to 50 kbps uses:', options: ['Multilevel multiplexing', 'Multislot allocation', 'Pulse stuffing', 'Statistical TDM'], answer: 2, explain: 'Dummy bits raise the rate.' },
+    { q: 'The T-1 data rate is:', options: ['1.536 Mbps', '1.544 Mbps', '2.048 Mbps', '6.312 Mbps'], answer: 1, explain: '$193 \\times 8000$.' },
+    { q: 'How many DS-1 channels make up a DS-3?', options: ['4', '7', '24', '28'], answer: 3, explain: '7 DS-2 × 4 DS-1 = 28.' },
+    { q: 'Which TDM needs an address in every slot?', options: ['Synchronous', 'Statistical', 'Both', 'Neither'], answer: 1, explain: 'There are no fixed slot-to-output relationships in statistical TDM.' },
+    { q: 'For 8 output lines, statistical TDM needs an address of:', options: ['2 bits', '3 bits', '8 bits', '4 bits'], answer: 1, explain: '$\\log_2 8 = 3$.' },
+    { q: 'Overhead bits per DS-2 frame:', options: ['1', '8', '21', '168'], answer: 2, explain: '168 kbps ÷ 8000 frames/s.' },
+    { q: 'Four 100 kbps channels, 2-bit slots: frame rate?', options: ['100,000/s', '50,000/s', '400,000/s', '25,000/s'], answer: 1, explain: '400 kbps ÷ 8-bit frames.' },
+    { q: 'In statistical TDM the link capacity is normally:', options: ['Greater than the sum of inputs', 'Equal to the sum', 'Less than the sum', 'Unrelated'], answer: 2, explain: 'It is sized by load statistics.' },
+  ],
+  solvers: ['tdm', 'pcm'],
+};

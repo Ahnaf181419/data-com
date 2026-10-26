@@ -1,0 +1,5 @@
+node_modules/
+dist/
+# Source PDFs (course slides + classmates' notes) stay local
+Class Lecture/
+Notes/

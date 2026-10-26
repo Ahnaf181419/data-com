@@ -1,0 +1,109 @@
+@import 'tailwindcss';
+
+/* Dark only. Amber = in-phase (active state, the signal trace); cyan = quadrature (math). */
+@theme {
+  --color-ink: #121a2e;
+  --color-panel: #19223b;
+  --color-raise: #212c4a;
+  --color-line: #2c3858;
+  --color-text: #e7e9f1;
+  --color-mute: #9aa4bf;
+  --color-amber: #f2b544;
+  --color-cyan: #6cc4d9;
+  --color-good: #7fd1a4;
+  --color-bad: #f08a8a;
+  --font-serif: Charter, 'Bitstream Charter', 'Iowan Old Style', 'Sitka Text', Cambria, Georgia, serif;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  min-height: 100dvh;
+}
+
+button {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-amber);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.prose-read {
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+/* Display math: scroll sideways instead of breaking the layout on narrow screens. */
+.math-block {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  border-left: 2px solid var(--color-cyan);
+  background: color-mix(in srgb, var(--color-cyan) 6%, transparent);
+  padding: 0.25rem 1rem;
+  border-radius: 0 8px 8px 0;
+}
+.math-block .katex-display {
+  margin: 0.6rem 0;
+}
+.katex {
+  font-size: 1.08em;
+}
+
+.trace {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 1.1s cubic-bezier(0.3, 0.7, 0.2, 1) forwards;
+}
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.card-3d {
+  transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.card-3d.flipped {
+  transform: rotateY(180deg);
+}
+.face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.face-back {
+  transform: rotateY(180deg);
+}
+
+dialog::backdrop {
+  background: rgb(5 8 18 / 0.7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trace {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .card-3d {
+    transition: none;
+  }
+}
