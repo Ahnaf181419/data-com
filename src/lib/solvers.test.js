@@ -135,3 +135,24 @@ test('Past paper: Spring 2025 (2-D parity, CRC, datagrams)', () => {
   assert.deepEqual(d.rows.map((r) => r.total), [62, 93.5, 118, 84, 108.5]);
   assert.deepEqual(d.order, [1, 4, 2, 5, 3]);
 });
+
+test('Past paper: Spring 2024 (Hamming, CRC, datagrams, PCM, 4B/5B, T-1, Clos, cable loss)', () => {
+  assert.deepEqual(s.hammingCheck('11001110111').result, { pos: 5, corrected: '11001100111' });
+  assert.deepEqual(s.crcGenerate('101001111', '10111').result, { quotient: '100110111', remainder: '0101', codeword: '1010011110101' });
+  assert.equal(s.crcCheck('1010011110101', '10111').result.remainder, '0000');
+  const d = s.datagramArrival({ lengths: [3200, 11700, 12200, 10200, 10700], paths: [[1, 3, 5], [1, 2, 5], [1, 2, 3, 5], [1, 4, 5], [1, 4, 3, 5]], delays: [3, 10, 20, 7, 20] }).result;
+  assert.deepEqual(d.rows.map((r) => r.total), [59, 91.5, 114, 81, 103.5]);
+  assert.deepEqual(d.order, [1, 4, 2, 5, 3]);
+  const q = s.pcmQuantize({ values: [6.3, 13.7, -5.8, -18.4, 19.5], vmin: -40, vmax: 40, nb: 3 }).result;
+  assert.equal(q.delta, 10);
+  assert.deepEqual(q.rows.map((r) => r.word), ['100', '101', '011', '010', '101']);
+  assert.equal(s.blockCode4B5B('101000100110000000010010').result.stream, '101101010001110111100100110100');
+  const t = s.tdm({ n: 24, rate: 64000, unitBits: 8, syncBits: 1 }).result;
+  assert.deepEqual([t.frameBits, t.frameRate, t.linkRate], [193, 8000, 1544000]);
+  const c = s.clos({ N: 100 }).result;
+  assert.deepEqual([c.n, c.k, c.total, c.pct], [5, 9, 5400, 54]);
+  const l = s.cableLoss({ P0: 2, dbPerKm: -0.3, km: 5 }).result;
+  assert.equal(l.db, -1.5);
+  assert.equal(Math.round(l.P * 1000) / 1000, 1.416);
+});
+

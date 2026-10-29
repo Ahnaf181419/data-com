@@ -1,4 +1,5 @@
-// CSE 2211 (AUST) semester finals: Fall 2024 (held 30/10/2025) and Spring 2025. Typed from the question papers.
+// CSE 2211 (AUST) semester finals: Fall 2024 (held 30/10/2025), Spring 2025 and Spring 2024 (held 17/04/2025).
+// Typed from the question papers.
 // Model answers use the class slides/notes; items marked `flagged` need the textbook method (not in the notes).
 // `answer` is the key-point summary; the full exam-script answer for each item lives in answerScripts.js.
 import { paperScripts } from './answerScripts.js';
@@ -360,6 +361,191 @@ const papers = [
               'D5: 53.5 + (4 + 9 + 22 + 20) = 108.5 ms.',
               'Arrival order: 1 → 4 → 2 → 5 → 3. Datagrams arrive out of order, as datagram networks allow.',
             ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: 'Spring 2024 semester final',
+    meta: 'Held 17/04/2025. 3 hours, 70 marks. Answer any 5 questions from each set.',
+    sets: [
+      {
+        name: 'Question 1',
+        rule: 'Answer any 5 (5 × 5 = 25)',
+        items: [
+          {
+            id: '1(a)', marks: 5, module: 'ch1',
+            q: 'Discuss a communication system which sends only voice information in terms of components, data flow and the criteria necessary for an effective and efficient communication system.',
+            answer: [
+              'Components: sender (telephone), receiver (telephone), transmission medium (e.g. twisted wire of the PSTN), message (voice), protocol (rules both sides follow).',
+              'Data flow: simplex (one way only), half-duplex (both ways, not at the same time), full-duplex (both ways at the same time). A phone call where both talk at once is full-duplex.',
+              'Effectiveness: delivery (right destination, by the address system), accuracy (no errors, noise cancelled), timeliness (delivered on time, as voice needs), jitter (uneven packet arrival delay) kept low.',
+            ],
+          },
+          {
+            id: '1(b)', marks: 5, module: 'ch1', flagged: true,
+            q: 'List the layers of the OSI model. Briefly describe the responsibilities of the physical layer and data link layer in the OSI model.',
+            answer: [
+              'Not in your slides or notes beyond "end devices use all 7 OSI layers": standard textbook answer.',
+              'Layers (bottom up): physical, data link, network, transport, session, presentation, application.',
+              'Physical: moves individual bits over the medium; defines the interface and medium, how bits are represented (encoding), the data rate, bit synchronization, line configuration, topology and transmission mode.',
+              'Data link: node-to-node (hop-to-hop) delivery of frames; framing, physical addressing, flow control, error control (detection and correction, as in Ch 10) and access control.',
+            ],
+          },
+          {
+            id: '1(c)', marks: 5, module: 'ch1', flagged: true,
+            q: 'Define signal impairment. Briefly discuss the three types of transmission impairment with an example.',
+            answer: [
+              'Not in your slides or notes: standard textbook answer.',
+              'Impairment: the medium is not perfect, so the signal received is not the same as the signal sent.',
+              '**Attenuation**: loss of energy over distance; fixed with amplifiers/repeaters (twisted pair needs repeaters every 5–6 km analog, 2–3 km digital). Measured in dB.',
+              '**Distortion**: the signal changes shape, because the frequency components of a composite signal arrive with different delays.',
+              '**Noise**: unwanted energy added on the way (thermal, induced, crosstalk, impulse); e.g. 0110 sent, 0010 received.',
+            ],
+          },
+          {
+            id: '1(d)', marks: 5, module: 'ch5-1',
+            q: 'Explain with an example the implementation process of QPSK with the help of a constellation diagram.',
+            answer: [
+              'Same as Spring 2025 Q1(a).',
+              '2 bits per signal element ($n_b = 2$, $L = 4$, $S = N/2$). A 2/1 converter sends the 1st bit to an in-phase carrier and the 2nd bit to a carrier shifted 90°; each branch is BPSK; the two are added.',
+              'Bits → phase: 11 → 45°, 01 → 135°, 00 → −135°, 10 → −45°, all with amplitude $\\sqrt2$ V.',
+            ],
+          },
+          {
+            id: '1(e)', marks: 5, module: 'ch6-1',
+            q: 'Describe with a neat diagram the analog hierarchy in which groups of signals are successively multiplexed onto higher-bandwidth lines.',
+            answer: [
+              'Same as Spring 2025 Q1(d). FDM at every level.',
+              'Group: 12 voice channels, 48 kHz. Supergroup: 5 groups, 240 kHz. Master group: 10 supergroups, 2.52 MHz. Jumbo group: 6 master groups, 16.984 MHz.',
+            ],
+          },
+          {
+            id: '1(f)', marks: 5, module: 'ch7-1',
+            q: 'Discuss the form of the signal in twisted-pair cable, coaxial cable, and fiber-optic cable. Briefly describe the modes for propagating signal along optical channels.',
+            answer: [
+              'Twisted pair and coax: metallic (copper) conductors carry the signal as **electric current**. Twisted pair: one wire carries the signal, the other is the ground reference; the receiver uses the difference. Coax: central core conductor, with the outer conductor as shield and second conductor.',
+              'Fiber: glass or plastic carries the signal as **light**, kept in the core by reflection off the less dense cladding.',
+              'Modes: multimode step-index (most distortion), multimode graded-index (less), single mode (almost none).',
+            ],
+          },
+          {
+            id: '1(g)', marks: 5, module: 'ch8',
+            q: 'Explain with an example the three phases of a virtual circuit network with the help of virtual circuit identifiers.',
+            answer: [
+              'Global address: used only in setup to create VCIs. VCI: small, used in data transfer, changes from link to link.',
+              'Setup: a request travels A → B, each switch records incoming port and VCI; the acknowledgment travels back filling in outgoing VCIs (destination chooses the last one, e.g. 77).',
+              'Data transfer: each switch looks up (incoming port, VCI) and forwards with the new VCI: (1, 14) → (3, 66), (1, 66) → (2, 22), (2, 22) → (3, 77).',
+              'Teardown: the source sends a teardown request, the destination confirms, all switches delete the entry.',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 2',
+        rule: 'Answer any 5 (5 × 5 = 25)',
+        items: [
+          {
+            id: '2(a)', marks: 5, module: 'ch1', flagged: true,
+            q: 'Design a hybrid topology with a star backbone and three ring networks and identify the consequences if a connection fails.',
+            answer: [
+              'Hybrid star with ring is in your notes; the failure consequences are the standard textbook reasoning.',
+              'Design: a central hub (star backbone) with a point-to-point link to each of three rings; each ring links its stations point-to-point in a loop.',
+              'A link inside a ring fails → that ring is broken and its stations may lose contact; the other rings work.',
+              'A hub-to-ring link fails → that ring still works inside but is cut off from the others.',
+              'The hub fails → no ring can reach another (single point of failure of a star).',
+            ],
+          },
+          {
+            id: '2(b)', marks: 5, module: 'ch5-1', flagged: true,
+            q: '"For any given bandwidth, a higher data rate creates signal distortions" — illustrate with an example.',
+            answer: [
+              'Not in your slides or notes as stated: standard textbook reasoning, using the notes’ bandwidth formulas.',
+              'Bandwidth needed grows with the rate: $B = (1+d)S$, and for NRZ $B_{min} = N/2$.',
+              'Example: a 4 kHz channel carries at most 8 kbps NRZ. Sending 16 kbps needs 8 kHz; the channel passes only the components up to 4 kHz, so the received signal loses its shape (distortion).',
+            ],
+          },
+          {
+            id: '2(c)', marks: 5, module: 'ch5-1',
+            q: 'In BFSK, show that the minimum bandwidth should be at least $2S$ for the proper operation of modulation and demodulation, where $S$ is the signal rate in baud.',
+            answer: ['Same as Spring 2025 Q2(b).', '$B_{max} = (1+d)S + 2\\Delta f$; at the minimum the two bands just touch: $2\\Delta f = S$ with $d = 0$, so $B_{min} = S + S = 2S$.'],
+          },
+          {
+            id: '2(d)', marks: 5, module: 'ch4x', flagged: true,
+            q: 'The input stream to a 4B/5B block encoder is 101000100110000000010010. With the help of the table (0000–0101), find the output stream and draw the graph of the differential Manchester scheme for the first 8 bits of the output stream.',
+            answer: [
+              'Groups: 1010, 0010, 0110, 0000, 0001, 0010. The printed table stops at 0101, so 1010 and 0110 come from the full 4B/5B table.',
+              'Output: 10110 10100 01110 11110 01001 10100',
+              'First 8 output bits 1 0 1 1 0 1 0 1; starting high the half-bit levels are HL HL LH HL HL LH LH HL.',
+            ],
+          },
+          {
+            id: '2(e)', marks: 5, module: 'ch6-2',
+            q: 'Design the TDM used by telephone companies where 24 voice channels can be multiplexed onto one T-1 line and produce 1.544 Mbps capacity.',
+            answer: [
+              'Each 4 kHz voice channel → PCM: $f_s = 2 \\times 4\\text{ k} = 8000$ samples/s, 8 bits/sample → 64 kbps.',
+              'Frame: 24 slots × 8 bits + 1 sync bit = 193 bits; one frame per sampling period → 8000 frames/s.',
+              '$193 \\times 8000 = 1.544$ Mbps $= 24 \\times 64$ kbps + 8 kbps overhead.',
+            ],
+          },
+          {
+            id: '2(f)', marks: 5, module: 'ch8',
+            q: 'Distinguish between delay in a datagram network and a virtual circuit network with a neat diagram.',
+            answer: [
+              'Datagram (two switches): $3T + 3\\tau + w_1 + w_2$. No setup or teardown, but each packet may wait at each switch; delays are not uniform.',
+              'Virtual circuit: $3T + 3\\tau$ + setup delay (one time, two directions) + teardown delay (one time, one direction). With resources reserved at setup there is no wait per packet.',
+            ],
+          },
+          {
+            id: '2(g)', marks: 5, module: 'ch8',
+            q: 'Design a three-stage space-division switch with input $N = 100$ using Clos criteria. Identify the total number of crosspoints and blocking ratio compared with one single crossbar.',
+            answer: [
+              'Clos: $n = \\sqrt{N/2} = \\sqrt{50} \\approx 7.07$; 7 does not divide 100, so take the nearest divisor $n = 5$; $k = 2n - 1 = 9$.',
+              'Stage 1: 20 crossbars of 5 × 9 = 900. Stage 2: 9 crossbars of 20 × 20 = 3600. Stage 3: 20 of 9 × 5 = 900. Total **5400**.',
+              'Single crossbar: $100 \\times 100 = 10{,}000$. Ratio $5400/10{,}000 = 54\\%$ (non-blocking).',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 3',
+        rule: 'Answer any 5 (4 × 5 = 20)',
+        items: [
+          {
+            id: '3(a)', marks: 4, module: 'ch6-2',
+            q: 'Ten sources, six with a bit rate of 200 kbps and four with a bit rate of 400 kbps, are to be combined using multilevel TDM. Each output slot carries 1 bit from each digital source with no synchronizing bits. Find the size of a frame in bits, frame rate, duration of a frame, and output data rate.',
+            answer: ['Same as Spring 2025 Q3(d).', 'Pair the 200 kbps lines → 3 × 400 kbps; with 4 × 400 kbps → 7 inputs. Frame 7 bits, 400,000 frames/s, 2.5 µs, 2.8 Mbps.'],
+          },
+          {
+            id: '3(b)', marks: 4, module: 'ch10',
+            q: 'A receiver receives the code 11001110111. Using the Hamming encoding algorithm, find the bit in error and generate the correct code.',
+            answer: ['Checks: $r_1$ odd → 1, $r_2$ even → 0, $r_4$ odd → 1, $r_8$ even → 0.', '$r_8 r_4 r_2 r_1 = 0101 = 5$: bit 5 is in error.', 'Correct code 11001100111 (data 1101101).'],
+          },
+          {
+            id: '3(c)', marks: 4, module: 'ch5-1',
+            q: 'A corporation has a medium with a 1-MHz bandwidth (lowpass). The corporation needs to create 10 separate independent channels, each capable of sending at least 10 Mbps. The company has decided to use QAM technology. What is the minimum number of bits per baud for each channel? What is the number of points in the constellation diagram for each channel? Assume $d = 0$.',
+            answer: ['Same as Spring 2025 Q3(b).', '100 kHz per channel → $S = 100$ kbaud → $r = 10\\text{ M}/100\\text{ k} = 100$ bits/baud → $L = 2^{100}$ points.'],
+          },
+          {
+            id: '3(d)', marks: 4, module: 'ch7-1', flagged: true,
+            q: 'The loss in a cable is usually defined in decibels per kilometer (dB/km). If the signal at the beginning of a cable with −0.3 dB/km has a power of 2 mW, what is the power of the signal at 5 km?',
+            answer: ['Not in your slides or notes: standard textbook decibel formula $dB = 10\\log_{10}(P_2/P_1)$.', 'Loss over 5 km $= -0.3 \\times 5 = -1.5$ dB.', '$P_2 = 2 \\times 10^{-0.15} \\approx 1.42$ mW.'],
+          },
+          {
+            id: '3(e)', marks: 4, module: 'ch10',
+            q: 'Given the dataword 101001111 and the divisor 10111, show the generation of the CRC codeword at the sender site (using binary division). Also verify the codeword at the receiver side.',
+            answer: ['Append 4 zeros: 1010011110000; divide by 10111 → quotient 100110111, remainder 0101.', 'Codeword 1010011110101.', 'Receiver: 1010011110101 ÷ 10111 → remainder 0000 → accept.'],
+          },
+          {
+            id: '3(f)', marks: 4, module: 'ch8',
+            q: 'Five equal-size datagrams of one message take different paths (3200, 11,700, 12,200, 10,200, 10,700 km via switches {1,3,5}, {1,2,5}, {1,2,3,5}, {1,4,5}, {1,4,3,5}). Switch delays (waiting + processing) are 3, 10, 20, 7, 20 ms; speed $2\\times10^8$ m/s. Find the arrival order and each delay.',
+            answer: ['Every 1000 km takes 5 ms. Delay = propagation + switch delays on the path.', 'D1: 16 + 43 = 59 ms. D2: 58.5 + 33 = 91.5 ms. D3: 61 + 53 = 114 ms. D4: 51 + 30 = 81 ms. D5: 53.5 + 50 = 103.5 ms.', 'Order: 1 → 4 → 2 → 5 → 3.'],
+          },
+          {
+            id: '3(g)', marks: 4, module: 'pcm', flagged: true,
+            q: 'Sampled values 6.3, 13.7, −5.8, −18.4, 19.5 V at times 0–4. Using PCM with 3-bit code words and amplitudes between −40 V and +40 V, show the normalized quantized value and quantization code for each.',
+            answer: ['$L = 8$, $\\Delta = 80/8 = 10$ V.', 'Normalized: 0.63, 1.37, −0.58, −1.84, 1.95 → quantized 0.5, 1.5, −0.5, −1.5, 1.5.', 'Codes 4, 5, 3, 2, 5 → 100, 101, 011, 010, 101.'],
           },
         ],
       },

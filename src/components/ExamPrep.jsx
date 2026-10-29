@@ -3,6 +3,7 @@ import { Block, Rich } from './NotesView.jsx';
 import Quiz, { shuffle } from './Quiz.jsx';
 import { likely, traps } from '../data/examPrep.js';
 import papers from '../data/pastPapers.js';
+import groups from '../data/questionBank.js';
 
 function Likely({ q, mod, onOpen }) {
   const [open, setOpen] = useState(false);
@@ -120,12 +121,136 @@ function Mock({ modules, best, onFinish, onOpen }) {
   );
 }
 
+const short = (paper) => paper.title.replace(' semester final', '');
+const allItems = papers.flatMap((p) => p.sets.flatMap((set) => set.items.map((it) => ({ ...it, paper: short(p) }))));
+const paperCount = (g) => new Set(g.refs.map(([paper]) => paper)).size;
+const asLikely = (it) => ({ ...it, id: `${it.paper} ${it.id}`, flag: `${it.marks} marks${it.flagged ? ', not in your slides/notes' : ''}` });
+
+function Group({ g, byId, onOpen }) {
+  const [open, setOpen] = useState(false);
+  const n = paperCount(g);
+  const items = g.refs.map(([paper, id]) => allItems.find((it) => it.paper === paper && it.id === id));
+  return (
+    <article className="rounded-2xl border border-line bg-panel p-5 sm:p-6">
+      <div className="flex flex-wrap items-center gap-2 text-sm">
+        <span className={`rounded-md px-2 py-0.5 font-medium ${n === papers.length ? 'bg-gold/15 text-gold' : 'bg-raise text-ash'}`}>
+          In {n} of {papers.length} papers
+        </span>
+        {g.exact && <span className="rounded-md bg-red/15 px-2 py-0.5 font-medium text-red">Word for word</span>}
+        <button onClick={() => onOpen(g.module)} className="press ml-auto min-h-9 rounded-lg px-2 text-ash underline-offset-4 hover:underline">
+          Ch {byId[g.module].chapter}: {byId[g.module].title}
+        </button>
+      </div>
+      <h3 className="display mt-2 text-2xl">{g.title}</h3>
+      <p className="mt-1 text-[1.02rem] leading-relaxed text-text/80">
+        <Rich text={g.note} />
+      </p>
+      <p className="mt-2 text-sm text-ash">{items.map((it) => `${it.paper} ${it.id}`).join(' · ')}</p>
+      <button onClick={() => setOpen(!open)} aria-expanded={open} className={`press mt-4 min-h-11 rounded-xl px-5 font-medium ${open ? 'border border-line text-ash' : 'border border-gold/50 text-gold'}`}>
+        {open ? 'Hide the questions' : `Compare the ${items.length} questions`}
+      </button>
+      {open && (
+        <div className="enter mt-4 grid grid-cols-[minmax(0,1fr)] gap-4">
+          {items.map((it) => (
+            <Likely key={`${it.paper}${it.id}`} q={asLikely(it)} mod={byId[it.module]} onOpen={onOpen} />
+          ))}
+        </div>
+      )}
+    </article>
+  );
+}
+
+// Chapter weight is computed from the papers, so it stays right when a paper is added.
+function Bank({ byId, onOpen }) {
+  const stats = Object.values(
+    allItems.reduce((acc, it) => {
+      const s = (acc[it.module] ??= { mod: byId[it.module], n: 0, marks: 0, papers: new Set() });
+      s.n++;
+      s.marks += it.marks;
+      s.papers.add(it.paper);
+      return acc;
+    }, {}),
+  ).sort((a, b) => b.marks - a.marks || b.n - a.n);
+  const top = stats[0].marks;
+  const repeats = new Set(groups.flatMap((g) => g.refs.map((r) => r.join(' ')))).size;
+  const sorted = [...groups].sort((a, b) => paperCount(b) - paperCount(a));
+  const flagged = allItems.filter((it) => it.flagged);
+  return (
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-10">
+      <section>
+        <h2 className="display text-3xl">What the papers ask</h2>
+        <p className="mt-1 max-w-prose text-ash">
+          {papers.length} finals ({papers.map(short).join(', ')}), {allItems.length} questions. {repeats} of them come back in another paper in the same or a similar form.
+        </p>
+      </section>
+
+      <section aria-labelledby="bank-chapters">
+        <h3 id="bank-chapters" className="display border-b border-line pb-2 text-2xl">
+          Most asked chapters
+        </h3>
+        <p className="mt-2 text-sm text-ash">Marks offered across all papers; you choose which questions to answer in each set. Tap a chapter to study it.</p>
+        <ol className="mt-4 grid gap-2">
+          {stats.map((s, i) => (
+            <li key={s.mod.id}>
+              <button onClick={() => onOpen(s.mod.id)} className="press lift w-full rounded-xl border border-line bg-panel px-4 py-3 text-left">
+                <span className="flex flex-wrap items-baseline justify-between gap-x-3">
+                  <span className="font-medium text-text">
+                    Ch {s.mod.chapter}: {s.mod.title}
+                  </span>
+                  <span className="text-sm tabular-nums text-ash">
+                    {s.n} {s.n === 1 ? 'question' : 'questions'} · {s.marks} marks · in {s.papers.size} of {papers.length}
+                  </span>
+                </span>
+                <span className="mt-2 block h-1.5 overflow-hidden rounded-full bg-line">
+                  <span className={`bar-fill block h-full rounded-full ${i < 3 ? 'bg-gold' : 'bg-gold/50'}`} style={{ transform: `scaleX(${s.marks / top})` }} />
+                </span>
+              </button>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section aria-labelledby="bank-repeats" className="grid grid-cols-[minmax(0,1fr)] gap-4">
+        <div>
+          <h3 id="bank-repeats" className="display border-b border-line pb-2 text-2xl">
+            Asked again and again
+          </h3>
+          <p className="mt-2 text-sm text-ash">Questions that ask the same thing, most repeated first. Open a group to compare the versions and their answers.</p>
+        </div>
+        {sorted.map((g) => (
+          <Group key={g.title} g={g} byId={byId} onOpen={onOpen} />
+        ))}
+      </section>
+
+      <section aria-labelledby="bank-outside">
+        <h3 id="bank-outside" className="display border-b border-line pb-2 text-2xl text-red">
+          Outside your notes
+        </h3>
+        <p className="mt-2 text-sm text-ash">These came up in a paper but your slides and notes don’t teach them; the answers use the textbook method.</p>
+        <ul className="mt-4 grid gap-2">
+          {flagged.map((it) => (
+            <li key={`${it.paper}${it.id}`} className="flex gap-3 rounded-xl border border-line bg-panel p-4">
+              <span className="display h-fit shrink-0 rounded-md bg-red/15 px-2 py-0.5 text-sm text-red">
+                {it.paper} {it.id}
+              </span>
+              <span className="prose-read min-w-0 text-[1rem] leading-snug text-text/85">
+                <Rich text={it.q} />
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
+  );
+}
+
 export default function ExamPrep({ modules, progress, onOpen, onMockFinish }) {
   const [tab, setTab] = useState('paper');
   const [paperIdx, setPaperIdx] = useState(0);
   const byId = Object.fromEntries(modules.map((m) => [m.id, m]));
   const tabs = [
     ['paper', 'Past papers'],
+    ['bank', 'Question bank'],
     ['likely', 'Likely questions'],
     ['mock', 'Mock exam'],
     ['traps', 'Traps'],
@@ -134,7 +259,7 @@ export default function ExamPrep({ modules, progress, onOpen, onMockFinish }) {
     <div className="mx-auto max-w-3xl px-5 pb-16 pt-8 sm:px-8">
       <p className="display text-lg text-red">Exam prep</p>
       <h1 className="display mt-1 text-5xl leading-[1.05] sm:text-6xl">Ace the final</h1>
-      <p className="mt-3 max-w-prose text-ash">The questions your notes flag as likely, a mock exam across every chapter, and the mistakes that cost marks.</p>
+      <p className="mt-3 max-w-prose text-ash">Past finals solved and analysed, the questions your notes flag as likely, a mock exam across every chapter, and the mistakes that cost marks.</p>
       <div role="tablist" aria-label="Exam prep sections" className="mt-7 flex gap-1 overflow-x-auto border-b border-line">
         {tabs.map(([id, l]) => (
           <button key={id} role="tab" aria-selected={tab === id} onClick={() => setTab(id)} className={`relative min-h-12 shrink-0 whitespace-nowrap px-4 font-medium ${tab === id ? 'text-text' : 'text-ash'}`}>
@@ -176,6 +301,7 @@ export default function ExamPrep({ modules, progress, onOpen, onMockFinish }) {
               ))}
             </div>
           ))}
+        {tab === 'bank' && <Bank byId={byId} onOpen={onOpen} />}
         {tab === 'likely' && (
           <div className="grid grid-cols-[minmax(0,1fr)] gap-5">
             {likely.map((q) => (

@@ -173,10 +173,14 @@ export function multistage({ N, n, k }) {
   };
 }
 
+// n = sqrt(N/2), taken as the divisor of N closest to it so every stage has whole crossbars.
 export function clos({ N }) {
-  const n = Math.round(Math.sqrt(N / 2));
+  const root = Math.sqrt(N / 2);
+  let n = 1;
+  for (let d = 1; d <= N; d++) if (N % d === 0 && Math.abs(d - root) < Math.abs(n - root)) n = d;
   const k = 2 * n - 1;
-  return { result: { n, k, ...multistage({ N, n, k }).result }, steps: [`n = \\sqrt{N/2} = \\sqrt{${N}/2} = ${n}`, `k = 2n - 1 = ${k}`, ...multistage({ N, n, k }).steps] };
+  const first = Number.isInteger(root) ? `n = \\sqrt{N/2} = \\sqrt{${N}/2} = ${n}` : `n = \\sqrt{${N}/2} \\approx ${fmt(root, 2)} \\to ${n}\\ (\\text{nearest divisor of } ${N})`;
+  return { result: { n, k, ...multistage({ N, n, k }).result }, steps: [first, `k = 2n - 1 = ${k}`, ...multistage({ N, n, k }).steps] };
 }
 
 export function circuitDelay({ D, S, L, R }) {
@@ -372,4 +376,11 @@ export function datagramArrival({ lengths, paths, delays, speed = 2e8 }) {
       `\\text{arrival order: } ${order.join(' \\to ')}`,
     ],
   };
+}
+
+// ---- Cable loss in dB/km (textbook method; Spring 2024 Q3d) ----
+export function cableLoss({ P0, dbPerKm, km }) {
+  const db = dbPerKm * km;
+  const P = P0 * 10 ** (db / 10);
+  return { result: { db, P }, steps: [`\\text{loss} = ${dbPerKm} \\times ${km} = ${fmt(db, 2)}\\text{ dB}`, `${fmt(db, 2)} = 10\\log_{10}\\frac{P}{${P0}} \\Rightarrow P = ${P0} \\times 10^{${fmt(db / 10, 3)}} = ${fmt(P, 3)}`] };
 }

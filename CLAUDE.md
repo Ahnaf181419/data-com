@@ -35,7 +35,10 @@ Live at https://ahnaf181419.github.io/data-com/ (GitHub Pages, deployed on every
   Every section needs one (a test enforces it).
 - `src/data/guide.js` — the beginner guide for each lesson (`plain` intro, `terms`, `recap`), same keys as
   checks.js; shown in Learn's step-by-step view. Restate the lesson and transcript only. Every section needs one.
-- `src/data/examPrep.js` (likely questions, traps), `src/data/pastPapers.js` (past finals with key-point answers).
+- `src/data/examPrep.js` (likely questions, traps), `src/data/pastPapers.js` (past finals with key-point answers:
+  Fall 2024, Spring 2025, Spring 2024; append new papers at the end, tests index the first two).
+- `src/data/questionBank.js` — groups of similar past-paper questions for the Question bank tab; refs are
+  `[paper, item id]`. Chapter weight there is computed from `pastPapers.js`.
 - `src/data/answerScripts.js` — the full exam-format answer for every past-paper item and likely question
   (attached as `script`). Extra block types: `h` (step heading), `given`, `answer` (boxed final answer, every
   past-paper script ends with one), `division` (CRC long division), `pre` (column working). Diagrams take `props`.

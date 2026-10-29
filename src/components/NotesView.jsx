@@ -118,7 +118,7 @@ export function Block({ b }) {
         <div className="my-3 rounded-lg border border-line bg-ink/60 px-4 py-2.5 font-sans text-[0.98rem] leading-relaxed">
           <span className="mr-2 font-semibold text-ash">Given:</span>
           {b.items.map((t, i) => (
-            <span key={i} className="mr-4 inline-block whitespace-nowrap">
+            <span key={i} className="mr-4 inline-block max-w-full">
               <Rich text={t} />
             </span>
           ))}

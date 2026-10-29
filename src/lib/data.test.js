@@ -7,6 +7,7 @@ import checks from '../data/checks.js';
 import guides from '../data/guide.js';
 import { likely, traps } from '../data/examPrep.js';
 import papers from '../data/pastPapers.js';
+import groups from '../data/questionBank.js';
 import { mod2div } from './solvers.js';
 
 const LABS = ['modulation', 'analog', 'fdm', 'tdm', 'crc', 'hamming', 'coding'];
@@ -122,4 +123,19 @@ test('CRC divisions in the exam scripts give the answers they print', () => {
   assert.equal(mod2div(crc[0].dividend, crc[0].divisor).remainder, '1010');
   assert.equal(mod2div(crc[1].dividend, crc[1].divisor).remainder, '0000');
   assert.equal(crc[1].dividend, '1010011110' + '1010');
+  const s24 = papers[2].sets[2].items.find((it) => it.id === '3(e)').script.filter((b) => b.type === 'division');
+  assert.equal(mod2div(s24[0].dividend, s24[0].divisor).remainder, '0101');
+  assert.equal(s24[1].dividend, '101001111' + '0101');
+  assert.equal(mod2div(s24[1].dividend, s24[1].divisor).remainder, '0000');
+});
+
+test('question bank groups point at real past-paper items', () => {
+  const ids = new Set(modules.map((m) => m.id));
+  const items = new Set(papers.flatMap((p) => p.sets.flatMap((set) => set.items.map((it) => `${p.title.replace(' semester final', '')} ${it.id}`))));
+  for (const g of groups) {
+    assert.ok(ids.has(g.module), g.title);
+    assert.ok(g.refs.length >= 2, `${g.title} groups at least two questions`);
+    for (const r of g.refs) assert.ok(items.has(r.join(' ')), `${g.title}: ${r.join(' ')}`);
+    inline(g.note);
+  }
 });
