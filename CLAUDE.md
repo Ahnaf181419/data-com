@@ -33,6 +33,8 @@ Live at https://ahnaf181419.github.io/data-com/ (GitHub Pages, deployed on every
   Text uses `$inline math$` and `**bold**`.
 - `src/data/checks.js` — one "check yourself" question per lesson, keyed by module id + exact section heading.
   Every section needs one (a test enforces it).
+- `src/data/guide.js` — the beginner guide for each lesson (`plain` intro, `terms`, `recap`), same keys as
+  checks.js; shown in Learn's step-by-step view. Restate the lesson and transcript only. Every section needs one.
 - `src/data/examPrep.js` (likely questions, traps), `src/data/pastPapers.js` (past finals with key-point answers).
 - `src/data/answerScripts.js` — the full exam-format answer for every past-paper item and likely question
   (attached as `script`). Extra block types: `h` (step heading), `given`, `answer` (boxed final answer, every

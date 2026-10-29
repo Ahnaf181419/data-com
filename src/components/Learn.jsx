@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Block, Rich } from './NotesView.jsx';
 import NotesView from './NotesView.jsx';
 import checks from '../data/checks.js';
+import guides from '../data/guide.js';
 
 export function Choice({ item, onAnswer }) {
   const [picked, setPicked] = useState(null);
@@ -51,6 +52,7 @@ export default function Learn({ module, index, learned, onIndex, onLearned, onDo
   const i = Math.min(index, total - 1);
   const s = module.sections[i];
   const check = checks[module.id]?.[s.heading];
+  const guide = guides[module.id]?.[s.heading];
   const isLearned = learned.includes(i);
   const go = (to) => {
     setDir(to > i ? 'enter-next' : 'enter-prev');
@@ -104,11 +106,48 @@ export default function Learn({ module, index, learned, onIndex, onLearned, onDo
               Lesson {i + 1} of {total}
             </p>
             <h2 className="display mb-4 mt-1 text-[2rem] font-medium leading-tight sm:text-[2.3rem]">{s.heading}</h2>
+            {guide && (
+              <div className="mb-8">
+                <p className="prose-read border-l-2 border-gold/60 pl-4 text-[1.24rem] leading-relaxed text-text">
+                  <Rich text={guide.plain} />
+                </p>
+                {guide.terms.length > 0 && (
+                  <section aria-label="New words" className="mt-5 rounded-2xl border border-line bg-panel p-5">
+                    <p className="mb-3 font-sans text-sm font-semibold text-gold">New words</p>
+                    <dl className="grid gap-3 text-[1.02rem] leading-snug">
+                      {guide.terms.map(([t, d]) => (
+                        <div key={t}>
+                          <dt className="font-semibold text-text">
+                            <Rich text={t} />
+                          </dt>
+                          <dd className="text-text/80">
+                            <Rich text={d} />
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </section>
+                )}
+              </div>
+            )}
             <div className="prose-read text-text/90">
               {s.blocks.map((b, k) => (
                 <Block key={k} b={b} />
               ))}
             </div>
+
+            {guide && (
+              <section aria-label="Remember" className="mt-10 rounded-2xl border border-gold/30 bg-gold/[0.06] p-5 sm:p-6">
+                <p className="mb-3 font-sans text-sm font-semibold text-gold">Remember</p>
+                <ul className="grid list-disc gap-2 pl-5 text-[1.02rem] leading-snug marker:text-gold">
+                  {guide.recap.map((r) => (
+                    <li key={r}>
+                      <Rich text={r} />
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
 
             {check && (
               <section aria-label="Check yourself" className="mt-10 rounded-2xl border border-line bg-panel p-5 sm:p-6">

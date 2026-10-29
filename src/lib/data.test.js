@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import katex from 'katex';
 import modules from '../data/syllabusData.js';
 import checks from '../data/checks.js';
+import guides from '../data/guide.js';
 import { likely, traps } from '../data/examPrep.js';
 import papers from '../data/pastPapers.js';
 import { mod2div } from './solvers.js';
@@ -52,6 +53,17 @@ test('every lesson has a valid check question', () => {
     }
   const headings = new Set(modules.flatMap((m) => m.sections.map((s) => `${m.id}/${s.heading}`)));
   for (const [id, byHeading] of Object.entries(checks)) for (const h of Object.keys(byHeading)) assert.ok(headings.has(`${id}/${h}`), `orphan check: ${id} / ${h}`);
+});
+
+test('every lesson has a beginner guide', () => {
+  for (const m of modules)
+    for (const s of m.sections) {
+      const g = guides[m.id]?.[s.heading];
+      assert.ok(g?.plain && g.recap?.length && Array.isArray(g.terms), `missing guide: ${m.id} / ${s.heading}`);
+      [g.plain, ...g.recap, ...g.terms.flat()].forEach(inline);
+    }
+  const headings = new Set(modules.flatMap((m) => m.sections.map((s) => `${m.id}/${s.heading}`)));
+  for (const [id, byHeading] of Object.entries(guides)) for (const h of Object.keys(byHeading)) assert.ok(headings.has(`${id}/${h}`), `orphan guide: ${id} / ${h}`);
 });
 
 test('exam prep points at real chapters and its math compiles', () => {
