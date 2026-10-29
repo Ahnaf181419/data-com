@@ -343,7 +343,7 @@ export const paperScripts = {
       p('First 8 bits: **0 1 0 1 1 0 1 0**. Rule: there is always a transition in the middle of each bit; a transition at the **start** of a bit means **0**, no transition at the start means **1**. Assume the line starts high.'),
       dia('waveform', { bits: '01011010' }),
       table(['Bit', '0', '1', '0', '1', '1', '0', '1', '0'], [['Half-bit levels', 'L H', 'H L', 'H L', 'L H', 'H L', 'H L', 'L H', 'L H']]),
-      ans('Output stream $= 010110100110101111100100110100$; graph above for 01011010.'),
+      ans('Output stream = 01011 01001 10101 11110 01001 10100; graph above for 01011010.'),
     ],
     '2(e)': [
       given('100 inputs', '10 TSIs in stage 1 and stage 3', '4 crossbars in stage 2'),
@@ -514,7 +514,7 @@ export const paperScripts = {
     '2(d)': [
       p('In a datagram network there is no setup or teardown; each packet is stored and forwarded at every switch or router. Draw a vertical time line for each device (time runs down): the height of each block is the transmission time $T$, the slope is the propagation time $\\tau$, and the gap at a switch is its waiting time $w$.'),
       dia('delay', { kind: 'datagram', nodes: ['Host 1', 'Switch', 'Host 2', 'Router', 'Host 3'], paths: [[0, 1, 2], [2, 3, 4]], waits: [['w_s'], ['w_r']], caption: 'Host 1 → switch → host 2, then host 2 → router → host 3.' }),
-      m(r`\text{Host 1} \to \text{Host 2}: \quad 2T + 2\tau + w_s \qquad \text{Host 2} \to \text{Host 3}: \quad 2T + 2\tau + w_r`),
+      m(r`\begin{aligned} \text{Host 1} \to \text{Host 2}&: \quad 2T + 2\tau + w_s \\ \text{Host 2} \to \text{Host 3}&: \quad 2T + 2\tau + w_r \end{aligned}`),
       p('Same pattern as the slide: through two switches the total delay is $3T + 3\\tau + w_1 + w_2$. Processing time is ignored.'),
       ans('Each leg has two transmission times, two propagation times and one waiting time: $2T + 2\\tau + w$.'),
     ],

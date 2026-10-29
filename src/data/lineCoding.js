@@ -58,7 +58,7 @@ export default {
       title: 'Fall 2024 Q2(d)',
       source: 'Past paper (flagged topic)',
       question: 'Encode 010100010011000000010010 with 4B/5B, then draw differential Manchester for the first 8 output bits.',
-      steps: ['Groups: 0101, 0001, 0011, 0000, 0001, 0010', 'Codes: 01011, 01001, 10101, 11110, 01001, 10100', 'Output: 010110100110101111100100110100', 'First 8 output bits: 0 1 0 1 1 0 1 0', 'Starting high: 0 flips at the start (low→high), 1 does not (high→low), 0 flips (high→low), 1 (low→high), 1 (high→low), 0 flips (high→low), 1 (low→high), 0 flips (low→high).'],
+      steps: ['Groups: 0101, 0001, 0011, 0000, 0001, 0010', 'Codes: 01011, 01001, 10101, 11110, 01001, 10100', 'Output: 01011 01001 10101 11110 01001 10100', 'First 8 output bits: 0 1 0 1 1 0 1 0', 'Starting high: 0 flips at the start (low→high), 1 does not (high→low), 0 flips (high→low), 1 (low→high), 1 (high→low), 0 flips (high→low), 1 (low→high), 0 flips (low→high).'],
       answer: 'Output 01011 01001 10101 11110 01001 10100; the drawing follows the lab above',
     },
   ],

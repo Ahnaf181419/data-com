@@ -109,7 +109,7 @@ const papers = [
             answer: [
               'Groups: 0101 | 0001 | 0011 | 0000 | 0001 | 0010.',
               'Codes: 01011 | 01001 | 10101 | 11110 | 01001 | 10100.',
-              'Output: 010110100110101111100100110100.',
+              'Output: 01011 01001 10101 11110 01001 10100.',
               'First 8 bits: 0 1 0 1 1 0 1 0. Differential Manchester: always a mid-bit transition; a transition at the start of a bit means 0.',
               'Starting high, the half-bit levels are: L H | H L | H L | L H | H L | H L | L H | L H (draw with the lab in Ch 4).',
             ],

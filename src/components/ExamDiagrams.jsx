@@ -302,7 +302,14 @@ function Delay({ nodes = ['A', 'Switch 1', 'Switch 2', 'B'], kind = 'datagram', 
       const w = waitLabels[k];
       if (k < seq.length - 2 && w) {
         parts.push(<line key={`w${y}`} x1={xs[b]} y1={y} x2={xs[b]} y2={y + W} stroke={R} strokeWidth="3" />);
-        parts.push(<g key={`wt${y}`}>{txt(xs[b] + 8, y + W / 2 + 4, w, { size: 11, fill: R, anchor: 'start' })}</g>);
+        // 'w1' / 'w_s' → w with a subscript
+        const [base, sub] = [w[0], w.slice(1).replace(/^_/, '')];
+        parts.push(
+          <text key={`wt${y}`} x={xs[b] + 8} y={y + W / 2 + 4} fontSize="12" fill={R} fontStyle="italic">
+            {base}
+            {sub && <tspan fontSize="9" dy="3">{sub}</tspan>}
+          </text>,
+        );
         y += W;
       }
       y -= T0;

@@ -58,6 +58,7 @@ button {
 }
 
 .prose-read {
+  overflow-wrap: break-word;
   font-family: var(--font-serif);
   font-size: 1.17rem;
   line-height: 1.68;
