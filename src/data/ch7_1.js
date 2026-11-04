@@ -3,7 +3,7 @@ export default {
   chapter: '7.1',
   title: 'Guided Media',
   wave: 'guided',
-  sources: ['ch7_1 slides'],
+  sources: ['ch7_1 slides', 'Spring 2024 Q3(d) (flagged lesson)'],
   sections: [
     {
       heading: 'Transmission media',
@@ -61,9 +61,22 @@ export default {
         { type: 'table', head: ['Advantages', 'Disadvantages'], rows: [['Higher bandwidth', 'Installation and maintenance need expertise not available everywhere'], ['Less signal attenuation', 'Unidirectional light: two fibers needed for two-way'], ['Immune to electromagnetic interference', 'Cost: cable and interfaces cost more than other guided media'], ['Resists corrosive materials', ''], ['Light weight', ''], ['Greater immunity to tapping (copper acts like an antenna)', '']] },
       ],
     },
+    {
+      heading: 'Decibels and cable loss (flagged extra)',
+      blocks: [
+        { type: 'note', text: '**Not in your slides or notes.** Spring 2024 Q3(d) asked it, so it is taught here using the standard textbook (Forouzan) method. Check with your teacher.' },
+        { type: 'p', text: 'Cable loss is quoted in **decibels per kilometre (dB/km)**. Decibels compare two power levels on a log scale; a negative dB value is a loss.' },
+        { type: 'math', tex: '\\text{dB} = 10\\log_{10}\\frac{P_2}{P_1} \\qquad\\Rightarrow\\qquad P_2 = P_1 \\times 10^{\\text{dB}/10}' },
+        { type: 'p', text: 'Losses along a cable add: total dB = (dB/km) × length in km. Handy anchor: **−3 dB ≈ half the power**.' },
+      ],
+    },
   ],
-  formulas: [],
-  examples: [],
+  formulas: [
+    { label: 'Decibels', tex: '\\text{dB} = 10\\log_{10}\\frac{P_2}{P_1}', where: 'negative dB = loss; −3 dB ≈ half power' },
+  ],
+  examples: [
+    { title: 'Cable loss (Spring 2024 Q3(d))', source: 'Spring 2024 Q3(d) (flagged)', question: 'A cable loses −0.3 dB/km. The signal enters at 2 mW. What is its power at 5 km?', steps: ['Loss over 5 km: $-0.3 \\times 5 = -1.5$ dB.', '$-1.5 = 10\\log_{10}(P_2/2)$', '$P_2 = 2 \\times 10^{-0.15} = 2 \\times 0.708$'], answer: '$P_2 \\approx 1.42$ mW' },
+  ],
   flashcards: [
     { front: 'Three guided media', back: 'Twisted-pair, coaxial, fiber-optic.' },
     { front: 'Why twist the pair?', back: 'Twisting balances the effect of noise and crosstalk on both wires, reducing interference.' },
@@ -77,6 +90,8 @@ export default {
     { front: 'Fiber connectors', back: 'SC (cable TV), ST (networking devices), MT-RJ (RJ-45 size).' },
     { front: 'Twisted-pair repeater spacing', back: 'Analog every 5–6 km, digital every 2–3 km.' },
     { front: 'Fiber disadvantages', back: 'Installation/maintenance expertise, unidirectional light, cost.' },
+    { front: 'Decibel formula', back: '$\\text{dB} = 10\\log_{10}(P_2/P_1)$; negative dB is a loss, and −3 dB ≈ half the power.' },
+    { front: 'Total cable loss', back: 'Losses add: total dB = dB/km × length in km.' },
   ],
   quiz: [
     { q: 'Which guided medium carries signals as light?', options: ['UTP', 'STP', 'Coax', 'Optical fiber'], answer: 3, explain: 'Twisted pair and coax carry electric current.' },
@@ -87,6 +102,7 @@ export default {
     { q: 'Coax bandwidth range from the slides:', options: ['3 kHz', '400–600 MHz', '10 GHz', '88–108 MHz'], answer: 1, explain: 'Up to 10,800 voice conversations.' },
     { q: 'In coax, the outer conductor acts as:', options: ['Only a shield', 'Only a second conductor', 'Both a shield and the second conductor', 'An insulator'], answer: 2, explain: 'It shields and completes the circuit.' },
     { q: 'A fiber disadvantage is:', options: ['Low bandwidth', 'EM interference', 'Unidirectional light propagation', 'Heavy weight'], answer: 2, explain: 'Two fibers are needed for bidirectional links.' },
+    { q: 'A cable with −3 dB loss keeps about:', options: ['All of its power', 'Half of its power', 'One tenth', 'Twice as much'], answer: 1, explain: '$10^{-3/10} = 10^{-0.3} \\approx 0.5$.' },
   ],
   solvers: [],
 };

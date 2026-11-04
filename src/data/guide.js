@@ -43,6 +43,24 @@ export default {
       terms: [['Topology', 'The layout of the links between devices: mesh, star, ring or bus.']],
       recap: ['Mesh, star and ring are point-to-point; bus is multipoint.', 'Hybrids: star + bus, star + ring, ring + bus.'],
     },
+    'The OSI model (flagged extra)': {
+      plain: 'This is an extra lesson: your slides and notes only mention the OSI model in passing, but a past final asked for its layers. It is a stack of seven jobs, from moving raw bits (bottom) to what the user sees (top). For the exam, know the seven names in order and what the bottom two layers do.',
+      terms: [
+        ['OSI model', 'A 7-layer reference model: physical, data link, network, transport, session, presentation, application.'],
+        ['Physical layer', 'Moves individual bits over the medium: encoding, data rate, synchronization, line configuration, topology, transmission mode.'],
+        ['Data link layer', 'Hop-to-hop delivery of frames: framing, physical addressing, flow control, error control, access control.'],
+      ],
+      recap: ['Seven layers bottom up: physical, data link, network, transport, session, presentation, application.', 'Physical = bits over the medium. Data link = frames, hop to hop.'],
+    },
+    'Signal impairment (flagged extra)': {
+      plain: 'Also an extra from a past final. A real medium is not perfect: the signal that arrives is weaker, shaped differently, and mixed with unwanted energy. The exam wants the three names and one line each.',
+      terms: [
+        ['Attenuation', 'Loss of signal energy over distance; fixed with amplifiers/repeaters, measured in dB.'],
+        ['Distortion', 'The signal changes shape because its frequency components arrive with different delays.'],
+        ['Noise', 'Unwanted energy added on the way (thermal, induced, crosstalk, impulse).'],
+      ],
+      recap: ['Impairment = the received signal differs from the sent one.', 'Three types: attenuation (energy loss), distortion (shape change), noise (added energy).'],
+    },
   },
 
   ch4x: {
@@ -332,6 +350,14 @@ export default {
       plain: 'Fiber’s wide bandwidth makes it the choice for backbones. Its downsides are cost, the expertise it needs, and one-way light.',
       terms: [],
       recap: ['Pros: bandwidth, low attenuation, no EM interference, hard to tap, light.', 'Cons: expertise, two fibers for two-way, cost.'],
+    },
+    'Decibels and cable loss (flagged extra)': {
+      plain: 'One more extra from a past final. Cable loss is quoted in decibels per kilometre, and decibels are just a logarithmic way to compare two power levels. Work out the total loss first, then convert back to a power ratio.',
+      terms: [
+        ['Decibel (dB)', '$10\\log_{10}(P_2/P_1)$ — a log-scale comparison of two powers; negative means loss.'],
+        ['dB/km', 'The cable’s loss figure; multiply by the length to get the total loss in dB.'],
+      ],
+      recap: ['$\\text{dB} = 10\\log_{10}(P_2/P_1)$, so $P_2 = P_1 \\times 10^{\\text{dB}/10}$.', 'Total loss = dB/km × length. Spring 2024: $-0.3 \\times 5 = -1.5$ dB → $2 \\times 10^{-0.15} \\approx 1.42$ mW.'],
     },
   },
 
