@@ -59,6 +59,9 @@ export default {
         { type: 'list', items: ['**Sender:** divide the unit into $k$ sections of $n$ bits, add them using one’s complement arithmetic (wrap any carry back around), complement the sum → checksum. Send it with the data.', '**Receiver:** add all sections including the checksum the same way and complement. Result 0 → accept; otherwise reject.'] },
         { type: 'p', text: '4-bit example: data (7, 11, 12, 0, 6). Sum = 36 = 100100; wrap the extra 10 → 0100 + 10 = 0110 = 6; checksum = complement = 1001 = 9. Send (7, 11, 12, 0, 6, 9).' },
         { type: 'p', text: 'Receiver: sum = 45 = 101101 → 1101 + 10 = 1111 → complement 0000 → no error.' },
+        { type: 'p', text: '8-bit example (from the slides): data **10101001 + 00111001**. One’s-complement sum = $169 + 57 = 226 = 11100010$ (no carry to wrap), so the checksum is the complement **00011101**. Send all three bytes.' },
+        { type: 'p', text: 'Receiver, no error: $169 + 57 + 29 = 255 = 11111111$ → complement $00000000$ → accept.' },
+        { type: 'p', text: 'Receiver, burst error: a 5-bit noise burst corrupts 4 bits of the first byte (the middle bit survives), so it arrives as **10110010**. Now $178 + 57 + 29 = 264 = 1\,00001000$ → wrap the carry: $00001000 + 1 = 00001001$ → complement $11110110 \\ne 0$ → **error detected**. This is why the slides pair the checksum example with a burst: addition spreads the damage across the sum.' },
       ],
     },
     {

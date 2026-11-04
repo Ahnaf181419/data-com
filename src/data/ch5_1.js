@@ -12,6 +12,7 @@ export default {
         { type: 'math', tex: 's(t) = A\\sin(2\\pi f t + \\varphi)' },
         { type: 'list', items: ['Vary the amplitude $A$ → **ASK**', 'Vary the frequency $f$ → **FSK**', 'Vary the phase $\\varphi$ → **PSK**', 'Vary amplitude and phase together → **QAM**'] },
         { type: 'table', head: ['', 'Baseband transmission', 'Broadband transmission'], rows: [['Signal', 'Baseband signal', 'Bandpass signal'], ['Channel', 'Low-pass channel', 'Passband channel'], ['Bandwidth', 'Starts from 0', 'Does not start from 0']] },
+        { type: 'p', text: 'Spectrum reminder from the notes: a **periodic** signal (like an alarm tone) has a **discrete** frequency spectrum; a **non-periodic** signal (like voice) has a **continuous** one.' },
       ],
     },
     {
@@ -26,7 +27,7 @@ export default {
       heading: 'Amplitude Shift Keying (ASK)',
       blocks: [
         { type: 'p', text: 'The amplitude of the carrier changes to reflect the data; frequency and phase stay constant. The peak amplitude is constant during each bit duration.' },
-        { type: 'p', text: '**Binary ASK (BASK)** – $n_b = 1$, $2^1 = 2$ levels (0 and 1). It is implemented by multiplying a **unipolar NRZ** signal (1 V high, 0 V low) by the carrier from an oscillator. When the NRZ amplitude is 1 the carrier is held; when it is 0 the carrier amplitude is zero.' },
+        { type: 'p', text: '**Binary ASK (BASK)** – $n_b = 1$, $2^1 = 2$ levels (0 and 1). It is implemented by multiplying a **unipolar NRZ** signal (1 V high, 0 V low) by the carrier from an oscillator. When the NRZ amplitude is 1 the carrier is held; when it is 0 the carrier amplitude is zero. The carrier is chosen so that one bit interval spans about **2–3 carrier cycles**.' },
         { type: 'math', tex: 'B = (1 + d)\\,S' },
         { type: 'p', text: '$d$ is the modulation/filtering factor, $0 \\le d \\le 1$. The bandwidth is proportional to the signal rate $S$.' },
         { type: 'math', tex: 'd = 0:\\ B_{min} = S = N \\qquad d = 1:\\ B_{max} = 2S = 2N' },
