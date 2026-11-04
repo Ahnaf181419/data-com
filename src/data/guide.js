@@ -15,12 +15,12 @@ export default {
     },
     'Five components': {
       plain: 'Every communication system, however big, is made of the same five parts: someone sends, someone receives, the message travels along some path, there is the message itself, and there are rules both sides follow. Once you can name these, you can describe any system in the course.',
-      terms: [],
+      terms: [['Transmission medium', 'The physical path the message travels (e.g. twisted wire).'], ['Protocol', 'The set of rules both sides follow.']],
       recap: ['Sender, receiver, transmission medium, message, protocol.', 'Medium = the physical path (e.g. twisted wire). Protocol = the set of rules.'],
     },
     'Data flow': {
       plain: 'Data flow answers one question: which way can data travel between two devices, and can both talk at the same moment? There are only three answers.',
-      terms: [],
+      terms: [['Simplex', 'One way only, never both.'], ['Half-duplex', 'Both ways, one direction at a time.'], ['Full-duplex', 'Both ways at the same time.']],
       recap: ['**Simplex**: one way only.', '**Half-duplex**: both ways, but one at a time.', '**Full-duplex**: both ways at the same time.'],
     },
     'Effectiveness': {
@@ -43,12 +43,30 @@ export default {
       terms: [['Topology', 'The layout of the links between devices: mesh, star, ring or bus.']],
       recap: ['Mesh, star and ring are point-to-point; bus is multipoint.', 'Hybrids: star + bus, star + ring, ring + bus.'],
     },
+    'The OSI model (flagged extra)': {
+      plain: 'This is an extra lesson: your slides and notes only mention the OSI model in passing, but a past final asked for its layers. It is a stack of seven jobs, from moving raw bits (bottom) to what the user sees (top). For the exam, know the seven names in order and what the bottom two layers do.',
+      terms: [
+        ['OSI model', 'A 7-layer reference model: physical, data link, network, transport, session, presentation, application.'],
+        ['Physical layer', 'Moves individual bits over the medium: encoding, data rate, synchronization, line configuration, topology, transmission mode.'],
+        ['Data link layer', 'Hop-to-hop delivery of frames: framing, physical addressing, flow control, error control, access control.'],
+      ],
+      recap: ['Seven layers bottom up: physical, data link, network, transport, session, presentation, application.', 'Physical = bits over the medium. Data link = frames, hop to hop.'],
+    },
+    'Signal impairment (flagged extra)': {
+      plain: 'Also an extra from a past final. A real medium is not perfect: the signal that arrives is weaker, shaped differently, and mixed with unwanted energy. The exam wants the three names and one line each.',
+      terms: [
+        ['Attenuation', 'Loss of signal energy over distance; fixed with amplifiers/repeaters, measured in dB.'],
+        ['Distortion', 'The signal changes shape because its frequency components arrive with different delays.'],
+        ['Noise', 'Unwanted energy added on the way (thermal, induced, crosstalk, impulse).'],
+      ],
+      recap: ['Impairment = the received signal differs from the sent one.', 'Three types: attenuation (energy loss), distortion (shape change), noise (added energy).'],
+    },
   },
 
   ch4x: {
     'Why this chapter is here': {
       plain: 'This chapter is extra. Your slides and notes do not cover it, but a past final asked it, so treat it as a short method to follow rather than deep theory.',
-      terms: [],
+      terms: [['4B/5B', 'Block coding: each 4 data bits become a 5-bit code with no long runs of 0s.'], ['Differential Manchester', 'Line coding: always a transition mid-bit; a transition at the start of the bit means 0.']],
       recap: ['Two steps: 4B/5B coding first, then draw differential Manchester.', 'Ask your teacher whether it is still in the syllabus.'],
     },
     '4B/5B block coding': {
@@ -130,7 +148,7 @@ export default {
     },
     'Quadrature Amplitude Modulation (QAM)': {
       plain: 'QAM combines ASK and PSK: it changes amplitude and phase together. On a constellation, dots can share an angle but sit at different distances, so more dots, and more bits per element, fit. The bandwidth formula does not change.',
-      terms: [],
+      terms: [['QAM', 'ASK + PSK combined: points differ in both amplitude and phase.'], ['Constellation point', 'One allowed amplitude+phase combination; distance from the origin = amplitude, angle = phase.']],
       recap: ['QAM = ASK + PSK, and $B = (1+d)S$.', '4-QAM with polar NRZ is exactly QPSK.', '8-QAM example: 24 bps at 8 baud → 3 bits per baud.'],
     },
   },
@@ -196,7 +214,7 @@ export default {
     },
     'Analog hierarchy (AT&T)': {
       plain: 'Telephone companies build big channels from small ones in levels, using FDM. Twelve voice channels make a group, five groups a supergroup, ten supergroups a master group and six master groups a jumbo group.',
-      terms: [],
+      terms: [['Group', '12 voice channels multiplexed together.'], ['Supergroup', '5 groups.'], ['Master group', '10 supergroups.'], ['Jumbo group', '6 master groups.']],
       recap: ['12, 60, 600, 3600 voice channels.', '48 kHz, 240 kHz, 2.52 MHz, 16.984 MHz. The last two include guard bands.'],
     },
     'Applications of FDM': {
@@ -214,7 +232,7 @@ export default {
     },
     'Checklist for TDM math': {
       plain: 'TDM math has a fixed path too: make every input digital (PCM if it is analog), find each input’s data rate, and if the rates differ, fix that first.',
-      terms: [],
+      terms: [['Data rate management', 'Fixing unequal input rates: multilevel, multiple-slot, or pulse stuffing.'], ['Pulse stuffing', 'Adding dummy bits to slower lines so all match the dominant rate.']],
       recap: ['Analog → PCM → digital.', 'Different rates → a data rate management technique.'],
     },
     'Synchronous TDM': {
@@ -227,7 +245,7 @@ export default {
     },
     Interleaving: {
       plain: 'Interleaving is the name for how a frame is filled: take a unit from input 1, then input 2, and so on, in turn. Picture two fast switches, one at each end, rotating in step.',
-      terms: [],
+      terms: [['Interleaving', 'Taking one unit from each input in turn, like a rotating switch.'], ['Frame', 'One full round of units, one per input.']],
       recap: ['Interleaving = taking a group of bits from each input in turn.'],
     },
     'Data rate management': {
@@ -247,7 +265,7 @@ export default {
     },
     'T-1 for analog transmission': {
       plain: 'A T-1 line carries 24 telephone calls even though calls are analog: each call is first sampled (PCM), then the 24 digital streams are time-division multiplexed. You should be able to rebuild 1.544 Mbps from scratch.',
-      terms: [],
+      terms: [['T-1', 'The 1.544 Mbps line: 24 × 8-bit samples + 1 sync bit, 8000 frames/s.'], ['Sync bit', 'The single framing bit at the start of each T-1 frame.']],
       recap: ['Frame = $24 \\times 8 + 1 = 193$ bits.', '8000 frames/s → $193 \\times 8000 = 1.544$ Mbps.'],
     },
     'Statistical TDM': {
@@ -280,12 +298,12 @@ export default {
     },
     'PCM bandwidth': {
       plain: 'Once voice is a bit stream, it needs a channel. For NRZ, the minimum bandwidth is half the bit rate.',
-      terms: [],
+      terms: [['Minimum bandwidth (NRZ)', '$B_{min} = c \\times N \\times \\frac1r$ with $c = \\frac12$, $r = 1$.']],
       recap: ['$B_{min} = f_s \\times n_b / 2$.'],
     },
     'The full T-1 chain': {
       plain: 'This lesson ties TDM and PCM together: 24 voice channels → PCM → TDM → one T-1 line. If you can explain each arrow, you understand this whole part of the course.',
-      terms: [],
+      terms: [['DS-0', 'One 64 kbps digitized voice channel.'], ['Overhead', 'The extra bits above the pure data rate (the 8 kbps of a T-1).']],
       recap: ['24 × 64 kbps + 8 kbps overhead = 1.544 Mbps.', '1544 / 24 = 64.33 kbps; the part above 64 is overhead.'],
     },
   },
@@ -330,15 +348,23 @@ export default {
     },
     'Fiber applications, pros and cons': {
       plain: 'Fiber’s wide bandwidth makes it the choice for backbones. Its downsides are cost, the expertise it needs, and one-way light.',
-      terms: [],
+      terms: [['Hybrid network', 'Fiber backbone with coax to the user (cable TV).'], ['Backbone', 'The high-capacity core of a network.']],
       recap: ['Pros: bandwidth, low attenuation, no EM interference, hard to tap, light.', 'Cons: expertise, two fibers for two-way, cost.'],
+    },
+    'Decibels and cable loss (flagged extra)': {
+      plain: 'One more extra from a past final. Cable loss is quoted in decibels per kilometre, and decibels are just a logarithmic way to compare two power levels. Work out the total loss first, then convert back to a power ratio.',
+      terms: [
+        ['Decibel (dB)', '$10\\log_{10}(P_2/P_1)$ — a log-scale comparison of two powers; negative means loss.'],
+        ['dB/km', 'The cable’s loss figure; multiply by the length to get the total loss in dB.'],
+      ],
+      recap: ['$\\text{dB} = 10\\log_{10}(P_2/P_1)$, so $P_2 = P_1 \\times 10^{\\text{dB}/10}$.', 'Total loss = dB/km × length. Spring 2024: $-0.3 \\times 5 = -1.5$ dB → $2 \\times 10^{-0.15} \\approx 1.42$ mW.'],
     },
   },
 
   'ch7-2': {
     'Wireless communication': {
       plain: 'Unguided (wireless) media send electromagnetic waves through free space, with no conductor. Anyone with a capable receiver can pick them up. Different frequency ranges are used for radio/microwave, infrared and light.',
-      terms: [],
+      terms: [['Unguided media', 'No physical conductor: waves travel through free space.'], ['Radio vs microwave band', 'Radio 3 kHz–1 GHz; microwave 1–300 GHz.']],
       recap: ['3 kHz–300 GHz radio and microwave; 300 GHz–400 THz infrared; 400–900 THz light.'],
     },
     Antennas: {
@@ -352,7 +378,7 @@ export default {
     'Antenna gain and effective area': {
       plain: '**Gain** says how much more power an antenna radiates in one direction than the isotropic antenna does. It depends on the **effective area**, which measures how good the antenna is at receiving power.',
       terms: [['Effective area $A_e$', 'Related to the antenna’s size and shape; how effective it is at receiving.']],
-      recap: ['$G = 4\\pi A_e / \\lambda^2 = 4\\pi f^2 A_e / c^2$.', 'Parabolic dish: $A_e = 0.56A$.'],
+      recap: ['$G = 4\\pi A_e / \\lambda^2 = 4\\pi f^2 A_e / c^2$.', 'Parabolic dish: $A_e = 0.56A$.', 'Gain in decibels: $G_{dB} = 10\\log_{10}G$ (the slide answer is 45.46 dB).'],
     },
     'Propagation modes': {
       plain: 'How a wireless signal travels depends on its frequency. Below 3 MHz it follows the earth, from 3 to 30 MHz it bounces off the ionosphere, and above 30 MHz the two antennas must be in line of sight.',
@@ -366,7 +392,7 @@ export default {
     },
     'Wireless transmission waves': {
       plain: 'This lesson compares the three wave types side by side. Learn the table row by row: frequency, antenna, how they travel, walls and examples.',
-      terms: [],
+      terms: [['Omnidirectional', 'Radiates in all directions (radio waves).'], ['Unidirectional', 'One narrow beam (microwaves, parabolic dishes).']],
       recap: ['Radio: omnidirectional, through walls. Microwave: unidirectional, line of sight. Infrared: short range, no walls.'],
     },
   },
@@ -387,7 +413,7 @@ export default {
     },
     'Message switching': {
       plain: 'Message switching sends the whole message hop by hop: each node stores it completely, then forwards it. It is not used today, but know the name **store-and-forward**.',
-      terms: [],
+      terms: [['Store-and-forward', 'Each node stores the entire message, then forwards it when the next hop is free.']],
       recap: ['No dedicated path; each node buffers the entire message.'],
     },
     'Packet switching: datagram networks': {
@@ -449,7 +475,7 @@ export default {
     },
     'Two-dimensional parity': {
       plain: 'Arrange the data in rows, give every row a parity bit, then add a whole row of column parity bits. Each bit is now checked twice, once by its row and once by its column.',
-      terms: [],
+      terms: [['Row parity', 'A parity bit appended to each data row.'], ['Column parity', 'A whole extra row holding the parity of each column.']],
       recap: ['Row parity + a column-parity row.', 'Misses two bad bits in one unit matched by two in the same positions in another.'],
     },
     'Cyclic Redundancy Check (CRC)': {

@@ -17,6 +17,7 @@ export default {
       blocks: [
         { type: 'p', text: 'An antenna is an electrical conductor (or system of conductors). For **transmission** it radiates electromagnetic energy into space; for **reception** it collects energy from space. In two-way communication the same antenna does both.' },
         { type: 'list', items: ['**Isotropic** (idealized) – radiates equally in all directions; the radiation pattern is a sphere.', '**Half-wave dipole (Hertz)** – physical length $\\lambda/2$.', '**Quarter-wave vertical (Marconi)** – physical length $\\lambda/4$.', '**Parabolic reflector** – used in terrestrial microwave and satellite applications.'] },
+        { type: 'diagram', id: 'antennas' },
       ],
     },
     {

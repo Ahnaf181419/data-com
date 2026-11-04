@@ -105,6 +105,44 @@ export function tdm({ n, rate, unitBits = 1, syncBits = 0 }) {
   return { result: { inSlot, outSlot, frameBits, frameRate, linkRate }, steps };
 }
 
+// Multiple-slot TDM: unequal input rates share one frame via a common unit (gcd of the rates).
+export function tdmMultislot({ rates, syncBits = 0 }) {
+  if (!rates?.length) throw new Error('Provide at least one input rate.');
+  if (rates.some((r) => !(r > 0))) throw new Error('All input rates must be positive.');
+  const gcd = (a, b) => (b ? gcd(b, a % b) : a);
+  const unit = Math.round(rates.reduce(gcd));
+  const slots = rates.map((r) => r / unit);
+  const frameBits = slots.reduce((a, b) => a + b, 0) + syncBits;
+  const frameRate = unit; // each slot carries 1 bit at the common unit rate
+  const duration = 1 / frameRate;
+  const linkRate = frameBits * unit;
+  const steps = [
+    `\\text{common unit} = \\gcd(\\text{rates}) = ${fmt(unit)}\\text{ bps}`,
+    ...slots.map((sl, i) => `\\text{input } ${i + 1}: \\frac{${fmt(rates[i])}}{${fmt(unit)}} = ${sl}\\text{ slots/frame}`),
+    `\\text{frame size} = ${slots.join(' + ')}${syncBits ? ` + ${syncBits}` : ''} = ${frameBits}\\text{ bits}`,
+    `\\text{frame rate} = ${fmt(frameRate)}\\text{ frames/s}, \\qquad \\text{duration} = \\frac{1}{${fmt(frameRate)}} = ${fmt(duration, 9)}\\text{ s}`,
+    `\\text{link rate} = ${frameBits} \\times ${fmt(unit)} = ${fmt(linkRate)}\\text{ bps}`,
+  ];
+  return { result: { unit, slots, frameBits, frameRate, duration, linkRate }, steps };
+}
+
+// FDM analog hierarchy (Raiyan's nested-guard method): each level multiplexes n units of the level below,
+// adding n-1 guard bands. units = [12, 5, 10, 6] climbs group → jumbo group.
+export function fdmHierarchy({ units, bw, guard }) {
+  if (!units?.length) throw new Error('Provide the units per level.');
+  const names = ['Group', 'Supergroup', 'Master group', 'Jumbo group'];
+  let cur = bw;
+  const levels = [];
+  const steps = [];
+  units.forEach((n, i) => {
+    const prev = cur;
+    cur = n * cur + (n - 1) * guard;
+    levels.push(cur);
+    steps.push(`\\text{${names[i] ?? `Level ${i + 1}`}} = ${n} \\times ${fmt(prev)} + ${n - 1} \\times ${fmt(guard)} = ${fmt(cur)}\\text{ kHz}`);
+  });
+  return { result: { levels }, steps };
+}
+
 // ---- PCM ----
 export function pcm({ fh, N, nb }) {
   const fs = 2 * fh;
@@ -129,6 +167,7 @@ export function losDistance({ h1, h2 }) {
 
 export function losHeight({ d, h2 }) {
   const root = d / 3.57 - Math.sqrt(K * h2);
+  if (root < 0) throw new Error(`h₂ = ${h2} m already reaches ${fmt(3.57 * Math.sqrt(K * h2), 1)} km on its own — no positive h₁ can give d = ${d} km (h₁ = 0 suffices).`);
   const h1 = (root * root) / K;
   return {
     result: { h1 },
@@ -212,6 +251,7 @@ export function parity2D(rows) {
 
 export function mod2div(dividend, divisor) {
   if (divisor.length < 2 || divisor[0] !== '1') throw new Error('Divisor must start with 1 and have at least 2 bits.');
+  if (dividend.length < divisor.length) throw new Error(`Dividend (${dividend.length} bits) must be at least as long as the divisor (${divisor.length} bits).`);
   const n = divisor.length;
   let cur = dividend.slice(0, n);
   let q = '';
@@ -286,6 +326,9 @@ export function hammingEncode(data) {
 
 export function hammingCheck(codeword) {
   const n = codeword.length;
+  // A valid length is k data + r parity bits with redundancyBits(k).r === r (e.g. 7 = 4+3, 11 = 7+4).
+  const hammingLength = n >= 3 && Array.from({ length: n - 1 }, (_, i) => i + 1).some((k) => redundancyBits(k).result.r + k === n);
+  if (!hammingLength) throw new Error(`Not a Hamming codeword length (${n} bits): need k data + r parity bits, e.g. 7 = 4 + 3 or 11 = 7 + 4.`);
   const bit = (p) => +codeword[n - p];
   let pos = 0;
   const steps = [];

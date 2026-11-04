@@ -77,6 +77,22 @@ export default {
         { type: 'note', text: '802.11 is the protocol that describes how WiFi works.' },
       ],
     },
+    {
+      heading: 'The OSI model (flagged extra)',
+      blocks: [
+        { type: 'note', text: '**Not in your slides or notes.** Spring 2024 Q1(b) asked it, so it is taught here using the standard textbook (Forouzan) method. Check with your teacher.' },
+        { type: 'p', text: 'The **OSI model** stacks network communication into seven layers, bottom up: **physical, data link, network, transport, session, presentation, application**. End devices use all seven; intermediate devices (switches, routers) use only the lower ones.' },
+        { type: 'list', items: ['**Physical layer** – moves individual bits over the medium. It defines the interface and the medium, how bits are represented (encoding), the data rate, bit synchronization, line configuration, topology and transmission mode.', '**Data link layer** – node-to-node (hop-to-hop) delivery of frames: framing, physical addressing, flow control, error control (detection and correction, as in Ch 10) and access control.'] },
+      ],
+    },
+    {
+      heading: 'Signal impairment (flagged extra)',
+      blocks: [
+        { type: 'note', text: '**Not in your slides or notes.** Spring 2024 Q1(c) asked it, so it is taught here using the standard textbook method. Check with your teacher.' },
+        { type: 'p', text: 'A transmission medium is not perfect, so the signal received is not exactly the one sent — this is **signal impairment**. Three types:' },
+        { type: 'list', items: ['**Attenuation** – loss of energy over distance; fixed with amplifiers/repeaters (twisted pair needs repeaters every 5–6 km analog, 2–3 km digital). Measured in dB.', '**Distortion** – the signal changes shape because the frequency components of a composite signal arrive with different delays.', '**Noise** – unwanted energy added on the way (thermal, induced, crosstalk, impulse); e.g. 0110 sent, 0010 received.'] },
+      ],
+    },
   ],
   formulas: [
     { label: 'Propagation delay', tex: 'P_d = \\frac{D}{S}', where: 'D link distance, S signal speed' },
@@ -92,6 +108,9 @@ export default {
     { front: 'Transmission delay formula', back: '$T_d = L/R$ (message size ÷ data rate).' },
     { front: 'Which topology is multipoint?', back: 'Bus. Mesh, star and ring are point-to-point.' },
     { front: 'End device vs intermediate device', back: 'An end device creates/reads/writes messages (all 7 layers). An intermediate device only forwards (up to layer 3).' },
+    { front: 'OSI layers (bottom up)', back: 'Physical, data link, network, transport, session, presentation, application.' },
+    { front: 'Physical vs data link layer', back: 'Physical: moves bits over the medium (encoding, data rate, synchronization, topology). Data link: hop-to-hop frames (framing, physical addressing, flow/error control, access control).' },
+    { front: 'Three transmission impairments', back: 'Attenuation (energy loss, dB), distortion (frequency components arrive with different delays), noise (unwanted energy added).' },
   ],
   quiz: [
     { q: 'Which data flow allows both directions but not at the same time?', options: ['Simplex', 'Half-duplex', 'Full-duplex', 'Multipoint'], answer: 1, explain: 'Half-duplex is two-way, one direction at a time.' },
@@ -100,6 +119,8 @@ export default {
     { q: 'Which topology uses a multipoint connection?', options: ['Mesh', 'Star', 'Ring', 'Bus'], answer: 3, explain: 'Bus is multipoint; the rest are point-to-point.' },
     { q: 'Delivery effectiveness is ensured by:', options: ['Encryption', 'The address system', 'Noise cancellation', 'Repeaters'], answer: 1, explain: 'The notes say delivery is ensured by the address system.' },
     { q: 'A 3200 km link with signal speed $2\\times10^8$ m/s has propagation delay:', options: ['16 ms', '1.6 ms', '160 ms', '0.16 ms'], answer: 0, explain: '$3.2\\times10^6 / 2\\times10^8 = 0.016$ s = 16 ms.' },
+    { q: 'Which OSI layer is responsible for hop-to-hop delivery of frames?', options: ['Physical', 'Data link', 'Network', 'Transport'], answer: 1, explain: 'Framing, physical addressing, flow/error control, access control.' },
+    { q: 'A composite signal whose frequency components arrive with different delays suffers:', options: ['Attenuation', 'Distortion', 'Noise', 'Jitter'], answer: 1, explain: 'Distortion changes the signal’s shape.' },
   ],
   solvers: ['delay'],
 };

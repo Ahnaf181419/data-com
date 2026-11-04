@@ -24,7 +24,7 @@ function Seg({ value, options, onChange, label }) {
           role="radio"
           aria-checked={value === o}
           onClick={() => onChange(o)}
-          className={`press min-h-10 rounded-lg px-3.5 text-sm font-medium ${value === o ? 'bg-gold text-ink' : 'text-ash'}`}
+          className={`press min-h-11 rounded-lg px-3.5 text-sm font-medium ${value === o ? 'bg-gold text-ink' : 'text-ash'}`}
         >
           {o}
         </button>
@@ -41,15 +41,15 @@ function BitToggles({ bits, setBits, max = 12 }) {
           key={i}
           onClick={() => setBits(bits.slice(0, i) + (b === '1' ? '0' : '1') + bits.slice(i + 1))}
           aria-label={`Bit ${i + 1} is ${b}, tap to flip`}
-          className={`press size-10 rounded-lg border font-mono text-lg ${b === '1' ? 'border-gold/60 bg-gold/15 text-gold' : 'border-line text-ash'}`}
+          className={`press size-11 rounded-lg border font-mono text-lg ${b === '1' ? 'border-gold/60 bg-gold/15 text-gold' : 'border-line text-ash'}`}
         >
           {b}
         </button>
       ))}
-      <button onClick={() => bits.length < max && setBits(bits + '0')} disabled={bits.length >= max} aria-label="Add a bit" className="press size-10 rounded-lg border border-dashed border-line text-ash disabled:opacity-30">
+      <button onClick={() => bits.length < max && setBits(bits + '0')} disabled={bits.length >= max} aria-label="Add a bit" className="press size-11 rounded-lg border border-dashed border-line text-ash disabled:opacity-30">
         +
       </button>
-      <button onClick={() => bits.length > 2 && setBits(bits.slice(0, -1))} disabled={bits.length <= 2} aria-label="Remove last bit" className="press size-10 rounded-lg border border-dashed border-line text-ash disabled:opacity-30">
+      <button onClick={() => bits.length > 2 && setBits(bits.slice(0, -1))} disabled={bits.length <= 2} aria-label="Remove last bit" className="press size-11 rounded-lg border border-dashed border-line text-ash disabled:opacity-30">
         −
       </button>
     </div>
@@ -110,7 +110,7 @@ export function ModulationLab() {
     <LabFrame title="Modulation lab" hint="Tap bits to flip them. Watch which carrier property changes: amplitude (ASK), frequency (FSK) or phase (PSK/QPSK).">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <Seg label="Scheme" value={scheme} options={['ASK', 'BFSK', 'BPSK', 'QPSK']} onChange={setScheme} />
-        <button onClick={() => setPlay(!play)} aria-pressed={play} className="press min-h-10 rounded-xl border border-line px-4 text-sm text-ash">
+        <button onClick={() => setPlay(!play)} aria-pressed={play} className="press min-h-11 rounded-xl border border-line px-4 text-sm text-ash">
           {play ? 'Stop playhead' : 'Play playhead'}
         </button>
       </div>
@@ -145,6 +145,7 @@ export function ModulationLab() {
 // ---------- Analog-to-analog ----------
 export function AnalogLab() {
   const [type, setType] = useState('AM');
+  const [play, setPlay] = useState(false);
   const W = 640, N = 900;
   const m = (t) => Math.sin(2 * Math.PI * 1.5 * t);
   const fc = 14;
@@ -165,13 +166,21 @@ export function AnalogLab() {
   }[type];
   return (
     <LabFrame title="AM, FM and PM side by side" hint="The ash line is the modulating (message) signal; gold is the transmitted carrier.">
-      <Seg label="Modulation" value={type} options={['AM', 'FM', 'PM']} onChange={setType} />
-      <svg viewBox="0 0 640 190" className="mt-4 w-full" role="img" aria-label={`${type} modulated carrier`}>
-        <line x1="0" x2={W} y1="40" y2="40" stroke="var(--color-line)" />
-        <path d={path(N, (i) => (i / N) * W, (i) => 40 - m(i / N) * 30)} fill="none" stroke="var(--color-ash)" strokeWidth="1.5" />
-        <line x1="0" x2={W} y1="135" y2="135" stroke="var(--color-line)" />
-        <path d={path(N, (i) => (i / N) * W, (i) => 135 - out[i] * 48)} fill="none" stroke="var(--color-gold)" strokeWidth="1.8" />
-      </svg>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Seg label="Modulation" value={type} options={['AM', 'FM', 'PM']} onChange={setType} />
+        <button onClick={() => setPlay(!play)} aria-pressed={play} className="press min-h-11 rounded-xl border border-line px-4 text-sm text-ash">
+          {play ? 'Stop playhead' : 'Play playhead'}
+        </button>
+      </div>
+      <div className="relative mt-4">
+        <svg viewBox="0 0 640 190" className="w-full" role="img" aria-label={`${type} modulated carrier`}>
+          <line x1="0" x2={W} y1="40" y2="40" stroke="var(--color-line)" />
+          <path d={path(N, (i) => (i / N) * W, (i) => 40 - m(i / N) * 30)} fill="none" stroke="var(--color-ash)" strokeWidth="1.5" />
+          <line x1="0" x2={W} y1="135" y2="135" stroke="var(--color-line)" />
+          <path d={path(N, (i) => (i / N) * W, (i) => 135 - out[i] * 48)} fill="none" stroke="var(--color-gold)" strokeWidth="1.8" />
+        </svg>
+        {play && <div className="playhead pointer-events-none absolute inset-y-0 left-0 w-0.5 bg-red/80" style={{ '--w': 'calc(100% - 2px)', '--dur': '8s' }} />}
+      </div>
       <div className="mt-2 flex flex-wrap items-center justify-between gap-3 text-sm">
         <span className="text-text/85">{text[0]}</span>
         <InlineMath math={text[1]} />
@@ -236,6 +245,7 @@ export function FdmLab() {
 const LINES = ['A', 'B', 'C', 'D'];
 export function TdmLab({ mode: initial = 'sync' }) {
   const [mode, setMode] = useState(initial === 'stat' ? 'Statistical' : 'Synchronous');
+  const [cycle, setCycle] = useState(false);
   const [data, setData] = useState(['1111', '1010', '0110', '0001']);
   const toggle = (l, t) => setData(data.map((row, i) => (i === l ? row.slice(0, t) + (row[t] === '1' ? '0' : '1') + row.slice(t + 1) : row)));
   const T = 4;
@@ -252,7 +262,14 @@ export function TdmLab({ mode: initial = 'sync' }) {
   const slotsSent = frames.reduce((a, f) => a + f.length, 0);
   return (
     <LabFrame title="TDM frame builder" hint="Tap a unit to give that line data or make it idle. Synchronous TDM keeps a slot for every line (wasted when empty); statistical TDM sends only units with data and tags each with its line address.">
-      <Seg label="TDM type" value={mode} options={['Synchronous', 'Statistical']} onChange={setMode} />
+      <div className="flex flex-wrap items-center gap-3">
+        <Seg label="TDM type" value={mode} options={['Synchronous', 'Statistical']} onChange={setMode} />
+        {mode === 'Synchronous' && (
+          <button onClick={() => setCycle(!cycle)} aria-pressed={cycle} className="press min-h-11 rounded-xl border border-line px-4 text-sm text-ash">
+            {cycle ? 'Stop interleaving' : 'Show interleaving'}
+          </button>
+        )}
+      </div>
       <div className="mt-4 grid gap-2">
         {LINES.map((L, l) => (
           <div key={L} className="flex items-center gap-2">
@@ -262,7 +279,7 @@ export function TdmLab({ mode: initial = 'sync' }) {
                 key={t}
                 onClick={() => toggle(l, t)}
                 aria-label={`Line ${L} unit ${t + 1}: ${data[l][t] === '1' ? 'has data' : 'idle'}`}
-                className={`press h-10 flex-1 rounded-lg border font-mono text-sm ${data[l][t] === '1' ? 'border-gold/60 bg-gold/15 text-gold' : 'border-dashed border-line text-ash/50'}`}
+                className={`press h-11 flex-1 rounded-lg border font-mono text-sm ${data[l][t] === '1' ? 'border-gold/60 bg-gold/15 text-gold' : 'border-dashed border-line text-ash/50'}`}
               >
                 {data[l][t] === '1' ? `${L}${t + 1}` : 'idle'}
               </button>
@@ -280,7 +297,11 @@ export function TdmLab({ mode: initial = 'sync' }) {
               </span>
             )}
             {f.map((u, j) => (
-              <span key={j} className={`grid min-w-12 place-items-center rounded-md px-2 py-1.5 font-mono text-sm ${u ? 'bg-gold/15 text-gold' : 'border border-dashed border-red/40 text-red/70'}`}>
+              <span
+                key={j}
+                className={`grid min-w-12 place-items-center rounded-md px-2 py-1.5 font-mono text-sm ${u ? 'bg-gold/15 text-gold' : 'border border-dashed border-red/40 text-red/70'} ${cycle && mode === 'Synchronous' ? 'slot-cycle' : ''}`}
+                style={cycle && mode === 'Synchronous' ? { '--t': `${frames.length * LINES.length * 0.3}s`, animationDelay: `${(i * LINES.length + j) * 0.3}s` } : undefined}
+              >
                 {u ? (mode === 'Statistical' ? <span>{u}<sub className="ml-0.5 text-[0.65rem] text-ash">→{u[0]}</sub></span> : u) : 'empty'}
               </span>
             ))}
@@ -413,7 +434,7 @@ export function HammingLab() {
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <span className="text-sm text-ash">Show coverage of</span>
         {parities.map((p) => (
-          <button key={p} onClick={() => setFocus(p)} aria-pressed={focus === p} className={`press min-h-10 rounded-lg px-3 text-sm ${focus === p ? 'bg-gold text-ink' : 'border border-line text-ash'}`}>
+          <button key={p} onClick={() => setFocus(p)} aria-pressed={focus === p} className={`press min-h-11 rounded-lg px-3 text-sm ${focus === p ? 'bg-gold text-ink' : 'border border-line text-ash'}`}>
             <InlineMath math={`r_{${p}}`} />
           </button>
         ))}
@@ -429,7 +450,7 @@ export function HammingLab() {
                 key={pos}
                 onClick={() => setFlip(flip === pos ? 0 : pos)}
                 aria-label={`Position ${pos}, ${isP ? 'parity' : 'data'} bit ${b}${flip === pos ? ', corrupted' : ''}`}
-                className={`press grid w-12 gap-0.5 rounded-lg border py-1.5 text-center ${flip === pos ? 'border-red bg-red/15' : inCover ? 'border-gold/70 bg-gold/10' : 'border-line'}`}
+                className={`press grid w-12 gap-0.5 rounded-lg border py-1.5 text-center ${flip === pos ? 'pop border-red bg-red/15' : inCover ? 'border-gold/70 bg-gold/10' : 'border-line'}`}
               >
                 <span className="text-[0.7rem] text-ash">{isP ? `r${pos}` : `b${pos}`}</span>
                 <span className={`font-mono text-lg ${isP ? 'text-gold' : 'text-text'}`}>{b}</span>
@@ -496,7 +517,7 @@ export function CodingLab() {
             <Seg label="Starting level" value={startHigh ? 'Start high' : 'Start low'} options={['Start high', 'Start low']} onChange={(v) => setStartHigh(v === 'Start high')} />
             <label className="flex items-center gap-2">
               Draw first
-              <input type="number" min="2" max="30" value={count} onChange={(e) => setCount(Math.max(2, Math.min(30, +e.target.value || 2)))} className="min-h-10 w-16 rounded-lg border border-line bg-ink px-2 text-base text-text" />
+              <input type="number" min="2" max="30" value={count} onChange={(e) => setCount(Math.max(2, Math.min(30, +e.target.value || 2)))} className="min-h-11 w-16 rounded-lg border border-line bg-ink px-2 text-base text-text" />
               bits
             </label>
           </div>
@@ -511,7 +532,7 @@ export function CodingLab() {
                 </text>
               </g>
             ))}
-            <path d={d} fill="none" stroke="var(--color-gold)" strokeWidth="2.2" strokeLinejoin="round" />
+            <path d={d} pathLength={1} className="trace" fill="none" stroke="var(--color-gold)" strokeWidth="2.2" strokeLinejoin="round" />
           </svg>
           <p className="mt-2 break-all font-mono text-sm text-text/85">Output: {coded.stream}</p>
         </>

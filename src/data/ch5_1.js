@@ -12,6 +12,7 @@ export default {
         { type: 'math', tex: 's(t) = A\\sin(2\\pi f t + \\varphi)' },
         { type: 'list', items: ['Vary the amplitude $A$ → **ASK**', 'Vary the frequency $f$ → **FSK**', 'Vary the phase $\\varphi$ → **PSK**', 'Vary amplitude and phase together → **QAM**'] },
         { type: 'table', head: ['', 'Baseband transmission', 'Broadband transmission'], rows: [['Signal', 'Baseband signal', 'Bandpass signal'], ['Channel', 'Low-pass channel', 'Passband channel'], ['Bandwidth', 'Starts from 0', 'Does not start from 0']] },
+        { type: 'p', text: 'Spectrum reminder from the notes: a **periodic** signal (like an alarm tone) has a **discrete** frequency spectrum; a **non-periodic** signal (like voice) has a **continuous** one.' },
       ],
     },
     {
@@ -26,7 +27,7 @@ export default {
       heading: 'Amplitude Shift Keying (ASK)',
       blocks: [
         { type: 'p', text: 'The amplitude of the carrier changes to reflect the data; frequency and phase stay constant. The peak amplitude is constant during each bit duration.' },
-        { type: 'p', text: '**Binary ASK (BASK)** – $n_b = 1$, $2^1 = 2$ levels (0 and 1). It is implemented by multiplying a **unipolar NRZ** signal (1 V high, 0 V low) by the carrier from an oscillator. When the NRZ amplitude is 1 the carrier is held; when it is 0 the carrier amplitude is zero.' },
+        { type: 'p', text: '**Binary ASK (BASK)** – $n_b = 1$, $2^1 = 2$ levels (0 and 1). It is implemented by multiplying a **unipolar NRZ** signal (1 V high, 0 V low) by the carrier from an oscillator. When the NRZ amplitude is 1 the carrier is held; when it is 0 the carrier amplitude is zero. The carrier is chosen so that one bit interval spans about **2–3 carrier cycles**.' },
         { type: 'math', tex: 'B = (1 + d)\\,S' },
         { type: 'p', text: '$d$ is the modulation/filtering factor, $0 \\le d \\le 1$. The bandwidth is proportional to the signal rate $S$.' },
         { type: 'math', tex: 'd = 0:\\ B_{min} = S = N \\qquad d = 1:\\ B_{max} = 2S = 2N' },
@@ -34,6 +35,7 @@ export default {
         { type: 'math', tex: 'f_l = f_c - \\frac{S}{2} \\qquad f_h = f_c + \\frac{S}{2}' },
         { type: 'diagram', id: 'spectrum', props: { segs: [{ label: 'ASK', fc: 'fc' }], spans: [{ from: 0, to: 1, label: 'B = (1+d)S' }], ticks: [[0, 'fc − S/2'], [1, 'fc + S/2']], caption: 'r = 1, S = N: the band sits around fc in the middle of the channel.' } },
         { type: 'note', text: 'Full-duplex (Ex 5.4): split the 200–300 kHz band into two 50 kHz halves with carriers 225 kHz and 275 kHz. With $d = 1$, each direction gets $N = 50/2 = 25$ kbps.' },
+        { type: 'lab', id: 'modulation' },
       ],
     },
     {
@@ -48,6 +50,7 @@ export default {
         { type: 'p', text: 'For the minimum, the two bands just touch, with $d = 0$ and $r = 1$:' },
         { type: 'math', tex: '2\\Delta f = \\tfrac12(1+d)S + \\tfrac12(1+d)S = (1+0)S = S \\quad\\Rightarrow\\quad B_{min} = S + S = 2S \\quad (2)' },
         { type: 'diagram', id: 'spectrum', props: { segs: [{ w: 2, label: 'f₁ band', sub: '(1+d)S' }, { w: 1, kind: 'none' }, { w: 2, label: 'f₂ band', sub: '(1+d)S' }], spans: [{ from: 0, to: 3, label: 'B = (1+d)S + 2Δf' }, { from: 0.5, to: 2.5, label: '2Δf', row: 1, red: true }], ticks: [[0.5, 'f₁'], [1.5, 'fc'], [2.5, 'f₂']], caption: 'Bandwidth of BFSK: two carriers 2Δf apart, each with a (1+d)S band.' } },
+        { type: 'p', text: 'Flip the scheme selector in the lab above (ASK / BFSK / BPSK / QPSK) to watch the **frequency** carry the bits.' },
       ],
     },
     {
@@ -65,11 +68,12 @@ export default {
       heading: 'Phase Shift Keying (PSK)',
       blocks: [
         { type: 'p', text: 'The carrier phase changes to represent different signal elements; peak amplitude and frequency stay constant.' },
-        { type: 'p', text: '**BPSK** – $n_b = 1$, two elements: bit 1 starts at phase 0°, bit 0 starts at phase 180°. It uses a **polar NRZ** signal multiplied by the carrier (same idea as ASK with polar instead of unipolar NRZ).' },
+        { type: 'p', text: '**BPSK** – $n_b = 1$, two elements: bit 1 starts at phase 0°, bit 0 starts at phase 180°. It uses a **polar NRZ** signal multiplied by the carrier (same idea as ASK with polar instead of unipolar NRZ). In the lab above, choose BPSK to watch the **phase** flip with each bit.' },
         { type: 'math', tex: 'B = (1+d)\\,S' },
         { type: 'p', text: '**QPSK** – $n_b = 2$, $L = 4$. A 2/1 converter splits the bit stream: the 1st bit modulates carrier $f_{c1}$ (0°), the 2nd bit modulates $f_{c2}$, shifted 90° (in quadrature). The two BPSK signals are added.' },
         { type: 'diagram', id: 'qpskimpl' },
         { type: 'table', head: ['Bits', 'Phase', 'Amplitude'], rows: [['00', '−135°', '$\\sqrt2$ V'], ['10', '−45°', '$\\sqrt2$ V'], ['01', '135°', '$\\sqrt2$ V'], ['11', '45°', '$\\sqrt2$ V']] },
+        { type: 'note', text: 'Raiyan’s notes flip the BPSK 0/1 phase assignment in places, and the QPSK circuit mapping on p. 23 disagrees with the constellation on p. 20. The slide assignment in the table above is the one to use in the exam.' },
         { type: 'p', text: 'Each composite point has amplitude $L^2 = V^2 + V^2 \\Rightarrow L = \\sqrt2\\,V$. Using carrier amplitude $1/\\sqrt2$ makes the final amplitude 1 V.' },
         { type: 'note', text: 'Higher-order PSK ($n_b = 3$: 8-PSK; $n_b = 4$: 16-PSK; $n_b = \\log_2 L$) packs points onto one circle by phase only. With a large $L$ the phases become very hard to tell apart. This limitation is why PSK is combined with ASK as QAM.' },
       ],

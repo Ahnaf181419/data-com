@@ -156,3 +156,36 @@ test('Past paper: Spring 2024 (Hamming, CRC, datagrams, PCM, 4B/5B, T-1, Clos, c
   assert.equal(Math.round(l.P * 1000) / 1000, 1.416);
 });
 
+
+test('solvers reject malformed input instead of guessing', () => {
+  assert.throws(() => s.losHeight({ d: 41, h2: 200 }), /no positive h₁|h₂/u);
+  assert.throws(() => s.mod2div('101', '1011'), /at least as long/u);
+  assert.throws(() => s.hammingCheck('10101010'), /Hamming/u);
+  // valid inputs still work:
+  assert.ok(s.losHeight({ d: 41, h2: 10 }).result.h1 > 45);
+  assert.equal(s.mod2div('1010', '1011').remainder, '001');
+  assert.equal(s.hammingCheck('10011000101').result.pos, 6);
+});
+
+test('worked answers printed in the lessons reproduce exactly', () => {
+  // Fall 2024 Q3(c): multiple-slot TDM (unequal rates share a frame via the gcd unit)
+  const t = s.tdmMultislot({ rates: [200e3, 200e3, 150e3, 150e3] }).result;
+  assert.deepEqual([t.frameBits, t.frameRate, t.linkRate], [14, 50000, 700e3]);
+  assert.ok(Math.abs(t.duration - 2e-5) < 1e-11);
+  // Spring 2025 Q3(d) = Spring 2024 3(a): multilevel — six 200 kbps pair into three 400 kbps → 7 inputs at the 400 kHz unit
+  const t2 = s.tdmMultislot({ rates: Array(7).fill(400e3) }).result;
+  assert.deepEqual([t2.frameBits, t2.frameRate, t2.linkRate], [7, 400000, 2800000]);
+  assert.ok(Math.abs(t2.duration - 2.5e-6) < 1e-11);
+  // ch6_1 Quiz-3 FDM hierarchy (Raiyan's nested guard bands)
+  assert.deepEqual(s.fdmHierarchy({ units: [12, 5, 10, 6], bw: 4, guard: 1 }).result.levels, [59, 299, 2999, 17999]);
+  // ch7_2 80-km TV antenna
+  assert.ok(Math.abs(s.losHeight({ d: 80, h2: 0 }).result.h1 - 376.6) < 0.5);
+  // Fall 2024 Q2(e) TST design (plain arithmetic)
+  assert.deepEqual([4 * (10 * 10), (10 + 10) * 10], [400, 200]);
+  // ch6_2 DS-2 example
+  const ds2 = s.tdm({ n: 96, rate: 64000, unitBits: 8, syncBits: 21 }).result;
+  assert.deepEqual([ds2.frameBits, ds2.frameRate, ds2.linkRate], [789, 8000, 6312000]);
+  // ch6_1 Ex 6.3 (QAM: r = N/B → L = 2^r)
+  const e3 = s.bitsPerElement({ N: 1000000, S: 250000 }).result;
+  assert.deepEqual([e3.r, e3.L], [4, 16]);
+});

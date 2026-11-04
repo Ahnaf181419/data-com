@@ -35,6 +35,7 @@ export default {
       heading: 'Interleaving',
       blocks: [
         { type: 'p', text: 'Taking a group of bits from each input line in turn is called **interleaving**. TDM can be pictured as two fast-rotating switches, one on each side, synchronized and rotating at the same speed in opposite directions. As the MUX switch opens in front of a connection, that connection can send one unit onto the path.' },
+        { type: 'lab', id: 'tdm' },
       ],
     },
     {
@@ -51,15 +52,16 @@ export default {
       heading: 'Frame synchronization',
       blocks: [
         { type: 'p', text: 'So the receiver knows the bit boundaries, a known bit pattern (synchronization bits) is placed between frames, usually alternating 1, 0, 1, … The receiver looks for the expected bit and counts bits to the end of the frame. If the pattern is wrong there is an error.' },
+        { type: 'diagram', id: 'syncbits' },
         { type: 'p', text: 'Sync bits are part of the transmission **overhead**: adding them raises the link data rate.' },
       ],
     },
     {
       heading: 'Digital signal (DS) hierarchy',
       blocks: [
-        { type: 'table', head: ['Service', 'Line', 'Rate (Mbps)', 'Voice channels', 'Made of', 'Overhead'], rows: [['DS-0', '—', '0.064', '1', 'single 64 kbps channel', '—'], ['DS-1', 'T-1', '1.544', '24', '24 × DS-0', '8 kbps (1 bit/frame)'], ['DS-2', 'T-2', '6.312', '96', '4 × DS-1', '168 kbps (21 bits/frame)'], ['DS-3', 'T-3', '44.736', '672', '7 × DS-2 (28 DS-1)', '1.368 Mbps'], ['DS-4', 'T-4', '274.176', '4032', '6 × DS-3 (42 DS-2)', '16.128 Mbps']] },
+        { type: 'table', head: ['Service', 'Line', 'Rate (Mbps)', 'Voice channels', 'Made of', 'Overhead'], rows: [['DS-0', '—', '0.064', '1', 'single 64 kbps channel', '—'], ['DS-1', 'T-1', '1.544', '24', '24 × DS-0', '8 kbps (1 bit/frame)'], ['DS-2', 'T-2', '6.312', '96', '4 × DS-1', '168 kbps (21 bits/frame)'], ['DS-3', 'T-3', '44.736', '672', '7 × DS-2 (28 DS-1)', '1.728 Mbps'], ['DS-4', 'T-4', '274.176', '4032', '6 × DS-3 (42 DS-2)', '16.128 Mbps']] },
                 { type: 'diagram', id: 'hierarchy', props: { kind: 'TDM', first: '64 kbps each', levels: [{ input: '24 DS-0', name: 'DS-1', bw: '1.544 Mbps' }, { input: '4 DS-1', name: 'DS-2', bw: '6.312 Mbps' }, { input: '7 DS-2', name: 'DS-3', bw: '44.736 Mbps' }, { input: '6 DS-3', name: 'DS-4', bw: '274.176 Mbps' }], caption: 'DS hierarchy: each level is a TDM multiplexer.' } },
-{ type: 'note', text: 'The DS-3 slide text says 44.376 Mbps (= 672 × 64 kbps + 1.368 Mbps), while the slide table and both notes show 44.736 Mbps.' },
+{ type: 'note', text: 'The DS-3 slide text says 44.376 Mbps (= 672 × 64 kbps + 1.368 Mbps), while the slide table and both notes show 44.736 Mbps (= 672 × 64 kbps + 1.728 Mbps). Use 44.736 with 1.728, or 44.376 with 1.368 — never mix the two.' },
         { type: 'list', items: ['DS-0, DS-1… are service names; T-1 to T-4 are the lines that implement them, with matching capacities.', 'Only T-1 and T-3 are commercially available. DS-0 is not offered; it is a reference.', 'Europe uses **E lines**: E-1 2.048 Mbps (30 ch), E-2 8.448 (120), E-3 34.368 (480), E-4 139.264 (1920).'] },
       ],
     },
@@ -68,6 +70,11 @@ export default {
       blocks: [
         { type: 'p', text: 'T lines are digital but can carry analog telephone signals if the signals are first sampled (PCM) and then time-division multiplexed. Instead of 24 twisted pairs to the exchange, an organization runs one T-1 line.' },
         { type: 'math', tex: '\\text{frame} = 24 \\times 8 + 1 = 193\\text{ bits}, \\quad 193 \\times 8000 = 1.544\\text{ Mbps}' },
+        { type: 'diagram', id: 'tdmframe', props: {
+          inputs: [...Array.from({ length: 12 }, (_, i) => ({ rate: '64 kbps', tag: `${i + 1}`, group: 0 })), ...Array.from({ length: 12 }, (_, i) => ({ rate: '64 kbps', tag: `${i + 13}`, group: 1 })), { rate: 'sync', tag: 'S' }],
+          groupRate: '12 voice lines each', expandGroups: true, out: '1.544 Mbps', frame: '24 × 8 + 1 = 193 bits',
+          caption: 'One T-1 frame: 24 channels each contribute an 8-bit PCM sample (slots 1–24), plus 1 sync bit (S) — 193 bits, 8000 times a second.',
+        } },
         { type: 'p', text: 'Each slot holds one 8-bit sample from each channel, plus 1 sync bit; there are 8000 frames per second (one per sampling period).' },
       ],
     },

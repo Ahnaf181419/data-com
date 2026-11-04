@@ -15,6 +15,8 @@ export default {
     Effectiveness: c('Audio and video arriving together is about:', ['Delivery', 'Accuracy', 'Timeliness', 'Security'], 2, 'Timeliness means data is delivered on time.'),
     Networks: c('A 1000-bit message on a 1 Mbps link has transmission delay:', ['1 ms', '1 s', '1 µs', '0.1 ms'], 0, '$T_d = L/R = 1000/10^6 = 1$ ms.'),
     'Connection types and topologies': c('Which topology is multipoint?', ['Mesh', 'Ring', 'Star', 'Bus'], 3, 'Bus shares one link; the rest are point-to-point.'),
+    'The OSI model (flagged extra)': c('Which OSI layer is responsible for hop-to-hop delivery of frames?', ['Physical', 'Data link', 'Network', 'Transport'], 1, 'Framing, physical addressing, flow/error control, access control.'),
+    'Signal impairment (flagged extra)': c('Loss of signal energy over distance is:', ['Distortion', 'Noise', 'Attenuation', 'Jitter'], 2, 'Fixed with amplifiers/repeaters; measured in dB.'),
   },
   'ch5-1': {
     'What and why': c('Changing the frequency of the carrier gives:', ['ASK', 'FSK', 'PSK', 'QAM'], 1, 'Frequency Shift Keying.'),
@@ -68,6 +70,7 @@ export default {
     'Propagation modes': c('In graded-index fiber, density is highest:', ['At the edge', 'At the centre', 'Uniformly', 'In the cladding'], 1, 'It decreases gradually towards the edge.'),
     'Fiber construction and connectors': c('Kevlar strands in fiber cable provide:', ['Insulation', 'Strength', 'Light guidance', 'Shielding'], 1, 'The same material as bulletproof vests.'),
     'Fiber applications, pros and cons': c('Why do bidirectional fiber links need two fibers?', ['Cost', 'Light propagation is unidirectional', 'Noise', 'Attenuation'], 1, 'One fiber per direction.'),
+    'Decibels and cable loss (flagged extra)': c('A cable with −3 dB loss keeps about:', ['All of its power', 'Half of its power', 'One tenth', 'Twice as much'], 1, '−3 dB ≈ ×0.5 ($10^{-0.3} \\approx 0.5$).'),
   },
   'ch7-2': {
     'Wireless communication': c('Infrared occupies:', ['3 kHz – 1 GHz', '1 – 300 GHz', '300 GHz – 400 THz', '400 – 900 THz'], 2, 'Per the slide spectrum.'),
