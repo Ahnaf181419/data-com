@@ -129,6 +129,7 @@ export function losDistance({ h1, h2 }) {
 
 export function losHeight({ d, h2 }) {
   const root = d / 3.57 - Math.sqrt(K * h2);
+  if (root < 0) throw new Error(`h₂ = ${h2} m already reaches ${fmt(3.57 * Math.sqrt(K * h2), 1)} km on its own — no positive h₁ can give d = ${d} km (h₁ = 0 suffices).`);
   const h1 = (root * root) / K;
   return {
     result: { h1 },
@@ -212,6 +213,7 @@ export function parity2D(rows) {
 
 export function mod2div(dividend, divisor) {
   if (divisor.length < 2 || divisor[0] !== '1') throw new Error('Divisor must start with 1 and have at least 2 bits.');
+  if (dividend.length < divisor.length) throw new Error(`Dividend (${dividend.length} bits) must be at least as long as the divisor (${divisor.length} bits).`);
   const n = divisor.length;
   let cur = dividend.slice(0, n);
   let q = '';
@@ -286,6 +288,9 @@ export function hammingEncode(data) {
 
 export function hammingCheck(codeword) {
   const n = codeword.length;
+  // A valid length is k data + r parity bits with redundancyBits(k).r === r (e.g. 7 = 4+3, 11 = 7+4).
+  const hammingLength = n >= 3 && Array.from({ length: n - 1 }, (_, i) => i + 1).some((k) => redundancyBits(k).result.r + k === n);
+  if (!hammingLength) throw new Error(`Not a Hamming codeword length (${n} bits): need k data + r parity bits, e.g. 7 = 4 + 3 or 11 = 7 + 4.`);
   const bit = (p) => +codeword[n - p];
   let pos = 0;
   const steps = [];

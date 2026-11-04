@@ -156,3 +156,13 @@ test('Past paper: Spring 2024 (Hamming, CRC, datagrams, PCM, 4B/5B, T-1, Clos, c
   assert.equal(Math.round(l.P * 1000) / 1000, 1.416);
 });
 
+
+test('solvers reject malformed input instead of guessing', () => {
+  assert.throws(() => s.losHeight({ d: 41, h2: 200 }), /no positive h₁|h₂/u);
+  assert.throws(() => s.mod2div('101', '1011'), /at least as long/u);
+  assert.throws(() => s.hammingCheck('10101010'), /Hamming/u);
+  // valid inputs still work:
+  assert.ok(s.losHeight({ d: 41, h2: 10 }).result.h1 > 45);
+  assert.equal(s.mod2div('1010', '1011').remainder, '001');
+  assert.equal(s.hammingCheck('10011000101').result.pos, 6);
+});
