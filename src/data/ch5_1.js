@@ -70,6 +70,7 @@ export default {
         { type: 'p', text: '**QPSK** – $n_b = 2$, $L = 4$. A 2/1 converter splits the bit stream: the 1st bit modulates carrier $f_{c1}$ (0°), the 2nd bit modulates $f_{c2}$, shifted 90° (in quadrature). The two BPSK signals are added.' },
         { type: 'diagram', id: 'qpskimpl' },
         { type: 'table', head: ['Bits', 'Phase', 'Amplitude'], rows: [['00', '−135°', '$\\sqrt2$ V'], ['10', '−45°', '$\\sqrt2$ V'], ['01', '135°', '$\\sqrt2$ V'], ['11', '45°', '$\\sqrt2$ V']] },
+        { type: 'note', text: 'Raiyan’s notes flip the BPSK 0/1 phase assignment in places, and the QPSK circuit mapping on p. 23 disagrees with the constellation on p. 20. The slide assignment in the table above is the one to use in the exam.' },
         { type: 'p', text: 'Each composite point has amplitude $L^2 = V^2 + V^2 \\Rightarrow L = \\sqrt2\\,V$. Using carrier amplitude $1/\\sqrt2$ makes the final amplitude 1 V.' },
         { type: 'note', text: 'Higher-order PSK ($n_b = 3$: 8-PSK; $n_b = 4$: 16-PSK; $n_b = \\log_2 L$) packs points onto one circle by phase only. With a large $L$ the phases become very hard to tell apart. This limitation is why PSK is combined with ASK as QAM.' },
       ],

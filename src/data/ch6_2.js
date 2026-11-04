@@ -57,9 +57,9 @@ export default {
     {
       heading: 'Digital signal (DS) hierarchy',
       blocks: [
-        { type: 'table', head: ['Service', 'Line', 'Rate (Mbps)', 'Voice channels', 'Made of', 'Overhead'], rows: [['DS-0', '—', '0.064', '1', 'single 64 kbps channel', '—'], ['DS-1', 'T-1', '1.544', '24', '24 × DS-0', '8 kbps (1 bit/frame)'], ['DS-2', 'T-2', '6.312', '96', '4 × DS-1', '168 kbps (21 bits/frame)'], ['DS-3', 'T-3', '44.736', '672', '7 × DS-2 (28 DS-1)', '1.368 Mbps'], ['DS-4', 'T-4', '274.176', '4032', '6 × DS-3 (42 DS-2)', '16.128 Mbps']] },
+        { type: 'table', head: ['Service', 'Line', 'Rate (Mbps)', 'Voice channels', 'Made of', 'Overhead'], rows: [['DS-0', '—', '0.064', '1', 'single 64 kbps channel', '—'], ['DS-1', 'T-1', '1.544', '24', '24 × DS-0', '8 kbps (1 bit/frame)'], ['DS-2', 'T-2', '6.312', '96', '4 × DS-1', '168 kbps (21 bits/frame)'], ['DS-3', 'T-3', '44.736', '672', '7 × DS-2 (28 DS-1)', '1.728 Mbps'], ['DS-4', 'T-4', '274.176', '4032', '6 × DS-3 (42 DS-2)', '16.128 Mbps']] },
                 { type: 'diagram', id: 'hierarchy', props: { kind: 'TDM', first: '64 kbps each', levels: [{ input: '24 DS-0', name: 'DS-1', bw: '1.544 Mbps' }, { input: '4 DS-1', name: 'DS-2', bw: '6.312 Mbps' }, { input: '7 DS-2', name: 'DS-3', bw: '44.736 Mbps' }, { input: '6 DS-3', name: 'DS-4', bw: '274.176 Mbps' }], caption: 'DS hierarchy: each level is a TDM multiplexer.' } },
-{ type: 'note', text: 'The DS-3 slide text says 44.376 Mbps (= 672 × 64 kbps + 1.368 Mbps), while the slide table and both notes show 44.736 Mbps.' },
+{ type: 'note', text: 'The DS-3 slide text says 44.376 Mbps (= 672 × 64 kbps + 1.368 Mbps), while the slide table and both notes show 44.736 Mbps (= 672 × 64 kbps + 1.728 Mbps). Use 44.736 with 1.728, or 44.376 with 1.368 — never mix the two.' },
         { type: 'list', items: ['DS-0, DS-1… are service names; T-1 to T-4 are the lines that implement them, with matching capacities.', 'Only T-1 and T-3 are commercially available. DS-0 is not offered; it is a reference.', 'Europe uses **E lines**: E-1 2.048 Mbps (30 ch), E-2 8.448 (120), E-3 34.368 (480), E-4 139.264 (1920).'] },
       ],
     },
