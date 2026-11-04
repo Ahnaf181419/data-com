@@ -189,3 +189,14 @@ test('worked answers printed in the lessons reproduce exactly', () => {
   const e3 = s.bitsPerElement({ N: 1000000, S: 250000 }).result;
   assert.deepEqual([e3.r, e3.L], [4, 16]);
 });
+
+test('ch8_2 slide numbers reproduce exactly', () => {
+  // Banyan 8 × 8: stages = log2(8) = 3, microswitches per stage = 8/2 = 4, total 12
+  const stages = Math.log2(8);
+  assert.deepEqual([stages, (8 / 2) * stages], [3, 12]);
+  // Multistage 200 × 200 (n = 20, k = 4) → 2000 crosspoints; Clos redesign → 15,200
+  const ms = s.multistage({ N: 200, n: 20, k: 4 }).result;
+  assert.deepEqual([ms.total, ms.crossbar, ms.pct], [2000, 40000, 5]);
+  const clos = s.clos({ N: 200 }).result;
+  assert.deepEqual([clos.n, clos.k, clos.total], [10, 19, 15200]);
+});

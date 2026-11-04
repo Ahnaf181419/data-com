@@ -451,6 +451,54 @@ export default {
     },
   },
 
+  'ch8-2': {
+    'Which switch where': {
+      plain: 'This chapter zooms into the hardware of switching. First know the map: circuit-switched networks use space-division switches (crossbar, multistage) and time-division switches (TSI, TDM bus); packet-switched networks use the banyan switch.',
+      terms: [['Space-division switch', 'Connections use physically separated paths at the same instant.'], ['Time-division switch', 'Connections share hardware by taking turns in time slots.'], ['Banyan switch', 'The multistage switch used in packet switching.']],
+      recap: ['Circuit: crossbar, multistage (space) and TSI, TDM bus (time).', 'Packet: banyan.'],
+    },
+    'Space-division switching and the crossbar': {
+      plain: 'A crossbar is a grid: n inputs, m outputs, and a transistor (crosspoint) at every crossing. Any input can reach any output at any time, so it never blocks — but the parts count explodes (1000 × 1000 = a million crosspoints) and fewer than 25% are busy at once.',
+      terms: [['Crosspoint', 'An electronic microswitch (transistor) at one grid intersection.'], ['Non-blocking', 'Every input–output pair always has an available path.']],
+      recap: ['Crosspoints = n × m; non-blocking.', 'Impractical at scale: 1000 × 1000 needs 10⁶ crosspoints; <25% in use at any time.'],
+    },
+    'Multistage switch structure': {
+      plain: 'A multistage switch stacks small crossbars in three stages so several paths share the same middle crosspoints. Learn the recipe (stage 1: N/n crossbars of n × k; stage 2: k of (N/n) × (N/n); stage 3: N/n of k × n) and the total formula.',
+      terms: [['Stage', 'One column of crossbars in the three-stage design.'], ['n', 'Inputs per first-stage crossbar (group size).'], ['k', 'Number of middle-stage crossbars.']],
+      recap: ['Total = 2kN + k(N/n)².', 'Slide example: 200 × 200, n = 20, k = 4 → 2000 crosspoints (5% of 40,000).'],
+    },
+    'Blocking and the Clos criterion': {
+      plain: 'Blocking means a call cannot be set up because every middle crossbar that could complete the path is busy. Too few middle switches (k < n) causes it. Clos\'s criterion sizes the stages so blocking can never happen.',
+      terms: [['Blocking', 'No path available between an input and an output.'], ['Clos criterion', 'n = √(N/2), k ≥ 2n − 1 → non-blocking.']],
+      recap: ['Single-stage never blocks; multistage blocks when k < n.', 'Clos: n = √(N/2), k ≥ 2n − 1 (200 × 200 redesign → 15,200 crosspoints).'],
+    },
+    'Time-slot interchange (TSI)': {
+      plain: 'The TSI is switching by reordering time: incoming slots fill a RAM in arrival order, and a control unit reads them out in whatever order the connections need. One memory location per input, one slot wide.',
+      terms: [['Control unit', 'Decides the order slots are read out of the RAM.'], ['RAM location', 'Holds exactly one time slot.']],
+      recap: ['#locations = #inputs; location size = slot size.', 'Slide pattern: 1→3, 2→4, 3→1, 4→2 for four lines.'],
+    },
+    'The TDM bus': {
+      plain: 'Instead of a RAM, the TDM bus gives every line a gate onto one shared high-speed bus. In each time slot the control unit closes exactly one input gate and one output gate, so one burst crosses the bus. Simple, no crosspoints — but strictly one transfer per slot.',
+      terms: [['Gate', 'A microswitch connecting one line to the bus.']],
+      recap: ['One input gate + one output gate closed per time slot.', 'The control unit opens/closes gates as needed.'],
+    },
+    'Time vs space switching': {
+      plain: 'The two families trade speed for parts: space switching is instant but needs a fortune in crosspoints; time switching needs no crosspoints but stores and retrieves every slot, adding delay. Remember the two-column comparison.',
+      terms: [],
+      recap: ['Space: instantaneous, many crosspoints.', 'Time: no crosspoints, RAM delay per slot.'],
+    },
+    'Time-space-time (TST)': {
+      plain: 'TST gets the best of both: TSIs (cheap, no crosspoints) on the outside, one small crossbar (instant) in the middle. Splitting the inputs across several TSIs also cuts the average delay proportionally.',
+      terms: [['TST', 'Time–space–time: TSI → crossbar → TSI.']],
+      recap: ['3 TSIs for 12 inputs → average delay one-third of a single TSI.', 'Slide Example 1 (= Fall 2024 Q2(e)): N = 100 → 400 crosspoints, 200 memory locations.'],
+    },
+    'The banyan switch': {
+      plain: 'The banyan is the packet-switched multistage switch. Write the output port in binary; each stage of tiny 2 × 2 microswitches consumes one bit, starting from the high-order bit. Counting is the exam skill: log₂n stages, n/2 microswitches each.',
+      terms: [['Microswitch', 'A 2 × 2 switch element that forwards by one bit.'], ['High-order bit', 'The leftmost bit of the binary output port; stage 1 routes on it.']],
+      recap: ['Stages = log₂n; microswitches = (n/2) per stage, (n/2)log₂n total.', '8 × 8 → 3 stages × 4 microswitches = 12.'],
+    },
+  },
+
   ch10: {
     Errors: {
       plain: 'Noise can change bits while they travel. This chapter is about noticing when that happens (**detection**) and fixing it (**correction**). First, know the two kinds of error.',

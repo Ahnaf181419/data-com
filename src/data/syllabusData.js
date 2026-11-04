@@ -10,6 +10,7 @@ import pcm from './pcm.js';
 import ch7_1 from './ch7_1.js';
 import ch7_2 from './ch7_2.js';
 import ch8 from './ch8.js';
+import ch8_2 from './ch8_2.js';
 import ch10 from './ch10.js';
 
-export default [ch1, ch4x, ch5_1, ch5_2, ch6_1, ch6_2, pcm, ch7_1, ch7_2, ch8, ch10];
+export default [ch1, ch4x, ch5_1, ch5_2, ch6_1, ch6_2, pcm, ch7_1, ch7_2, ch8, ch8_2, ch10];

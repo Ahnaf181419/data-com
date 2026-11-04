@@ -236,6 +236,17 @@ const likelyQuestions = [
       'Receiver recomputes: $r_8 r_4 r_2 r_1 = 0111 = 7$ → flip bit 7 → 10011100101.',
     ],
   },
+  {
+    module: 'ch8-2',
+    flag: 'ch8_2 slides',
+    q: 'Design the structure of an 8 × 8 banyan switch: how many stages, how many microswitches per stage, and which bit does each stage route on?',
+    answer: [
+      'A banyan switch is a multistage switch whose microswitches route each packet by the binary string of its output port.',
+      'Number of stages: $\\log_2 n = \\log_2 8 = 3$.',
+      'Microswitches per stage: $n/2 = 8/2 = 4$ (each microswitch is a 2 × 2 switch) → $4 \\times 3 = 12$ in total.',
+      'Stage 1 routes on the high-order bit, stage 2 on the middle bit, stage 3 on the low-order bit — one bit per stage.',
+    ],
+  },
 ];
 
 // Each likely question gets the exam-script answer at the same index in answerScripts.js.

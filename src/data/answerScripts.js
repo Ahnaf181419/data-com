@@ -1123,6 +1123,14 @@ export const likelyScripts = [
     m(r`r_8 r_4 r_2 r_1 = 0111 = 7 \Rightarrow \text{invert bit 7}`),
     ans('Codeword 10011100101; the error is at bit 7, corrected back to 10011100101.'),
   ],
+  [
+    given('$n = 8$ inputs and 8 outputs', 'packet switching (banyan)'),
+    h('Structure'),
+    m(r`\text{stages} = \log_2 n = \log_2 8 = 3`),
+    m(r`\text{microswitches per stage} = \frac{n}{2} = \frac{8}{2} = 4 \quad\Rightarrow\quad \text{total} = 4 \times 3 = 12`),
+    p('Each microswitch is a 2 × 2 switch. Stage 1 routes on the **high-order bit** of the binary output port, stage 2 on the middle bit, stage 3 on the low-order bit — one bit consumed per stage.'),
+    ans('**3 stages**, **4 microswitches per stage** (12 total); stage 1 uses the high-order bit, stage 3 the low-order bit.'),
+  ],
 ];
 likelyScripts[6] = paperScripts['Fall 2024']['1(b)'];
 likelyScripts[18] = paperScripts['Fall 2024']['1(d)'];

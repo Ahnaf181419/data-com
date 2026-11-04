@@ -418,4 +418,84 @@ function Zones() {
   );
 }
 
-export const DIAGRAMS = { topologies: Topologies, muxdemux: MuxDemux, fiber: Fiber, multistage: Multistage, refraction: Refraction, crossbar: Crossbar, biterrors: BitErrors, cablesection: CableSection, storeforward: StoreForward, syncbits: SyncBits, antennas: Antennas, sampling: Sampling, zones: Zones, ...EXAM_DIAGRAMS };
+function Banyan() {
+  const ys = Array.from({ length: 8 }, (_, i) => 34 + i * 24); // input/output line y
+  const boxY = (j) => 34 + j * 48 + 10; // microswitch j (pair of lines) top
+  const stages = [110, 250, 390];
+  return (
+    <Fig caption="An 8 × 8 banyan switch: log₂8 = 3 stages of n/2 = 4 microswitches (2 × 2) each — 12 in total. Stage 1 routes on the high-order bit of the output port, stage 2 on the middle bit, stage 3 on the last bit." label="Banyan switch with three stages of microswitches">
+      <svg viewBox="0 0 640 250" className="w-full">
+        {ys.map((y, i) => (
+          <g key={`in${i}`}>
+            <line x1="30" y1={y} x2="70" y2={y} stroke={A} />
+            <text x="24" y={y + 4} fontSize="11" fill={A} textAnchor="end">{i}</text>
+            <line x1="454" y1={y} x2="494" y2={y} stroke={A} />
+            <text x="502" y={y + 4} fontSize="11" fontFamily="var(--font-mono)" fill={G}>{i.toString(2).padStart(3, '0')}</text>
+          </g>
+        ))}
+        {stages.map((x, s) => (
+          <g key={x}>
+            {[0, 1, 2, 3].map((j) => (
+              <g key={j}>
+                <rect x={x} y={boxY(j)} width="44" height="28" rx="5" fill="var(--color-raise)" stroke={G} strokeWidth={s === 0 ? 1.6 : 1.1} />
+                <text x={x + 22} y={boxY(j) + 18} textAnchor="middle" fontSize="10" fill={T}>2×2</text>
+                {/* schematic links to the next stage's neighbouring boxes */}
+                {s < 2 &&
+                  [j, j + (j % 2 ? -1 : 1)].map((k) => (
+                    <line key={k} x1={x + 44} y1={boxY(j) + 14} x2={stages[s + 1]} y2={boxY(Math.max(0, Math.min(3, k))) + 14} stroke={L} strokeWidth="1" />
+                  ))}
+              </g>
+            ))}
+            <text x={x + 22} y="238" textAnchor="middle" fontSize="10" fill={A}>stage {s + 1} reads bit {s + 1}</text>
+          </g>
+        ))}
+        {/* inputs/outputs to first/last stage */}
+        {ys.map((y, i) => (
+          <g key={`tie${i}`}>
+            <line x1="70" y1={y} x2="110" y2={boxY(Math.floor(i / 2)) + 14} stroke={L} strokeWidth="1" />
+            <line x1="434" y1={boxY(Math.floor(i / 2)) + 14} x2="454" y2={y} stroke={L} strokeWidth="1" />
+          </g>
+        ))}
+        <text x="502" y="20" fontSize="10" fill={A}>output port (binary)</text>
+      </svg>
+    </Fig>
+  );
+}
+
+function TdmBus() {
+  const ys = [34, 64, 94, 124];
+  const gate = (x, y, key) => (
+    <g key={key}>
+      <rect x={x} y={y - 9} width="18" height="18" rx="4" fill="var(--color-raise)" stroke={G} />
+      <text x={x + 9} y={y + 4} textAnchor="middle" fontSize="10" fill={T}>G</text>
+    </g>
+  );
+  return (
+    <Fig caption="The TDM bus: every line reaches one high-speed bus through a gate. In each time slot the control unit closes exactly one input gate and one output gate, moving one burst across the bus." label="TDM bus with input and output gates">
+      <svg viewBox="0 0 640 200" className="w-full">
+        {ys.map((y, i) => (
+          <g key={i}>
+            <line x1="30" y1={y} x2="140" y2={y} stroke={A} />
+            {gate(140, y, `gi${i}`)}
+            <line x1="158" y1={y} x2="185" y2={y} stroke={A} />
+            <line x1="185" y1={y} x2="185" y2="79" stroke={L} strokeDasharray="3 4" />
+            <line x1="455" y1="79" x2="455" y2={y} stroke={L} strokeDasharray="3 4" />
+            <line x1="455" y1={y} x2="482" y2={y} stroke={A} />
+            {gate(482, y, `go${i}`)}
+            <line x1="500" y1={y} x2="610" y2={y} stroke={A} />
+          </g>
+        ))}
+        <line x1="150" y1="79" x2="490" y2="79" stroke={G} strokeWidth="4" strokeLinecap="round" />
+        <text x="320" y="66" textAnchor="middle" fontSize="12" fill={G}>high-speed bus</text>
+        <rect x="270" y="150" width="100" height="30" rx="6" fill="var(--color-raise)" stroke={G} />
+        <text x="320" y="169" textAnchor="middle" fontSize="11" fill={T}>Control unit</text>
+        <line x1="290" y1="150" x2="149" y2="112" stroke={A} strokeDasharray="4 4" />
+        <line x1="350" y1="150" x2="491" y2="112" stroke={A} strokeDasharray="4 4" />
+        <text x="80" y="158" fontSize="10" fill={A}>input gates</text>
+        <text x="520" y="158" fontSize="10" fill={A}>output gates</text>
+      </svg>
+    </Fig>
+  );
+}
+
+export const DIAGRAMS = { topologies: Topologies, muxdemux: MuxDemux, fiber: Fiber, multistage: Multistage, refraction: Refraction, crossbar: Crossbar, biterrors: BitErrors, cablesection: CableSection, storeforward: StoreForward, syncbits: SyncBits, antennas: Antennas, sampling: Sampling, zones: Zones, banyan: Banyan, tdmbus: TdmBus, ...EXAM_DIAGRAMS };

@@ -11,7 +11,7 @@ import groups from '../data/questionBank.js';
 import { mod2div } from './solvers.js';
 
 const LABS = ['modulation', 'analog', 'fdm', 'tdm', 'crc', 'hamming', 'coding'];
-const DIAGRAMS = ['topologies', 'muxdemux', 'fiber', 'multistage', 'refraction', 'crossbar', 'biterrors', 'cablesection', 'storeforward', 'syncbits', 'antennas', 'sampling', 'zones', 'spectrum', 'hierarchy', 'qpskimpl', 'constellations', 'fdmsystem', 'delay', 'vcsetup', 'propagation', 'tst', 'waveform', 'tdmframe', 'modwave', 'datagramnet', 'redundancy'];
+const DIAGRAMS = ['topologies', 'muxdemux', 'fiber', 'multistage', 'refraction', 'crossbar', 'biterrors', 'cablesection', 'storeforward', 'syncbits', 'antennas', 'sampling', 'zones', 'banyan', 'tdmbus', 'spectrum', 'hierarchy', 'qpskimpl', 'constellations', 'fdmsystem', 'delay', 'vcsetup', 'propagation', 'tst', 'waveform', 'tdmframe', 'modwave', 'datagramnet', 'redundancy'];
 const tex = (s) => katex.renderToString(s, { throwOnError: true });
 const inline = (text = '') => (text.match(/\$[^$]+\$/g) ?? []).forEach((m) => tex(m.slice(1, -1)));
 
