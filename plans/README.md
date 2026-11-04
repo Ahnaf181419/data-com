@@ -8,20 +8,20 @@ Verification for every plan: `npm test` (26 tests at audit time) and `npm run bu
 
 | Plan | Title | Priority | Effort | Depends on | Status |
 |------|-------|----------|--------|------------|--------|
-| 001 | Flagged lessons: OSI, impairments, dB cable loss | P1 | M | — | TODO |
-| 002 | ch8 exam methods: TST crosspoints, n-switch delay | P1 | S | — | TODO |
-| 003 | Content corrections: DS-3 overhead, PSK mapping note | P1 | S | — | TODO |
-| 004 | Solver guards: losHeight, mod2div, hammingCheck | P1 | S | — | TODO |
-| 005 | Regression tests: multislot TDM, FDM hierarchy, TST, antenna | P1 | S–M | — | TODO |
-| 006 | Slide facts: binary checksum, cycles-per-bit, spectra | P2 | S | — | TODO |
-| 007 | Seven static teaching diagrams (refraction, crossbar, …) | P2 | M | — | TODO |
-| 008 | T-1 frame layout + voice→PCM→T-1 chain figures | P2 | M | — | TODO |
-| 009 | PCM sampling + quantization-zone visuals | P2 | M | — | TODO |
-| 010 | Lab motion: playhead, trace, pop, TDM slot cycle | P2 | S–M | — | TODO |
-| 011 | Modulation lab placement + PCM practice | P2 | S | — | TODO |
-| 012 | Guide terms, 44px touch targets, hover affordances | P2 | S | — | TODO |
-| 013 | Untrack source PDFs and scans | P2 | S | — | TODO |
-| 014 | Investigate syllabus pointer (Ch 2/3/4) with teacher | P3 | S | — | TODO |
+| 001 | Flagged lessons: OSI, impairments, dB cable loss | P1 | M | — | DONE |
+| 002 | ch8 exam methods: TST crosspoints, n-switch delay | P1 | S | — | DONE |
+| 003 | Content corrections: DS-3 overhead, PSK mapping note | P1 | S | — | DONE |
+| 004 | Solver guards: losHeight, mod2div, hammingCheck | P1 | S | — | DONE |
+| 005 | Regression tests: multislot TDM, FDM hierarchy, TST, antenna | P1 | S–M | — | DONE |
+| 006 | Slide facts: binary checksum, cycles-per-bit, spectra | P2 | S | — | DONE |
+| 007 | Seven static teaching diagrams (refraction, crossbar, …) | P2 | M | — | DONE |
+| 008 | T-1 frame layout + voice→PCM→T-1 chain figures | P2 | M | — | DONE |
+| 009 | PCM sampling + quantization-zone visuals | P2 | M | — | DONE |
+| 010 | Lab motion: playhead, trace, pop, TDM slot cycle | P2 | S–M | — | DONE |
+| 011 | Modulation lab placement + PCM practice | P2 | S | — | DONE |
+| 012 | Guide terms, 44px touch targets, hover affordances | P2 | S | — | DONE |
+| 013 | Untrack source PDFs and scans | P2 | S | — | DONE |
+| 014 | Investigate syllabus pointer (Ch 2/3/4) with teacher | P3 | S | — | BLOCKED (human task: student must ask the teacher; no agent can do it) |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (one-line reason) | REJECTED (one-line rationale).
 

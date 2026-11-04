@@ -395,9 +395,10 @@ function Zones() {
         <Arrows />
         {codes.map((_, i) => (
           <g key={i}>
+            {/* band i spans voltages (20-5i) down to (15-5i); the course numbers zones from 0 at the BOTTOM, so this band is zone 7-i */}
             <rect x="120" y={y(20 - i * 5)} width="240" height="25" fill={i % 2 ? 'rgb(240 195 90 / 0.02)' : 'rgb(240 195 90 / 0.09)'} stroke={L} strokeWidth="0.7" />
-            <text x="368" y={y(20 - i * 5) + 17} fontSize="11" fontFamily="var(--font-mono)" fill={i === 5 ? G : A}>{codes[i]}</text>
-            <text x="390" y={y(20 - i * 5) + 17} fontSize="11" fill={A}>zone {i}</text>
+            <text x="368" y={y(20 - i * 5) + 17} fontSize="11" fontFamily="var(--font-mono)" fill={i === 2 ? G : A}>{codes[7 - i]}</text>
+            <text x="390" y={y(20 - i * 5) + 17} fontSize="11" fill={A}>zone {7 - i}</text>
           </g>
         ))}
         {[-17.5, -12.5, -7.5, -2.5, 2.5, 7.5, 12.5, 17.5].map((v) => (
