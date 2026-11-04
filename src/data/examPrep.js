@@ -238,7 +238,7 @@ const likelyQuestions = [
   },
   {
     module: 'ch8-2',
-    flag: 'ch8_2 slides',
+    flag: 'Slides + notes',
     q: 'Design the structure of an 8 × 8 banyan switch: how many stages, how many microswitches per stage, and which bit does each stage route on?',
     answer: [
       'A banyan switch is a multistage switch whose microswitches route each packet by the binary string of its output port.',

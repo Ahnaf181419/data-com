@@ -12,7 +12,7 @@ function Likely({ q, mod, onOpen }) {
     <article className="rounded-2xl border border-line bg-panel p-5 sm:p-6">
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2 text-sm">
         <span className={`flex flex-wrap items-center gap-2 font-medium ${q.id && !q.flagged ? 'text-ash' : 'text-red'}`}>
-          {q.id && <span className="display rounded-md bg-red/15 px-2 py-0.5 text-base text-red">{q.id}</span>}
+          {q.id && <span className={`display rounded-md px-2 py-0.5 text-base ${q.flagged ? 'bg-red/15 text-red' : 'bg-raise text-ash'}`}>{q.id}</span>}
           {q.flag}
           {q.outOfSyllabus && (
             <span className="rounded-md bg-raise px-2 py-0.5 text-xs font-medium text-ash">out of syllabus</span>
@@ -136,7 +136,7 @@ function Group({ g, byId, onOpen }) {
   return (
     <article className="rounded-2xl border border-line bg-panel p-5 sm:p-6">
       <div className="flex flex-wrap items-center gap-2 text-sm">
-        <span className={`rounded-md px-2 py-0.5 font-medium ${n === papers.length ? 'bg-gold/15 text-gold' : 'bg-raise text-ash'}`}>
+        <span className={`rounded-md px-2 py-0.5 font-medium ${n >= papers.length - 1 ? 'bg-gold/15 text-gold' : 'bg-raise text-ash'}`}>
           In {n} of {papers.length} papers
         </span>
         {g.exact && <span className="rounded-md bg-red/15 px-2 py-0.5 font-medium text-red">Word for word</span>}
@@ -177,7 +177,7 @@ function Bank({ byId, onOpen }) {
   const top = stats[0].marks;
   const repeats = new Set(groups.flatMap((g) => g.refs.map((r) => r.join(' ')))).size;
   const sorted = [...groups].sort((a, b) => paperCount(b) - paperCount(a));
-  const flagged = allItems.filter((it) => it.flagged);
+  const flagged = allItems.filter((it) => it.flagged && !it.outOfSyllabus);
   const outOfSyllabus = allItems.filter((it) => it.outOfSyllabus);
   return (
     <div className="grid grid-cols-[minmax(0,1fr)] gap-10">
@@ -231,7 +231,7 @@ function Bank({ byId, onOpen }) {
           Outside your notes
         </h3>
         <p className="mt-2 text-sm text-ash">These came up in a paper but your slides and notes don’t teach them; the answers use the textbook method.</p>
-        <ul className="mt-4 grid gap-2">
+        <ul className="mt-4 grid grid-cols-[minmax(0,1fr)] gap-2">
           {flagged.map((it) => (
             <li key={`${it.paper}${it.id}`} className="flex gap-3 rounded-xl border border-line bg-panel p-4">
               <span className="display h-fit shrink-0 rounded-md bg-red/15 px-2 py-0.5 text-sm text-red">
@@ -254,7 +254,7 @@ function Bank({ byId, onOpen }) {
             These came up in the older papers, but the slides for this course do not teach them. The answers are still here so you can recognise one if it appears — but your revision time is better spent on the chapters above.
           </p>
         </div>
-        <ul className="mt-4 grid gap-2">
+        <ul className="mt-4 grid grid-cols-[minmax(0,1fr)] gap-2">
           {outOfSyllabus.map((it) => (
             <li key={`${it.paper}${it.id}`} className="flex gap-3 rounded-xl border border-line bg-panel p-4">
               <span className="display h-fit shrink-0 rounded-md bg-raise px-2 py-0.5 text-sm text-ash">
@@ -297,9 +297,9 @@ export default function ExamPrep({ modules, progress, onOpen, onMockFinish }) {
       </div>
       <div key={tab} className="enter mt-8">
         {tab === 'paper' && (
-          <div role="radiogroup" aria-label="Paper" className="mb-6 inline-flex flex-wrap gap-1 rounded-xl border border-line bg-panel p-1">
+          <div role="group" aria-label="Past paper" className="mb-6 grid grid-cols-2 gap-1 rounded-xl border border-line bg-panel p-1 sm:grid-cols-4">
             {papers.map((p, i) => (
-              <button key={p.title} role="radio" aria-checked={paperIdx === i} onClick={() => setPaperIdx(i)} className={`press min-h-11 rounded-lg px-4 text-sm font-medium ${paperIdx === i ? 'bg-red text-ink' : 'text-ash'}`}>
+              <button key={p.title} aria-pressed={paperIdx === i} onClick={() => setPaperIdx(i)} className={`press min-h-11 rounded-lg px-3 text-sm font-medium ${paperIdx === i ? 'bg-red text-ink' : 'text-ash'}`}>
                 {p.title.replace(' semester final', '')}
               </button>
             ))}
@@ -347,7 +347,7 @@ export default function ExamPrep({ modules, progress, onOpen, onMockFinish }) {
                   <p className="prose-read leading-relaxed text-text/90">
                     <Rich text={t.text} />
                   </p>
-                  <button onClick={() => onOpen(t.module)} className="mt-1 text-sm text-ash underline-offset-4 hover:underline">
+                  <button onClick={() => onOpen(t.module)} className="press mt-1 min-h-11 px-2 text-sm text-ash underline decoration-line underline-offset-4 hover:decoration-gold">
                     Ch {byId[t.module].chapter}: {byId[t.module].title}
                   </button>
                 </div>

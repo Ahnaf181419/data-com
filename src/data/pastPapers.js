@@ -700,7 +700,7 @@ const papers = [
             answer: [
               '**Out of syllabus question** — 2B1Q is not in the current slides/notes (Ch 4 teaches 4B/5B and differential Manchester only).',
               '2B1Q maps every **two** bits to one **quaternary** signal level: 00 → −1, 01 → −3, 11 → +3, 10 → +1 (the usual assignment).',
-              'Each pair therefore produces one signal element, so a 16-bit stream gives 8 signal elements; the signal level sequence for (i) is −3, +1, +1, −3, +3, −3, −1, +1 and for (ii) −1, +3, +3, −1, −1, +3, +1, −1 (with the given level ordering).',
+              'Each pair therefore produces one signal element, so a 16-bit stream gives 8 signal elements; the level sequence for (i) is −3, +1, −3, +1, −3, +1, −3, +1 and for (ii) −1, +3, −1, +3, −1, +3, −1, +3.',
               'The graph is a staircase of these levels; the “last level positive” assumption sets the sign of the first level.',
             ],
           },
@@ -810,7 +810,7 @@ const papers = [
             answer: [
               'The **dominant rate** is 190 kbps, so each frame lasts $1/190000$ s = **5.26 µs**; the 180 kbps line is stuffed with dummy bits to keep up.',
               'Each frame carries one bit from each channel → frame size = **2 bits** (plus occasional dummy bits on the slow line).',
-              'The slow line needs $190/180 = 1.0556$ bits per frame, so one dummy bit is stuffed every 19 frames.',
+              'The slow line fills only $180/190 = 18/19$ of each frame, so one dummy bit is stuffed every 19 frames.',
             ],
           },
         ],
@@ -825,7 +825,7 @@ const papers = [
             answer: [
               '**Out of syllabus question** — only 4B/5B and differential Manchester are in the current notes (Ch 4).',
               'NRZ-L: $B = N$ → **3 Mbps**. AMI: $B = N/2$ → **6 Mbps**. Manchester: $B = 2N$ → **1.5 Mbps**. 8B6T: $B = 6N/8$ → **4 Mbps**.',
-              'MLT-3: $B = 4N/3$ → **2.25 Mbps**. 2B1Q: $B = 2N$ → **1.5 Mbps**. 4D-PAM5: $B = 4N/5$ → **3.75 Mbps**.',
+              'MLT-3: $B = 4N/3$ → **2.25 Mbps**. 2B1Q: $B = N/2$ → **6 Mbps** (2 bits per signal element). 4D-PAM5: $B = 4N/5$ → **3.75 Mbps**.',
             ],
           },
           {
@@ -1083,7 +1083,7 @@ const papers = [
             answer: [
               '**Out of syllabus question** — 2B1Q is not in the current slides/notes (Ch 4 teaches 4B/5B and differential Manchester only).',
               '2B1Q maps two bits to one quaternary level: 00 → −1, 01 → −3, 11 → +3, 10 → +1.',
-              '(i) 0110011001100110 → −3, +1, +1, −3, +3, −3, −1, +1. (ii) 0011001100110011 → −1, +3, +3, −1, −1, +3, +1, −1.',
+              '(i) 0110011001100110 → −3, +1, −3, +1, −3, +1, −3, +1. (ii) 0011001100110011 → −1, +3, −1, +3, −1, +3, −1, +3.',
             ],
           },
           {
@@ -1251,7 +1251,7 @@ const papers = [
             q: 'Draw the frequency spectrum for: (i) a nonperiodic composite signal with bandwidth 200 kHz, middle frequency 140 kHz and peak amplitude 20 V (the two extreme frequencies have amplitude 0), (ii) a periodic signal (all frequencies of the same amplitude) with bandwidth 20 Hz and highest frequency 60 Hz.',
             answer: [
               '(i) The spectrum is **continuous** (non-periodic): a triangular band from $140-100 = 40$ kHz to $140+100 = 240$ kHz, peaking at **20 V** at $f_c = 140$ kHz and falling to 0 at both edges.',
-              '(ii) The spectrum is **discrete** (periodic): lines at 40, 50 and 60 Hz (fundamental $f_0 = 60 - 20 = 40$ Hz, next two harmonics), all with the same amplitude.',
+              '(ii) The spectrum is **discrete** (periodic): the occupied band runs from 40 to 60 Hz, with equal-amplitude lines at 40, 50 and 60 Hz — the 4th, 5th and 6th harmonics of a 10 Hz fundamental.',
               'See the spectrum diagrams in Ch 5.1.',
             ],
           },
@@ -1271,7 +1271,7 @@ const papers = [
             answer: [
               '**Out of syllabus question** for part (i) (the Nyquist formula is not in the current notes); part (ii) is taught in Ch 5.1.',
               '(i) With SNR = 63 the usable levels are $L = \\text{SNR} + 1 = 64$, so $N = 2B\\log_2 L = 2 \\times 10^6 \\times 6 = \\mathbf{12\\ Mbps}$ (6 bits per signal element).',
-              '(ii) $r = N/S = 8000/1000 = \\mathbf{8}$ data elements per signal element ($L = 2^8 = 256$ levels); the number of signal elements needed for 8000 bits = **8000**.',
+              '(ii) $r = N/S = 8000/1000 = \\mathbf{8}$ data elements per signal element ($L = 2^8 = 256$ levels); the number of signal elements needed for 8000 bits = **1000**.',
             ],
           },
         ],
@@ -1310,7 +1310,7 @@ const papers = [
             q: 'A sender needs to send the four data items 0x3456, 0xABCC, 0x02BC and 0xEEEE. (i) Find the checksum at the sender site. (ii) Find the checksum at the receiver site if the second data item is changed to 0xABCE and the third data item is changed to 0x02BA.',
             answer: [
               '(i) Sum the 16-bit words: $0x3456 + 0xABCC + 0x02BC + 0xEEEE = 0x1D1CC$; wrap the carry: $0xD1CC + 1 = 0xD1CD$; checksum = complement = **0x2E32**.',
-              '(ii) The altered items change the sum by $+2$ and $-2$ → the sum is unchanged (0x1D1CC → wrapped 0xD1CD), so the receiver computes the same complemented sum **0x2E32** ≠ 0 → the error is detected.',
+              '(ii) The altered items change the sum by $+2$ and $-2$ → the sum is unchanged (0x1D1CC → wrapped 0xD1CD). The receiver adds the checksum as well: $0x1D1CC + 0x2E32 = 0x1FFFE$ → wrap → 0xFFFF → complement **0x0000** → **no error is detected**: the two changes cancel.',
               'Note the teaching point: two compensating errors cancel in the sum — a checksum cannot catch them, which is why CRC is used when that matters.',
             ],
           },
@@ -1405,7 +1405,7 @@ const papers = [
             id: '3(a)', marks: 7, module: 'ch1', flagged: true,
             q: 'Mention the types of sublayers in the Data Link Layer. What is the purpose of cladding in an optical fiber? How does sky propagation differ from line-of-sight propagation?',
             answer: [
-              'The data link layer has two sublayers: **LLC** (logical link control — talks to the network layer) and **MAC** (media access control — frames, addresses, access to the medium).',
+              'The data link layer has two sublayers: **LLC** (logical link control — talks to the network layer) and **MAC** (media access control — frames, addresses, access to the medium). (The OSI-layer functions are taught in Ch 1 as a flagged lesson; the sublayer names are not.)',
               'The **cladding** is a layer of less-dense glass around the core: it keeps the light in the core by total internal reflection (above the critical angle) and reduces scattering. See Ch 7.1.',
               '**Sky wave** (3–30 MHz) is reflected by the ionosphere, so it can travel far and hop between the ionosphere and the earth; **line of sight** (>30 MHz) travels straight, so the antennas must see each other (the ionosphere does not reflect it). See Ch 7.2.',
             ],
@@ -1465,7 +1465,7 @@ const papers = [
             q: 'We have a baseband channel with a 5-MHz bandwidth. What is the data rate for this channel if we use each of the following line coding schemes: i. NRZ-L, ii. AMI, iii. Manchester, iv. 8B6T, v. MLT-3, vi. 2B1Q, vii. 4D-PAM5?',
             answer: [
               '**Out of syllabus question** — only 4B/5B and differential Manchester are in the current notes (Ch 4).',
-              'NRZ-L ($B=N$): **5 Mbps**; AMI ($B=N/2$): **10 Mbps**; Manchester ($B=2N$): **2.5 Mbps**; 8B6T ($B=6N/8$): **6.67 Mbps**; MLT-3 ($B=4N/3$): **3.75 Mbps**; 2B1Q ($B=2N$): **2.5 Mbps**; 4D-PAM5 ($B=4N/5$): **6.25 Mbps**.',
+              'NRZ-L ($B=N$): **5 Mbps**; AMI ($B=N/2$): **10 Mbps**; Manchester ($B=2N$): **2.5 Mbps**; 8B6T ($B=6N/8$): **6.67 Mbps**; MLT-3 ($B=4N/3$): **3.75 Mbps**; 2B1Q ($B=N/2$): **10 Mbps** (2 bits per signal element); 4D-PAM5 ($B=4N/5$): **6.25 Mbps**.',
             ],
           },
         ],

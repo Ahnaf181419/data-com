@@ -81,7 +81,8 @@ export default {
     'Wireless transmission waves': c('Cellular phones and satellite networks use:', ['Radio waves', 'Microwaves', 'Infrared', 'Light'], 1, '1–300 GHz, line of sight.'),
   },
   ch8: {
-    'Why switching': c('Switches create:', ['Permanent links', 'Temporary connections', 'Guard bands', 'Carriers'], 1, 'Temporary connections between devices.'),    'Circuit switching': c('During circuit-switched data transfer, data is:', ['Packetized with addresses', 'Not packetized and not addressed', 'Stored and forwarded', 'Broadcast'], 1, 'Switches route by band or time slot.'),
+    'Why switching': c('Switches create:', ['Permanent links', 'Temporary connections', 'Guard bands', 'Carriers'], 1, 'Temporary connections between devices.'),
+    'Circuit switching': c('During circuit-switched data transfer, data is:', ['Packetized with addresses', 'Not packetized and not addressed', 'Stored and forwarded', 'Broadcast'], 1, 'Switches route by band or time slot.'),
     'Message switching': c('Message switching is also called:', ['Virtual circuit', 'Store-and-forward', 'Crossbar', 'Datagram'], 1, 'Each node stores the whole message.'),
     'Packet switching: datagram networks': c('Datagrams of one message may:', ['Never be dropped', 'Take different paths and arrive out of order', 'Need setup', 'Share a VCI'], 1, 'Each packet is independent.'),
     'Virtual-circuit networks': c('Who assigns the last VCI in setup?', ['The source', 'The first switch', 'The destination (receiver)', 'The router table'], 2, 'e.g. VCI 77 at B.'),

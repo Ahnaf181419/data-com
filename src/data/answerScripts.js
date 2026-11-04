@@ -993,8 +993,8 @@ export const paperScripts = {
     '3(a)': [
       note('**Out of syllabus question.** 2B1Q is not in the current slides/notes.'),
       given('2B1Q: 00 → −1, 01 → −3, 11 → +3, 10 → +1', 'last signal level positive'),
-      m(r`(i)\ 0110011001100110 \Rightarrow -3,\,+1,\,+1,\,-3,\,+3,\,-3,\,-1,\,+1`),
-      m(r`(ii)\ 0011001100110011 \Rightarrow -1,\,+3,\,+3,\,-1,\,-1,\,+3,\,+1,\,-1`),
+      m(r`(i)\ 0110011001100110 \Rightarrow -3,\,+1,\,-3,\,+1,\,-3,\,+1,\,-3,\,+1`),
+      m(r`(ii)\ 0011001100110011 \Rightarrow -1,\,+3,\,-1,\,+3,\,-1,\,+3,\,-1,\,+3`),
       p('Each 16-bit stream gives 8 signal elements; the graph is a staircase through these levels.'),
       ans('The 2B1Q level sequences are as computed above (8 levels per stream).'),
     ],
@@ -1107,7 +1107,8 @@ export const paperScripts = {
       table(['Level', 'Made of', 'Bandwidth'], [['Group', '12 voice channels', '48 kHz + guards'], ['Supergroup', '5 groups', '240 kHz'], ['Master group', '10 supergroups', '2.4 MHz'], ['Jumbo group', '6 master groups', '14.4 MHz']]),
       h('Digital hierarchy (TDM)'),
       table(['Level', 'Made of', 'Rate'], [['DS-1', '24 × 64 kbps', '1.544 Mbps'], ['DS-2', '4 × DS-1', '6.312 Mbps'], ['DS-3', '7 × DS-2', '44.736 Mbps'], ['DS-4', '6 × DS-3', '274.176 Mbps']]),
-      dia('hierarchy', { kind: 'FDM', first: '4 kHz each', levels: [{ input: '12 × 16-QAM', name: 'Group', bw: '59 kHz' }, { input: '5 groups', name: 'Supergroup', bw: '299 kHz' }, { input: '10 supergroups', name: 'Master group', bw: '2999 kHz' }, { input: '6 master groups', name: 'Jumbo group', bw: '17,999 kHz' }] }),
+      dia('hierarchy', { kind: 'FDM', first: '4 kHz each', levels: [{ input: '12 × 16-QAM', name: 'Group', bw: '48 kHz' }, { input: '5 groups', name: 'Supergroup', bw: '240 kHz' }, { input: '10 supergroups', name: 'Master group', bw: '2.4 MHz' }, { input: '6 master groups', name: 'Jumbo group', bw: '14.4 MHz' }] }),
+      note('These are the slide figures (no guard bands). Raiyan’s notes use the nested-guard method instead: 59 kHz, 299 kHz, 2999 kHz and 17,999 kHz — show which method you are using.'),
       ans('Analog: group → supergroup → master → jumbo. Digital: DS-1 → DS-2 → DS-3 → DS-4, each level a multiplexer feeding the next.'),
     ],
     '2(a)': [
@@ -1148,7 +1149,7 @@ export const paperScripts = {
       h('(i) Non-periodic composite signal'),
       p('The spectrum is **continuous**: a triangular band from $140 - 100 = 40$ kHz to $140 + 100 = 240$ kHz, peaking at 20 V at $f_c = 140$ kHz and falling to 0 at both edges.'),
       h('(ii) Periodic signal'),
-      p('The spectrum is **discrete**: $f_0 = 60 - 20 = 40$ Hz, so lines at 40, 50 and 60 Hz, all with the same amplitude.'),
+      p('The spectrum is **discrete**: the occupied band runs from 40 to 60 Hz with equal-amplitude lines at 40, 50 and 60 Hz — the 4th, 5th and 6th harmonics of a 10 Hz fundamental.'),
       dia('spectrum', { segs: [{ label: 'composite', fc: 'fc = 140 kHz' }], spans: [{ from: 0, to: 1, label: 'B = 200 kHz' }], ticks: [[0, '40 kHz'], [1, '240 kHz']], caption: 'Non-periodic composite: a continuous band peaked at the middle frequency.' }),
       ans('(i) continuous triangular band 40–240 kHz peaking at 20 V; (ii) discrete lines at 40, 50 and 60 Hz.'),
     ],
@@ -1201,9 +1202,10 @@ export const paperScripts = {
       m(r`\text{sum} = \texttt{0x3456} + \texttt{0xABCC} + \texttt{0x02BC} + \texttt{0xEEEE} = \texttt{0x1D1CC}`),
       m(r`\text{wrap: } \texttt{0xD1CC} + 1 = \texttt{0xD1CD} \Rightarrow \text{checksum} = \overline{\texttt{0xD1CD}} = \texttt{0x2E32}`),
       h('(ii) Receiver, with 0xABCE and 0x02BA'),
-      m(r`\Delta = (+2) + (-2) = 0 \Rightarrow \text{same sum } \texttt{0x1D1CC} \Rightarrow \text{same result } \texttt{0x2E32} \ne 0`),
-      p('Two compensating errors cancel in the sum — a classic checksum limitation; CRC would catch them.'),
-      ans('(i) **0x2E32**; (ii) the receiver also gets **0x2E32** ≠ 0 → the error is detected (the two changes cancelled in the sum).'),
+      m(r`\Delta = (+2) + (-2) = 0 \Rightarrow \text{same sum } \texttt{0x1D1CC}`),
+      m(r`\text{receiver: } \texttt{0x1D1CC} + \texttt{0x2E32} = \texttt{0x1FFFE} \Rightarrow \texttt{0xFFFF} \Rightarrow \text{complement} = \texttt{0x0000}`),
+      p('All zeros means **no error detected** — the two changes cancelled in the sum. A classic checksum limitation; CRC would catch them.'),
+      ans('(i) **0x2E32**; (ii) the receiver\u2019s checksum is **0x0000** → **no error is detected** (the two changes cancelled in the sum).'),
     ],
     '3(e)': [
       given('dataword 10100111', 'divisor 10111'),
@@ -1262,7 +1264,7 @@ export const paperScripts = {
     ],
     '3(a)': [
       h('Data link sublayers'),
-      p('**LLC** (logical link control) and **MAC** (media access control). The DLC-sublayer functions are taught in Ch 1 as a flagged lesson.'),
+      p('**LLC** (logical link control) and **MAC** (media access control). The OSI-layer functions are taught in Ch 1 as a flagged lesson; the sublayer names are not.'),
       h('Cladding'),
       p('A less-dense glass layer around the core: it confines the light by total internal reflection and reduces scattering (Ch 7.1).'),
       h('Sky wave vs line of sight'),
@@ -1381,7 +1383,7 @@ export const paperScripts = {
       m(r`\text{dominant rate} = 190\ \text{kbps} \Rightarrow T_{frame} = \frac{1}{190000}\ \text{s} = 5.26\ \mu\text{s}`),
       h('Frame size'),
       p('One bit from each channel per frame → 2 bits; the slow line is stuffed with dummy bits to match.'),
-      m(r`\frac{190}{180} = 1.0556 \;\Rightarrow\; \text{one dummy bit stuffed every 19 frames}`),
+      m(r`\frac{180}{190} = \frac{18}{19} \;\Rightarrow\; \text{the slow line fills 18 of every 19 frames: one dummy bit stuffed every 19 frames}`),
       ans('Frame size **2 bits**; frame duration **5.26 µs** (one stuffing bit every 19 frames).'),
     ],
     '3(a)': [
@@ -1481,7 +1483,8 @@ export const paperScripts = {
       ans('About **7.2 s** (≈ 143 round trips of 50 ms, plus one final 25 ms hop).'),
     ],
   },
-  'Spring 2023': {    '1(a)': [
+  'Spring 2023': {
+    '1(a)': [
       note('**Out of syllabus question.** Not covered by the current slides or notes — standard textbook answer. Learn it only if the teacher confirms it is still examinable.'),
       h('TCP/IP layers and their data units'),
       table(['Layer', 'Unit passed down', 'Job'], [['Application', 'Message', 'The data the program wants to send.'], ['Transport (TCP/UDP)', 'Segment (TCP) / datagram (UDP)', 'Splits the message into transport units and adds a header.'], ['Internet', 'Datagram (IP packet)', 'Adds the IP header: source and destination addresses, routing.'], ['Network access (data link)', 'Frame', 'Adds the header and trailer: framing, MAC addressing, error control.']]),
@@ -1600,8 +1603,8 @@ export const paperScripts = {
       h('Bit-pair mapping'),
       table(['Bits', 'Signal level'], [['00', '−1'], ['01', '−3'], ['11', '+3'], ['10', '+1']]),
       h('Signal sequences'),
-      m(r`(i)\ 0110011001100110 \Rightarrow -3,\,+1,\,+1,\,-3,\,+3,\,-3,\,-1,\,+1`),
-      m(r`(ii)\ 0011001100110011 \Rightarrow -1,\,+3,\,+3,\,-1,\,-1,\,+3,\,+1,\,-1`),
+      m(r`(i)\ 0110011001100110 \Rightarrow -3,\,+1,\,-3,\,+1,\,-3,\,+1,\,-3,\,+1`),
+      m(r`(ii)\ 0011001100110011 \Rightarrow -1,\,+3,\,-1,\,+3,\,-1,\,+3,\,-1,\,+3`),
       p('Each 16-bit stream gives 8 signal elements; the graph is a staircase through those levels.'),
       ans('2B1Q sends 2 bits per signal element using four levels; the level sequences are as computed above.'),
     ],

@@ -15,7 +15,7 @@ export default [
       ['Fall 2023', '3(c)'],
       ['Fall 2023', '3(e)'],
     ],
-    note: 'In every paper since 2021. The generator is usually 10111 or $x^4+x+1$ = 1011; the dataword and the bit that gets corrupted change. Show both divisions, and prove the corrupted codeword gives a non-zero syndrome.',
+    note: 'In 7 of the 8 papers (everything except Fall 2024). The generator is usually 10111 or $x^4+x+1$ = 1011; the dataword and the bit that gets corrupted change. Show both divisions, and prove the corrupted codeword gives a non-zero syndrome.',
   },
   {
     title: 'Multistage switch: 100 inputs, 10 and 6 crossbars',
@@ -39,10 +39,10 @@ export default [
       ['Spring 2023', '3(e)'],
       ['Fall 2023', '3(f)'],
     ],
-    note: 'Three papers print the identical 32-bit unit 10011001111000100010010010000100 → checksum 11011010. The other two print longer units — group the bits into 8-bit words, note any leftover bits, and sum with end-around carry.',
+    note: 'Three papers print the identical 32-bit unit 10011001111000100010010010000100 → checksum 11011010. The other two print different units (37 bits in Spring 2023, 31 bits in Fall 2023) — group the bits into 8-bit words, note any leftover bits, and sum with end-around carry.',
   },
   {
-    title: 'PCM quantization: the same nine samples',
+    title: 'PCM quantization tables',
     module: 'pcm',
     exact: true,
     refs: [
@@ -51,19 +51,18 @@ export default [
       ['Fall 2022', '3(f)'],
       ['Spring 2023', '3(f)'],
     ],
-    note: 'The nine amplitudes −6.1, 7.5, 16.2, 19.7, 11.0, −5.5, −11.3, −9.4, −6.0 V over −20…+20 V with L = 8 appear twice word for word: Δ = 5 V, zones numbered from 0 at the bottom, codes 010, 101, 111, 111, 110, 010, 001, 010, 010.',
+    note: 'Fall 2022 and Spring 2023 use the identical nine amplitudes −6.1, 7.5, 16.2, 19.7, 11.0, −5.5, −11.3, −9.4, −6.0 V over −20…+20 V with L = 8 (codes 010, 101, 111, 111, 110, 010, 001, 010, 010); Fall 2024 and Spring 2024 use five samples with 3-bit codes. Always: Δ = range/L, zones counted from 0 at the bottom, quantized value = zone midpoint.',
   },
   {
     title: 'QAM: 10 channels on 1 MHz',
     module: 'ch5-1',
-    exact: true,
     refs: [
       ['Spring 2025', '3(b)'],
       ['Spring 2024', '3(c)'],
       ['Fall 2022', '2(d)'],
       ['Spring 2023', '2(d)'],
     ],
-    note: 'Word for word: 100 kHz per channel → $S = 100$ kbaud → $r = 100$ bits per element → $L = 2^{100}$ points.',
+    note: 'The same numbers every time: 100 kHz per channel → $S = 100$ kbaud → $r = 100$ bits per element → $L = 2^{100}$ points (the wording varies slightly from paper to paper).',
   },
   {
     title: 'Datagram arrival order',
@@ -75,7 +74,7 @@ export default [
       ['Fall 2022', '3(g)'],
       ['Spring 2023', '3(g)'],
     ],
-    note: 'The same five paths (3200, 11,700, 12,200, 10,200, 10,700 km via switches 1,3,5 / 1,2,5 / 1,2,3,5 / 1,4,5 / 1,4,3,5) and the same switch delays. Order came out 1 → 4 → 2 → 5 → 3 every time.',
+    note: 'The same five paths (3200, 11,700, 12,200, 10,200, 10,700 km via switches 1,3,5 / 1,2,5 / 1,2,3,5 / 1,4,5 / 1,4,3,5). The order came out 1 → 4 → 2 → 5 → 3 every time, but the switch delays differ (Spring 2025 uses 4, 11, 22, 9, 20 ms), so the totals differ — work each paper\u2019s own numbers.',
   },
   {
     title: 'Line coding: maximum data rates',
@@ -85,7 +84,7 @@ export default [
       ['Fall 2022', '2(f)'],
       ['Spring 2022', '5(b)'],
     ],
-    note: 'Out of your notes: NRZ-L $B=N$, AMI $B=N/2$, Manchester $B=2N$, 8B6T $B=6N/8$, MLT-3 $B=4N/3$, 2B1Q $B=2N$, 4D-PAM5 $B=4N/5$. Same list, different channel bandwidth (3 MHz, 5 MHz).',
+    note: 'Out of your notes, but the same standard table in all three papers: NRZ-L $B=N$, AMI $B=N/2$, Manchester $B=2N$, 8B6T $B=6N/8$, MLT-3 $B=4N/3$, 2B1Q $B=N/2$ (2 bits per element), 4D-PAM5 $B=4N/5$ — only the channel bandwidth changes (3 MHz, 5 MHz). Check the 2B1Q row against your own copy of Forouzan before the exam.',
   },
   {
     title: '2B1Q signal-level graphs',
@@ -100,13 +99,12 @@ export default [
   {
     title: 'Scrambling: B8ZS and HDB3',
     module: 'ch4x',
-    exact: true,
     refs: [
       ['Fall 2021', '3(b)'],
       ['Fall 2022', '3(b)'],
       ['Fall 2023', '3(g)'],
     ],
-    note: 'Out of your notes, and the same sequence every time: 11100000000000. B8ZS swaps eight zeros for 000VB0VB; HDB3 swaps four zeros for 000V (odd count of non-zero pulses) or 000VB (even).',
+    note: 'Out of your notes, and the same sequence every time: 11100000000000. B8ZS swaps eight zeros for 000VB0VB; HDB3 swaps four zeros for 000V (odd count of non-zero pulses) or 000VB (even). The wording changes, the method does not.',
   },
   {
     title: 'HDLC frames',
@@ -140,13 +138,12 @@ export default [
   {
     title: 'Five components of a data communication system',
     module: 'ch1',
-    exact: true,
     refs: [
       ['Fall 2021', '4(a)'],
       ['Spring 2023', '1(e)'],
       ['Fall 2023', '1(a)'],
     ],
-    note: 'Sender, receiver, transmission medium, message, protocol. In your notes (Ch 1) — the easiest question in the whole set.',
+    note: 'Sender, receiver, transmission medium, message, protocol — always the first part of the question. In your notes (Ch 1): the easiest question in the whole set.',
   },
   {
     title: 'Constellation with two points',
@@ -230,7 +227,7 @@ export default [
       ['Spring 2024', '3(b)'],
       ['Fall 2023', '3(b)'],
     ],
-    note: 'In every paper. Fall 2024 and Spring 2025 gave the same code 10011000101; Spring 2024 changed it to 11001110111; Fall 2023 asks for position 4.',
+    note: 'In 4 of the 8 papers. Fall 2024 and Spring 2025 gave the same code 10011000101; Spring 2024 changed it to 11001110111; Fall 2023 asks for position 4.',
   },
   {
     title: 'Multistage switches and blocking',
@@ -252,7 +249,7 @@ export default [
       ['Spring 2024', '1(e)'],
       ['Fall 2023', '1(f)'],
     ],
-    note: 'In every paper. Learn the levels, what each is made of and the bandwidths, and draw the diagram.',
+    note: 'In 4 of the 8 papers. Learn the levels, what each is made of and the bandwidths, and draw the diagram.',
   },
   {
     title: 'Switching delays',
@@ -263,7 +260,7 @@ export default [
       ['Spring 2024', '2(f)'],
       ['Fall 2021', '4(b)'],
     ],
-    note: 'In every paper: circuit-switched delays (setup = 2P+2T, teardown = P+T, then the data phase), datagram delays, and datagram vs virtual-circuit delays, each with the timing diagram.',
+    note: 'In 4 of the 8 papers: circuit-switched delays (setup = 2P+2T, teardown = P+T, then the data phase), datagram delays, and datagram vs virtual-circuit delays, each with the timing diagram.',
   },
   {
     title: 'Multilevel TDM: ten sources',

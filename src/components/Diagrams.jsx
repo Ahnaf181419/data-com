@@ -424,7 +424,8 @@ function Banyan() {
   const stages = [110, 250, 390];
   return (
     <Fig caption="An 8 × 8 banyan switch: log₂8 = 3 stages of n/2 = 4 microswitches (2 × 2) each — 12 in total. Stage 1 routes on the high-order bit of the output port, stage 2 on the middle bit, stage 3 on the last bit." label="Banyan switch with three stages of microswitches">
-      <svg viewBox="0 0 640 250" className="w-full">
+      <div className="overflow-x-auto">
+        <svg viewBox="0 0 640 250" className="w-full min-w-[520px]">
         {ys.map((y, i) => (
           <g key={`in${i}`}>
             <line x1="30" y1={y} x2="70" y2={y} stroke={A} />
@@ -457,7 +458,8 @@ function Banyan() {
           </g>
         ))}
         <text x="502" y="20" fontSize="10" fill={A}>output port (binary)</text>
-      </svg>
+        </svg>
+      </div>
     </Fig>
   );
 }
@@ -472,7 +474,8 @@ function TdmBus() {
   );
   return (
     <Fig caption="The TDM bus: every line reaches one high-speed bus through a gate. In each time slot the control unit closes exactly one input gate and one output gate, moving one burst across the bus." label="TDM bus with input and output gates">
-      <svg viewBox="0 0 640 200" className="w-full">
+      <div className="overflow-x-auto">
+        <svg viewBox="0 0 640 200" className="w-full min-w-[520px]">
         {ys.map((y, i) => (
           <g key={i}>
             <line x1="30" y1={y} x2="140" y2={y} stroke={A} />
@@ -493,7 +496,8 @@ function TdmBus() {
         <line x1="350" y1="150" x2="491" y2="112" stroke={A} strokeDasharray="4 4" />
         <text x="80" y="158" fontSize="10" fill={A}>input gates</text>
         <text x="520" y="158" fontSize="10" fill={A}>output gates</text>
-      </svg>
+        </svg>
+      </div>
     </Fig>
   );
 }
