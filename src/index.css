@@ -271,6 +271,22 @@ dialog[open]::backdrop {
   }
 }
 
+/* TDM lab: a cycling highlight visits slots in frame order — the rotating switch made visible. */
+.slot-cycle {
+  animation: slot-pulse var(--t, 4.8s) linear infinite;
+}
+@keyframes slot-pulse {
+  0%,
+  7% {
+    transform: scale(1.14);
+    background-color: rgb(240 195 90 / 0.45);
+  }
+  11%,
+  100% {
+    transform: scale(1);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .enter,
   .enter-next,
@@ -292,7 +308,8 @@ dialog[open]::backdrop {
   }
   .pop,
   .shake,
-  .playhead {
+  .playhead,
+  .slot-cycle {
     animation: none;
   }
   .press:active {
