@@ -105,6 +105,44 @@ export function tdm({ n, rate, unitBits = 1, syncBits = 0 }) {
   return { result: { inSlot, outSlot, frameBits, frameRate, linkRate }, steps };
 }
 
+// Multiple-slot TDM: unequal input rates share one frame via a common unit (gcd of the rates).
+export function tdmMultislot({ rates, syncBits = 0 }) {
+  if (!rates?.length) throw new Error('Provide at least one input rate.');
+  if (rates.some((r) => !(r > 0))) throw new Error('All input rates must be positive.');
+  const gcd = (a, b) => (b ? gcd(b, a % b) : a);
+  const unit = Math.round(rates.reduce(gcd));
+  const slots = rates.map((r) => r / unit);
+  const frameBits = slots.reduce((a, b) => a + b, 0) + syncBits;
+  const frameRate = unit; // each slot carries 1 bit at the common unit rate
+  const duration = 1 / frameRate;
+  const linkRate = frameBits * unit;
+  const steps = [
+    `\\text{common unit} = \\gcd(\\text{rates}) = ${fmt(unit)}\\text{ bps}`,
+    ...slots.map((sl, i) => `\\text{input } ${i + 1}: \\frac{${fmt(rates[i])}}{${fmt(unit)}} = ${sl}\\text{ slots/frame}`),
+    `\\text{frame size} = ${slots.join(' + ')}${syncBits ? ` + ${syncBits}` : ''} = ${frameBits}\\text{ bits}`,
+    `\\text{frame rate} = ${fmt(frameRate)}\\text{ frames/s}, \\qquad \\text{duration} = \\frac{1}{${fmt(frameRate)}} = ${fmt(duration, 9)}\\text{ s}`,
+    `\\text{link rate} = ${frameBits} \\times ${fmt(unit)} = ${fmt(linkRate)}\\text{ bps}`,
+  ];
+  return { result: { unit, slots, frameBits, frameRate, duration, linkRate }, steps };
+}
+
+// FDM analog hierarchy (Raiyan's nested-guard method): each level multiplexes n units of the level below,
+// adding n-1 guard bands. units = [12, 5, 10, 6] climbs group → jumbo group.
+export function fdmHierarchy({ units, bw, guard }) {
+  if (!units?.length) throw new Error('Provide the units per level.');
+  const names = ['Group', 'Supergroup', 'Master group', 'Jumbo group'];
+  let cur = bw;
+  const levels = [];
+  const steps = [];
+  units.forEach((n, i) => {
+    const prev = cur;
+    cur = n * cur + (n - 1) * guard;
+    levels.push(cur);
+    steps.push(`\\text{${names[i] ?? `Level ${i + 1}`}} = ${n} \\times ${fmt(prev)} + ${n - 1} \\times ${fmt(guard)} = ${fmt(cur)}\\text{ kHz}`);
+  });
+  return { result: { levels }, steps };
+}
+
 // ---- PCM ----
 export function pcm({ fh, N, nb }) {
   const fs = 2 * fh;

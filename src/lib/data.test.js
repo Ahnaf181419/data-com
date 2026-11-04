@@ -114,6 +114,7 @@ test('every past-paper item and likely question has a valid exam-script answer',
       }
   for (const q of likely) {
     assert.ok(q.script?.length, `likely: ${q.q}`);
+    assert.equal(q.script.at(-1).type, 'answer', `likely ends with a boxed answer: ${q.q}`);
     q.script.forEach((b) => checkBlock(b, q.q));
   }
 });
