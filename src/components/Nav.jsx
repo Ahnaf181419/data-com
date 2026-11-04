@@ -23,6 +23,10 @@ export function SideNav({ modules, view, currentId, progress, onHome, onPick, on
       <button onClick={onHome} aria-current={view === 'home' ? 'page' : undefined} className={item(view === 'home')}>
         <span className="w-10 text-center font-serif text-lg text-gold">⌂</span> Overview
       </button>
+      <button onClick={onExam} aria-current={view === 'exam' ? 'page' : undefined} className={`${item(view === 'exam')} border border-red/30`}>
+        <span className="w-10 text-center text-red">★</span>
+        <span className={view === 'exam' ? 'text-red' : 'text-text/85'}>Exam prep</span>
+      </button>
       <p className="mb-1 mt-4 px-3 text-sm text-ash/80">Chapters</p>
       {modules.map((m) => {
         const active = view === 'module' && m.id === currentId;
@@ -42,10 +46,6 @@ export function SideNav({ modules, view, currentId, progress, onHome, onPick, on
           </button>
         );
       })}
-      <button onClick={onExam} aria-current={view === 'exam' ? 'page' : undefined} className={`${item(view === 'exam')} mt-4 border border-red/30`}>
-        <span className="w-10 text-center text-red">★</span>
-        <span className={view === 'exam' ? 'text-red' : 'text-text/85'}>Exam prep</span>
-      </button>
     </nav>
   );
 }
