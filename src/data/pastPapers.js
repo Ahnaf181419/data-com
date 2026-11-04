@@ -734,12 +734,11 @@ const papers = [
           },
           {
             id: '3(e)', marks: 5, module: 'ch10',
-            q: 'Consider an eight-bit checksum. Analyse the checksum for the data unit to be transmitted and find the final bit stream received by the receiver.',
+            q: 'Consider an eight-bit checksum. Analyse the checksum for the data unit to be transmitted and find the final bit stream received by the receiver. Data unit: 1011111111111111001000101110010000100',
             answer: [
-              'Split the data into 8-bit words and add them with one’s-complement arithmetic (end-around carry).',
-              'Sender: the wrapped sum is complemented to give the checksum; the checksum is appended to the data.',
-              'Receiver: it adds the data **and** the checksum with the same arithmetic and complements the result — a result of all zeros means no error.',
-              'See the worked 8-bit checksum in Ch 10 (the numbers there are the slide’s example; the same method applies to this data unit).',
+              'Split the data into 8-bit words: 10111111, 11111111, 00100010, 11100100 (the printed unit has 37 bits, so 5 bits are left over).',
+              'One’s-complement sum: $191 + 255 + 34 + 228 = 708 = 0x2C4$; wrap the carry: $0xC4 + 2 = 0xC6$.',
+              'Checksum = complement of 0xC6 = **00111001**. The receiver adds the data and the checksum and complements — an all-zero result means no error.',
             ],
           },
           {
@@ -758,6 +757,762 @@ const papers = [
               'Every 1000 km costs 5 ms of propagation ($1000\\times10^3 / 2\\times10^8$); each datagram’s delay = propagation + the switch delays on its path.',
               'D1 (3200 km, 1-3-5): 16 + (3+20+20) = **59 ms**. D2 (11,700 km, 1-2-5): 58.5 + (3+10+20) = **91.5 ms**. D3 (12,200 km, 1-2-3-5): 61 + (3+10+20+20) = **114 ms**. D4 (10,200 km, 1-4-5): 51 + (3+7+20) = **81 ms**. D5 (10,700 km, 1-4-3-5): 53.5 + (3+7+20+20) = **103.5 ms**.',
               'Arrival order: **1 → 4 → 2 → 5 → 3**.',
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: 'Fall 2021 semester final',
+    meta: '3 hours, 70 marks. Seven questions of 14 marks each; answer any five. (Header date: 16/10/2022.)',
+    sets: [
+      {
+        name: 'Question 1',
+        rule: '14 marks',
+        items: [
+          {
+            id: '1(a)', marks: 7, module: 'ch10',
+            q: 'A bit stream 1101011011 is transmitted using the standard CRC method. The generator polynomial is x⁴ + x + 1. (i) Show the actual bit string transmitted. (ii) Suppose the third bit from the left is inverted during transmission. Show that this error is detected at the receiver.',
+            answer: [
+              'Generator $x^4+x+1$ = **1011** → append 3 zeros: 1101011011000.',
+              'Mod-2 division: quotient 1111010100, remainder **100** → codeword **1101011011100**.',
+              '(ii) Inverting the third bit from the left gives 1111011011100; dividing by 1011 gives the non-zero syndrome **011** → the error is detected.',
+            ],
+          },
+          {
+            id: '1(b)', marks: 7, module: 'ch5-1', flagged: true, outOfSyllabus: true,
+            q: 'Distinguish between baseband and broadband transmission. A host communicates with another host using the TCP/IP protocol suite. What is the unit of data sent or received at each of the following layers: i) Application, ii) Transport, iii) Network, iv) Data Link, v) Physical?',
+            answer: [
+              '**Out of syllabus question** for the TCP/IP half (the baseband/broadband half is taught in Ch 5.1).',
+              'Baseband: the digital signal is sent **as it is** (a lowpass channel, starts at 0 bandwidth). Broadband: the digital signal is **modulated** onto a carrier and occupies a bandpass channel.',
+              'TCP/IP data units: Application = **message**; Transport = **segment** (TCP) or **datagram** (UDP); Network = **datagram** (IP packet); Data Link = **frame**; Physical = **bits**.',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 2',
+        rule: '14 marks',
+        items: [
+          {
+            id: '2(a)', marks: 7, module: 'ch1', flagged: true, outOfSyllabus: true,
+            q: 'What is transmission impairment? Mention the names of the causes of transmission impairment. Mention the types of link-layer addressing techniques used in the Data Link Layer.',
+            answer: [
+              '**Out of syllabus question** for the addressing half (the impairment half is taught in Ch 1 as a flagged lesson).',
+              'Impairment: the medium is imperfect, so the received signal differs from the sent one. Causes: **attenuation** (energy loss over distance), **distortion** (frequency components arrive with different delays, changing the shape) and **noise** (unwanted energy added: thermal, induced, crosstalk, impulse).',
+              'Link-layer addressing types: **unicast** (one receiver), **broadcast** (every host on the link) and **multicast** (a chosen group of hosts).',
+            ],
+          },
+          {
+            id: '2(b)', marks: 7, module: 'ch6-2',
+            q: 'Two channels, one with a bit rate of 190 kbps and another with 180 kbps, are to be multiplexed using pulse-stuffing TDM with no synchronization bits. (i) What is the size of a frame in bits? (ii) What is the duration of a frame?',
+            answer: [
+              'The **dominant rate** is 190 kbps, so each frame lasts $1/190000$ s = **5.26 µs**; the 180 kbps line is stuffed with dummy bits to keep up.',
+              'Each frame carries one bit from each channel → frame size = **2 bits** (plus occasional dummy bits on the slow line).',
+              'The slow line needs $190/180 = 1.0556$ bits per frame, so one dummy bit is stuffed every 19 frames.',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 3',
+        rule: '14 marks',
+        items: [
+          {
+            id: '3(a)', marks: 7, module: 'ch4x', flagged: true, outOfSyllabus: true,
+            q: 'We have a baseband channel with a 3-MHz bandwidth. What is the data rate for this channel if we use each of the following line coding schemes: i) NRZ-L, ii) AMI, iii) Manchester, iv) 8B6T, v) MLT-3, vi) 2B1Q, vii) 4D-PAM5?',
+            answer: [
+              '**Out of syllabus question** — only 4B/5B and differential Manchester are in the current notes (Ch 4).',
+              'NRZ-L: $B = N$ → **3 Mbps**. AMI: $B = N/2$ → **6 Mbps**. Manchester: $B = 2N$ → **1.5 Mbps**. 8B6T: $B = 6N/8$ → **4 Mbps**.',
+              'MLT-3: $B = 4N/3$ → **2.25 Mbps**. 2B1Q: $B = 2N$ → **1.5 Mbps**. 4D-PAM5: $B = 4N/5$ → **3.75 Mbps**.',
+            ],
+          },
+          {
+            id: '3(b)', marks: 7, module: 'ch4x', flagged: true, outOfSyllabus: true,
+            q: 'What is the result of scrambling the sequence 11100000000000 using each of the following scrambling techniques, assuming the last non-zero signal level has been positive and the number of nonzero pulses is odd after the last substitution? i) B8ZS, ii) HDB3.',
+            answer: [
+              '**Out of syllabus question** — scrambling is not in the current slides/notes.',
+              '**B8ZS** replaces eight consecutive zeros by 000VB0VB (or 000VBOVB, depending on the parity of the nonzero pulses since the last substitution). With eleven zeros: the first eight are substituted, the last three stay as they are → **111 000VB0VB 000**.',
+              '**HDB3** replaces four consecutive zeros by 000V (odd number of nonzero pulses since the last substitution) or 000VB (even). With eleven zeros: the first four become 000V, the next four become 000VB, the last three stay → **111 000V 000VB 000**.',
+              'Polarity convention (whether V is the violation or the normal bipolar pulse) differs between textbooks — the structure of where the substitutions go is the same.',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 4',
+        rule: '14 marks',
+        items: [
+          {
+            id: '4(a)', marks: 7, module: 'ch1',
+            q: 'Identify the five components of a data communications system. Name the two major categories of transmission media.',
+            answer: [
+              'Five components: **sender, receiver, transmission medium, message, protocol**.',
+              'Two categories of media: **guided (wired)** — twisted pair, coaxial, fibre; and **unguided (wireless)** — free space.',
+            ],
+          },
+          {
+            id: '4(b)', marks: 7, module: 'ch8',
+            q: 'A path in a digital circuit-switched network has a data rate of 1 Mbps. The exchange of 1000 bits is required for the setup and teardown phases. The distance between two parties is 5000 kilometres. Answer the following if the propagation speed is 2 × 10⁸ m/s: (i) What is the total delay if 100,000 bits of data are exchanged during the data transfer phase? (ii) What is the total delay if 1,000,000 bits of data are exchanged during the data transfer phase?',
+            answer: [
+              'Propagation delay: $P_d = 5000\\times10^3 / 2\\times10^8 = 25$ ms. The 1000-bit exchange takes $T_d = 1000/10^6 = 1$ ms.',
+              'Setup $= 2(P_d + T_d) = 52$ ms; teardown $= P_d + T_d = 26$ ms.',
+              '(i) Data phase $= 25 + 100000/10^6$ s $= 25 + 100 = 125$ ms → total $= 52 + 125 + 26 = \\mathbf{203\\text{ ms}}$.',
+              '(ii) Data phase $= 25 + 1000 = 1025$ ms → total $= 52 + 1025 + 26 = \\mathbf{1103\\text{ ms}}$.',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 5',
+        rule: '14 marks',
+        items: [
+          {
+            id: '5(a)', marks: 7, module: 'ch1',
+            q: 'How many bits can fit on a link with a 2-millisecond delay if the bandwidth of the link is: i) 10 Megabyte/second? ii) 100 Megabyte/second?',
+            answer: [
+              'Bits that fit = bandwidth × time.',
+              '(i) $10\\times10^6$ B/s × 8 bits/B × 0.002 s = **160,000 bits**.',
+              '(ii) $100\\times10^6$ B/s × 8 × 0.002 = **1,600,000 bits**. (If the exam uses $1$ MB $= 2^{20}$ bytes, the answers are 167,772 and 1,677,722 bits.)',
+            ],
+          },
+          {
+            id: '5(b)', marks: 7, module: 'ch10',
+            q: 'Consider an eight-bit checksum. Calculate the checksum for the data unit to be transmitted: 10011001111000100010010010000100',
+            answer: [
+              'Split into 8-bit words: 10011001, 11100010, 00100100, 10000100.',
+              'One’s-complement sum: $153 + 226 + 36 + 132 = 547 = 0x223$; wrap the carry: $0x23 + 2 = 0x25$.',
+              'Checksum = complement of 0x25 = 0xDA = **11011010**. The receiver adds the data and the checksum and complements; 00000000 means no error.',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 6',
+        rule: '14 marks',
+        items: [
+          {
+            id: '6(a)', marks: 7, module: 'ch4x', flagged: true, outOfSyllabus: true,
+            q: 'Draw the graph of the data stream 0011011001 using each of the following schemes, assuming the last signal level has been positive: i) NRZ-L, ii) Differential Manchester, iii) Pseudoternary, iv) AMI, v) 2B1Q, vi) MLT-3, vii) 4D-PAM5.',
+            answer: [
+              '**Out of syllabus question** — only 4B/5B and differential Manchester are in the current notes (Ch 4).',
+              'The standard method for each scheme: NRZ-L (level = bit value), differential Manchester (mid-bit transition always; a start transition means 0), pseudoternary (a 1 is a pulse, a 0 is the absence of a pulse), AMI (1s alternate +/−, 0s are zero level), 2B1Q (two bits per quaternary level), MLT-3 (four-level cycle), 4D-PAM5 (four data bits give one of five levels).',
+              'For 2B1Q, 0011011001 → 00,11,01,10,01 → levels −1, +3, −3, +1, −3 (with the positive-last assumption).',
+            ],
+          },
+          {
+            id: '6(b)', marks: 7, module: 'ch5-1',
+            q: 'Calculate the baud rate for the given bit rate and type of modulation: i) 6000 bps, QPSK, ii) 36,000 bps, 64-QAM.',
+            answer: [
+              'Baud rate $S = N/r$, where $r$ = bits per signal element ($r = \\log_2 L$).',
+              '(i) QPSK: $L = 4$, $r = 2$ → $S = 6000/2 = \\mathbf{3000\\text{ baud}}$.',
+              '(ii) 64-QAM: $L = 64$, $r = 6$ → $S = 36000/6 = \\mathbf{6000\\text{ baud}}$.',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 7',
+        rule: '14 marks',
+        items: [
+          {
+            id: '7(a)', marks: 7, module: 'pcm', flagged: true,
+            q: 'Draw a sine curve representing an analog signal with amplitude between −40 V and +40 V and a phase angle of 4 degrees. Using an ideal sampling method with sixteen levels, calculate the quantized values and quantization error of each sample, and construct the encoded stream.',
+            answer: [
+              '16 levels over −40…+40 V → $\\Delta = 80/16 = 5$ V; each sample is replaced by the **middle of its zone** and the zone number (counted from 0 at the bottom) is sent as a **4-bit** code.',
+              'Sampling the sine at the standard instants ($t = 0, T/4, T/2, 3T/4$) with a 4° phase gives 2.79 V, 39.90 V, −2.79 V and −39.90 V.',
+              'Quantized values (zone midpoints): 2.5 V, 37.5 V, −2.5 V, −37.5 V; errors: −0.29 V, −2.40 V, +0.29 V, +2.40 V.',
+              'Encoded stream: **1000 1111 0111 0000**.',
+              'Note: the paper’s figure fixes the sampling instants — with other instants the numbers change, but the method does not.',
+            ],
+          },
+          {
+            id: '7(b)', marks: 7, module: 'ch10', flagged: true, outOfSyllabus: true,
+            q: 'A system uses the Go-Back-N ARQ protocol with a window size of seven. If each packet carries 1000 bits of data, how long does it take to send 1 million bits of data if the distance between the sender and receiver is 5000 kilometres and the propagation speed is 2 × 10⁸ m/s? Ignore transmission, waiting and processing delays. Assume no data or control frame is lost or damaged.',
+            answer: [
+              '**Out of syllabus question** — ARQ and sliding windows are not in the current slides/notes.',
+              'Only propagation counts: $P_d = 5000\\times10^3 / 2\\times10^8 = 25$ ms per hop; the **round trip** is 50 ms.',
+              'The sender can have 7 packets (7000 bits) in flight, so the total time is roughly (number of rounds) × 50 ms plus the final acknowledgements.',
+              'With 1000 packets of 1000 bits and a window of 7, the sender needs about $\\lceil 1000/7 \\rceil = 143$ windows; the acknowledgements trail the data by one round trip, giving roughly $143 \\times 50$ ms ≈ **7.2 s** (the last window’s data still has to arrive, so add one 25 ms hop).',
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: 'Fall 2022 semester final',
+    meta: '3 hours, 70 marks. Answer any 4 from Question 1 (20 marks) and any 5 from each of Questions 2 and 3 (25 marks each). (Header date: 11/09/2023.)',
+    sets: [
+      {
+        name: 'Question 1',
+        rule: 'Answer any 4 (5 × 4 = 20)',
+        items: [
+          {
+            id: '1(a)', marks: 5, module: 'ch5-1', flagged: true, outOfSyllabus: true,
+            q: 'We send a voice signal from a microphone to a recorder. Explain whether it is baseband or broadband transmission. Define three random-access protocols.',
+            answer: [
+              '**Out of syllabus question** for the protocols (the baseband/broadband half is taught in Ch 5.1).',
+              'A voice signal from a microphone is **analog**; sent directly over a low-pass channel it is a **baseband** transmission (no carrier is needed for an analog signal). Broadband would mean modulating it onto a carrier.',
+              'Three random-access protocols: **pure Aloha**, **slotted Aloha**, and **CSMA/CD** (carrier sense multiple access with collision detection); CSMA/CA is the collision-avoidance variant used in wireless.',
+            ],
+          },
+          {
+            id: '1(b)', marks: 5, module: 'ch7-2', flagged: true, outOfSyllabus: true,
+            q: 'Explain the following terms: i. ISOC, ii. IRTF.',
+            answer: [
+              '**Out of syllabus question** — the satellite organisations are not in the current slides/notes.',
+              '**ISOC** (International Satellite Operations Center) — the organisation that plans and controls the use of the INTELSAT satellite system.',
+              '**IRTF** (International Radio and Telecommunications Union) — the body that coordinates the use of the radio spectrum and the international radio regulations.',
+            ],
+          },
+          {
+            id: '1(c)', marks: 5, module: 'ch6-1',
+            q: 'Explain the multiplexing techniques for analog and digital signals. Define the applications of frequency-division multiplexing.',
+            answer: [
+              'Analog multiplexing = **FDM** (each signal modulates its own carrier; bandpass filters separate them at the receiver). Digital multiplexing = **TDM** (interleaving: synchronous, statistical, or multilevel/multiple-slot to handle unequal rates).',
+              'FDM applications: the **telephone network** (many voice channels on one trunk), **radio and TV broadcasting** (AM/FM stations side by side in frequency), and **cable TV** (many TV channels on one coax cable).',
+            ],
+          },
+          {
+            id: '1(d)', marks: 5, module: 'ch5-2', flagged: true, outOfSyllabus: true,
+            q: 'Define the analog-to-analog conversion technique most susceptible to noise and defend your answer. If the IP address of a router does not appear in any datagram sent from a source to a destination, why do we need to assign IP addresses to routers?',
+            answer: [
+              '**Out of syllabus question** for the router half (the PM comparison is taught in Ch 5.2).',
+              '**PM** (phase modulation) is the most susceptible to noise: noise changes the phase of the carrier directly, and PM is usually produced from FM, so it inherits FM’s noise susceptibility.',
+              'Routers still need IP addresses because every datagram must name its **next-hop router** as the destination at the link layer and the routers themselves are addressed for control traffic (routing updates, ICMP). The source and final destination addresses stay end-to-end in the IP header, but the routers are individually addressable hosts on the network.',
+            ],
+          },
+          {
+            id: '1(e)', marks: 5, module: 'ch6-1', flagged: true, outOfSyllabus: true,
+            q: 'Explain the use of guard bands. Draw the diagram of an Address Resolution Protocol packet.',
+            answer: [
+              '**Out of syllabus question** for the ARP part (the guard-band half is taught in Ch 6.1).',
+              'Guard band: an unused strip of spectrum left between FDM channels so their spectra never overlap and each can be separated by a bandpass filter; it also absorbs small drift in carrier frequencies.',
+              'ARP packet (Ethernet/IPv4): preamble (7 B) + SFD (1 B) + destination MAC (6 B) + source MAC (6 B) + type (2 B) + ARP payload (28 B) + FCS (4 B). Payload: hardware type, protocol type, address lengths, opcode, sender hardware/IP address, target hardware/IP address.',
+            ],
+          },
+          {
+            id: '1(f)', marks: 5, module: 'ch10', flagged: true, outOfSyllabus: true,
+            q: 'Define the HDLC protocol. Draw the diagram of the HDLC frames.',
+            answer: [
+              '**Out of syllabus question** — HDLC is not in the current slides/notes (Ch 10 teaches error-control methods only).',
+              'HDLC (High-Level Data Link Control) is a **bit-oriented** data link protocol whose frame is a sequence of bits; it supports three frame types: **I-frame** (data + sequence numbers), **S-frame** (flow/error control) and **U-frame** (link management).',
+              'Frame format: flag (01111110) → address (8 or 16 bits, usually omitted) → control (8 or 16 bits) → information → FCS (16/32-bit CRC) → flag; **bit stuffing** prevents the flag pattern from appearing inside the frame.',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 2',
+        rule: 'Answer any 5 (5 × 5 = 25)',
+        items: [
+          {
+            id: '2(a)', marks: 5, module: 'ch8-2',
+            q: 'We need a three-stage space-division switch with N = 100. We use 10 crossbars at the first and third stages and 6 crossbars at the middle stage. Calculate the total number of crosspoints.',
+            answer: [
+              'Stage 1: $N/n = 10$ crossbars → $n = 10$ inputs each; $k = 6$ → $10 \\times (10 \\times 6) = 600$ crosspoints.',
+              'Stage 2: $6 \\times (10 \\times 10) = 600$. Stage 3: $10 \\times (6 \\times 10) = 600$.',
+              'Total = **1800 crosspoints** (vs 10,000 for a single 100 × 100 crossbar).',
+            ],
+          },
+          {
+            id: '2(b)', marks: 5, module: 'ch7-2', flagged: true, outOfSyllabus: true,
+            q: 'Calculate the theoretical capacity of a channel if the bandwidth is (i) 20 kHz and SNR_dB = 40, (ii) 1 MHz and SNR_dB = 20.',
+            answer: [
+              '**Out of syllabus question** — Shannon’s capacity formula is not in the current slides/notes.',
+              '$C = B \\log_2(1 + \\text{SNR})$ with $\\text{SNR} = 10^{\\text{SNR}_{dB}/10}$.',
+              '(i) SNR $= 10^4$ → $C = 20000 \\times \\log_2(10001) = 20000 \\times 13.2877 \\approx \\mathbf{265{,}754\\ \\text{bps}}$ (≈ 265.75 kbps).',
+              '(ii) SNR $= 100$ → $C = 10^6 \\times \\log_2(101) = 10^6 \\times 6.6582 \\approx \\mathbf{6.66\\ \\text{Mbps}}$.',
+            ],
+          },
+          {
+            id: '2(c)', marks: 5, module: 'ch5-1', flagged: true, outOfSyllabus: true,
+            q: 'The telephone line has 4 kHz bandwidth. Calculate the maximum number of bits we can send using each of the following techniques, with d = 0: i. 64-QAM, ii. QPSK.',
+            answer: [
+              '**Out of syllabus question** — the Nyquist formula is not in the current slides/notes.',
+              '$N = 2B \\log_2 L$ (bits/s) with $B = 4000$ Hz.',
+              '(i) 64-QAM: $L = 64$ → $N = 2 \\times 4000 \\times 6 = \\mathbf{48{,}000\\ \\text{bps}}$.',
+              '(ii) QPSK: $L = 4$ → $N = 2 \\times 4000 \\times 2 = \\mathbf{16{,}000\\ \\text{bps}}$.',
+            ],
+          },
+          {
+            id: '2(d)', marks: 5, module: 'ch5-1',
+            q: 'A corporation has a medium with a 1-MHz bandwidth (lowpass). It needs 10 separate independent channels, each capable of sending at least 10 Mbps, using QAM. Calculate the minimum number of bits per baud for each channel and the number of points in the constellation diagram for each channel. Assume d = 0.',
+            answer: [
+              '1 MHz ÷ 10 channels = 100 kHz per channel; with $d = 0$, $B_{min} = S$ → $S = 100$ kbaud.',
+              '$r = N/S = 10\\,\\text{Mbps}/100\\,\\text{kbaud} = 100$ bits per element; $L = 2^{100}$ constellation points.',
+            ],
+          },
+          {
+            id: '2(e)', marks: 5, module: 'ch7-1', flagged: true, outOfSyllabus: true,
+            q: 'We have a digital medium with a data rate of 10 Mbps. Calculate the number of 64-kbps voice channels that can be carried by this medium if we use DSSS with the Barker sequence.',
+            answer: [
+              '**Out of syllabus question** — spread spectrum / CDMA is not in the current slides/notes.',
+              'In DSSS every bit is multiplied by a fast chip code (the Barker sequence); the spectrum used is the bit rate × the spreading factor, so the number of 64 kbps channels is limited by that spreading factor.',
+              'With a Barker code of length $m$, $m$ simultaneous 64 kbps channels need $m \\times 64$ kbps of spread bandwidth; the exact count also depends on the chip rate given in the full paper statement — check the original numbers before using this in the exam.',
+            ],
+          },
+          {
+            id: '2(f)', marks: 5, module: 'ch4x', flagged: true, outOfSyllabus: true,
+            q: 'We have a baseband channel with a 5-MHz bandwidth. Calculate the data rate for this channel if we use each of the following line coding schemes: i. NRZ-L, ii. AMI, iii. Manchester, iv. MLT-3, v. 4D-PAM5.',
+            answer: [
+              '**Out of syllabus question** — only 4B/5B and differential Manchester are in the current notes (Ch 4).',
+              'NRZ-L ($B = N$): **5 Mbps**. AMI ($B = N/2$): **10 Mbps**. Manchester ($B = 2N$): **2.5 Mbps**. MLT-3 ($B = 4N/3$): **3.75 Mbps**. 4D-PAM5 ($B = 4N/5$): **6.25 Mbps**.',
+            ],
+          },
+          {
+            id: '2(g)', marks: 5, module: 'ch7-2',
+            q: 'Assume the propagation speed is 2 × 10⁸ m/s. Calculate the bandwidth of light for the wavelength ranges (i) 1000 to 1200 nm, (ii) 1000 to 1400 nm.',
+            answer: [
+              '$\\lambda = c/f$ → $f = c/\\lambda$; the bandwidth is the difference between the two frequencies.',
+              '(i) $f_{1000} = 3\\times10^8/10^{-6} = 3\\times10^{14}$ Hz, $f_{1200} = 2.5\\times10^{14}$ Hz → $B = \\mathbf{5 \\times 10^{13}\\ \\text{Hz}}$ (50 THz).',
+              '(ii) $f_{1400} = 2.143\\times10^{14}$ Hz → $B = \\mathbf{8.57 \\times 10^{13}\\ \\text{Hz}}$ (85.7 THz).',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 3',
+        rule: 'Answer any 5 (5 × 5 = 25)',
+        items: [
+          {
+            id: '3(a)', marks: 5, module: 'ch4x', flagged: true, outOfSyllabus: true,
+            q: 'Draw the graph of the 2B1Q scheme using each of the following data streams, assuming the last signal level has been positive: (i) 0110011001100110, (ii) 0011001100110011.',
+            answer: [
+              '**Out of syllabus question** — 2B1Q is not in the current slides/notes (Ch 4 teaches 4B/5B and differential Manchester only).',
+              '2B1Q maps two bits to one quaternary level: 00 → −1, 01 → −3, 11 → +3, 10 → +1.',
+              '(i) 0110011001100110 → −3, +1, +1, −3, +3, −3, −1, +1. (ii) 0011001100110011 → −1, +3, +3, −1, −1, +3, +1, −1.',
+            ],
+          },
+          {
+            id: '3(b)', marks: 5, module: 'ch4x', flagged: true, outOfSyllabus: true,
+            q: 'Analyse the steps of scrambling the sequence 11100000000000 using each of the following scrambling techniques, assuming the last non-zero signal level has been positive and the number of nonzero pulses is odd after the last substitution: (i) B8ZS, (ii) HDB3.',
+            answer: [
+              '**Out of syllabus question** — scrambling is not in the current slides/notes.',
+              '**B8ZS** replaces eight consecutive zeros by 000VB0VB (or 000VBOVB, by the parity of the nonzero pulses since the last substitution): 111 + 000VB0VB + 000.',
+              '**HDB3** replaces four consecutive zeros by 000V (odd count of nonzero pulses) or 000VB (even): 111 + 000V + 000VB + 000.',
+            ],
+          },
+          {
+            id: '3(c)', marks: 5, module: 'ch10',
+            q: 'A bit stream 1101011011 is transmitted using the standard CRC method. The generator polynomial is x⁴ + x + 1. (i) Find the actual bit string transmitted. (ii) Suppose the third bit from the right is inverted during transmission. Analyse and find that this error is detected at the receiver.',
+            answer: [
+              'Generator 1011 → append 3 zeros: 1101011011000; mod-2 division gives quotient 1111010100, remainder **100** → codeword **1101011011100**.',
+              'Inverting the third bit from the right gives 1101011011000; the receiver’s syndrome is **100** ≠ 0 → the error is detected.',
+            ],
+          },
+          {
+            id: '3(d)', marks: 5, module: 'ch5-1',
+            q: 'Draw the constellation diagram for the following cases. Find the peak amplitude value for each case and define the type of modulation (ASK, FSK, PSK or QAM). The numbers in parentheses define the values of I and Q respectively: (i) Two points at (2, 0) and (3, 0), (ii) Two points at (0, 2) and (0, −2).',
+            answer: [
+              '(i) Both points lie on the **I-axis** with different amplitudes (2 and 3) → **ASK**; peak amplitude = **3 V** (the farthest point).',
+              '(ii) Both points lie on the **Q-axis** with opposite phases (0° and 180°) at the same amplitude 2 → **PSK** (BPSK); peak amplitude = **2 V**.',
+              'Neither case uses both axes, so neither is QAM; FSK would not be drawn on a constellation at all.',
+            ],
+          },
+          {
+            id: '3(e)', marks: 5, module: 'ch10',
+            q: 'Consider eight-bit checksum. Analyse the checksum for the data unit to be transmitted and find the final bit stream received by the receiver. Data unit: 10011001111000100010010010000100',
+            answer: [
+              'Split into 8-bit words: 10011001, 11100010, 00100100, 10000100.',
+              'One’s-complement sum: $153 + 226 + 36 + 132 = 547 = 0x223$; wrap the carry: $0x23 + 2 = 0x25$.',
+              'Checksum = complement of 0x25 = **11011010**; the receiver accepts only an all-zero complemented sum.',
+            ],
+          },
+          {
+            id: '3(f)', marks: 5, module: 'pcm', flagged: true,
+            q: 'Assume that we have a sampled signal and the sample amplitudes are between −20 and +20 V. We decide to have eight levels (L = 8). After sampling the actual amplitudes are −6.1, 7.5, 16.2, 19.7, 11.0, −5.5, −11.3, −9.4 and −6.0 V. Analyse the values of normalized PAM values, quantization values, normalized quantized values, normalized errors, quantization codes and encoded words.',
+            answer: [
+              '$L = 8$ over −20…+20 V → $\\Delta = 40/8 = 5$ V; normalized value = sample ÷ Δ; zone counted from 0 at the bottom; quantized value = zone midpoint.',
+              '−6.1 → −1.22, zone 2, −1.5, −0.28, **010**. 7.5 → 1.50, zone 5, 1.5, 0.00, **101**. 16.2 → 3.24, zone 7, 3.5, +0.26, **111**. 19.7 → 3.94, zone 7, 3.5, −0.44, **111**. 11.0 → 2.20, zone 6, 2.5, +0.30, **110**.',
+              '−5.5 → −1.10, zone 2, −1.5, −0.40, **010**. −11.3 → −2.26, zone 1, −2.5, −0.24, **001**. −9.4 → −1.88, zone 2, −1.5, +0.38, **010**. −6.0 → −1.20, zone 2, −1.5, −0.30, **010**.',
+            ],
+          },
+          {
+            id: '3(g)', marks: 5, module: 'ch8',
+            q: 'Three equal-size datagrams belonging to the same message leave for the destination one after another, travelling different paths: 3200 km via switches 1,3,5; 11,700 km via 1,2,5; 12,200 km via 1,2,3,5; 10,200 km via 1,4,5; 10,700 km via 1,4,3,5. The delay for each switch (including waiting and processing) is 3, 10, 20, 7 and 20 ms. With a propagation speed of 2 × 10⁸ m/s, find the order in which the datagrams arrive and the delay for each.',
+            answer: [
+              'Every 1000 km costs 5 ms; delay = propagation + the switch delays on the path.',
+              'D1: 16 + 43 = **59 ms**. D2: 58.5 + 33 = **91.5 ms**. D3: 61 + 53 = **114 ms**. D4: 51 + 30 = **81 ms**. D5: 53.5 + 50 = **103.5 ms**.',
+              'Arrival order: **1 → 4 → 2 → 5 → 3**.',
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: 'Fall 2023 semester final',
+    meta: '3 hours, 70 marks. Answer any 4 from Question 1 (20 marks) and any 5 from each of Questions 2 and 3 (25 marks each). (Header date: 06/11/2024.)',
+    sets: [
+      {
+        name: 'Question 1',
+        rule: 'Answer any 4 (5 × 4 = 20)',
+        items: [
+          {
+            id: '1(a)', marks: 5, module: 'ch1',
+            q: 'Identify the five components of data communication systems and draw: (i) a hybrid topology with a star backbone and three-ring networks, (ii) a hybrid topology with a ring backbone and two bus networks, (iii) constellation diagrams for Binary Phase Shift Keying and Quadrature Phase Shift Keying.',
+            answer: [
+              'Five components: **sender, receiver, transmission medium, message, protocol**.',
+              '(i) Star backbone + three rings: a star at the centre with each arm feeding a ring network (ring + star hybrid).',
+              '(ii) Ring backbone + two buses: a ring at the core with two bus segments tapped off it (ring + bus hybrid).',
+              '(iii) BPSK: two points on the horizontal axis at 0° and 180°, amplitude $L$; QPSK: four points at 45°, 135°, −135°, −45° with amplitude $\\sqrt2$ V.',
+            ],
+          },
+          {
+            id: '1(b)', marks: 5, module: 'ch1', flagged: true,
+            q: 'Write down the functions of each layer in the OSI model with a proper diagram.',
+            answer: [
+              'Bottom up: **physical** (bits over the medium), **data link** (hop-to-hop frames, framing, MAC, flow and error control), **network** (logical addressing and routing), **transport** (process-to-process delivery, segmentation), **session** (dialog control), **presentation** (translation, encryption, compression), **application** (the network service to the user).',
+              'Ch 1 teaches this as a flagged lesson (it is not in the slides/notes) — see the OSI section there.',
+            ],
+          },
+          {
+            id: '1(c)', marks: 5, module: 'ch10', flagged: true, outOfSyllabus: true,
+            q: 'Define the HDLC protocol. Briefly explain the two theoretical formulas for calculating the data rate.',
+            answer: [
+              '**Out of syllabus question** — HDLC and the capacity formulas are not in the current slides/notes.',
+              'HDLC: a **bit-oriented** data link protocol with three frame types — I-frame (data + sequence numbers), S-frame (flow/error control), U-frame (link management); frame = flag → address → control → information → FCS → flag, with bit stuffing.',
+              'The two formulas: **Nyquist** (noiseless channel) $N = 2B\\log_2 L$ (bits/s, limited by the bandwidth and the number of levels) and **Shannon** (noisy channel) $C = B\\log_2(1+\\text{SNR})$.',
+            ],
+          },
+          {
+            id: '1(d)', marks: 5, module: 'ch5-1', flagged: true, outOfSyllabus: true,
+            q: 'Describe data elements, signal elements, and line coding schemes with proper diagrams.',
+            answer: [
+              '**Out of syllabus question** for the line-coding schemes (data and signal elements are taught in Ch 5.1).',
+              'A **data element** is a bit; a **signal element** is the smallest unit of the signal (one volt, one baud). $r = $ data elements per signal element, $L = 2^r$ signal levels, $S = N/r$ baud.',
+              'Line coding schemes: NRZ-L, NRZ-I, NRZI, Manchester, differential Manchester, AMI, pseudoternary — each maps bits to voltage levels; Ch 4 teaches only 4B/5B and differential Manchester.',
+            ],
+          },
+          {
+            id: '1(e)', marks: 5, module: 'ch10', flagged: true, outOfSyllabus: true,
+            q: 'Write down the data link flow control approaches and explain the window size of Go-Back-N and Selective Repeat ARQ protocols with proper diagrams.',
+            answer: [
+              '**Out of syllabus question** — ARQ and sliding windows are not in the current slides/notes.',
+              'Flow control: **stop-and-wait** (one unacknowledged frame) and **sliding window** (several frames in flight, with the window size $W$ limiting them).',
+              '**Go-Back-N**: the window is $W = 2^m - 1$ (for an $m$-bit sequence number); on an error the receiver discards the bad frame and everything after it, and the sender retransmits from the bad frame onward. **Selective Repeat**: the window can be up to $2^{m-1}$; only the bad frames are retransmitted.',
+            ],
+          },
+          {
+            id: '1(f)', marks: 5, module: 'ch6-1',
+            q: 'Briefly explain the analog signal hierarchy of FDM and the digital signal hierarchy of TDM with proper diagrams.',
+            answer: [
+              '**Analog (FDM) hierarchy**: 12 voice channels → a **group** (48 kHz + guard); 5 groups → a **supergroup** (240 kHz); 10 supergroups → a **master group** (2.4 MHz); 6 master groups → a **jumbo group** (14.4 MHz).',
+              '**Digital (TDM) hierarchy**: 24 × 64 kbps → **DS-1** (1.544 Mbps); 4 × DS-1 → **DS-2** (6.312 Mbps); 7 × DS-2 → **DS-3** (44.736 Mbps); 6 × DS-3 → **DS-4** (274.176 Mbps).',
+              'Each level is a multiplexer whose output is one input of the level above; see the hierarchy diagrams in Ch 6.1 and Ch 6.2.',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 2',
+        rule: 'Answer any 5 (5 × 5 = 25)',
+        items: [
+          {
+            id: '2(a)', marks: 5, module: 'ch4x', flagged: true, outOfSyllabus: true,
+            q: 'Calculate the number of invalid code sequences we have in 5B/6B and 3B/4B encoding, and also the values of SNR and SNRdB for a noiseless channel.',
+            answer: [
+              '**Out of syllabus question** — the block-coding counts and SNR are not in the current slides/notes.',
+              '5B/6B: $2^6 = 64$ possible sequences, only $2^5 = 32$ used → **32 invalid**. 3B/4B: $2^4 = 16$ possible, 8 used → **8 invalid**.',
+              'A noiseless channel has **SNR = ∞**, so $\\text{SNR}_{dB} = 10\\log_{10}(\\infty) = \\infty$ dB.',
+            ],
+          },
+          {
+            id: '2(b)', marks: 5, module: 'ch6-2',
+            q: 'A multiplexer combines four 100-kbps channels using a time slot of 2 bits. Show the output with four arbitrary inputs. Calculate the frame rate, frame duration, bit rate, and bit duration at the link.',
+            answer: [
+              'Each frame carries 2 bits from each of the four channels → frame size = $4 \\times 2 = \\mathbf{8\\ bits}$.',
+              'Frame duration = time for 2 bits of a 100 kbps input = $2/100000 = \\mathbf{20\\ \\mu s}$ → frame rate = **50,000 frames/s**.',
+              'Link bit rate = $8 \\times 50{,}000 = \\mathbf{400\\ kbps}$; bit duration at the link = $1/400000 = \\mathbf{2.5\\ \\mu s}$.',
+            ],
+          },
+          {
+            id: '2(c)', marks: 5, module: 'ch6-2',
+            q: 'We need to use synchronous TDM and combine 20 digital sources, each at 100 kbps. Each output slot carries two bits from each digital source, but one extra bit is added to each frame for synchronization. (i) Calculate the size of an output frame in bits. (ii) Calculate the output frame rate.',
+            answer: [
+              '(i) Frame size = $20 \\times 2 + 1 = \\mathbf{41\\ bits}$.',
+              '(ii) Each source contributes 2 bits per frame at 100 kbps → frame duration = $2/100000 = 20\\ \\mu s$ → frame rate = **50,000 frames/s**.',
+            ],
+          },
+          {
+            id: '2(d)', marks: 5, module: 'pcm', flagged: true,
+            q: 'Assume an original analog signal has instantaneous amplitudes between −20 V and +20 V, and the quantization level is 8. Calculate the normalized and quantized PAM values by assigning codes to zones using the quantization and encoding of the given diagram.',
+            answer: [
+              '$L = 8$ over −20…+20 V → $\\Delta = 5$ V; the amplitude axis of the figure is normalized in units of $\\Delta$ (zones numbered 0–7 from the bottom).',
+              'Normalize: sample ÷ Δ. Quantized value: the **middle of the zone**. Code: the zone number in 3 bits.',
+              'For a sample of 11.0 V: normalized 2.2 → zone 6 → quantized 2.5 (12.5 V) → code **110**, normalized error +0.3.',
+            ],
+          },
+          {
+            id: '2(e)', marks: 5, module: 'ch5-1',
+            q: 'Draw the frequency spectrum for: (i) a nonperiodic composite signal with bandwidth 200 kHz, middle frequency 140 kHz and peak amplitude 20 V (the two extreme frequencies have amplitude 0), (ii) a periodic signal (all frequencies of the same amplitude) with bandwidth 20 Hz and highest frequency 60 Hz.',
+            answer: [
+              '(i) The spectrum is **continuous** (non-periodic): a triangular band from $140-100 = 40$ kHz to $140+100 = 240$ kHz, peaking at **20 V** at $f_c = 140$ kHz and falling to 0 at both edges.',
+              '(ii) The spectrum is **discrete** (periodic): lines at 40, 50 and 60 Hz (fundamental $f_0 = 60 - 20 = 40$ Hz, next two harmonics), all with the same amplitude.',
+              'See the spectrum diagrams in Ch 5.1.',
+            ],
+          },
+          {
+            id: '2(f)', marks: 5, module: 'ch7-1', flagged: true,
+            q: 'Suppose a signal travels through an amplifier. (i) Calculate the loss of power if power is reduced to one-half. (ii) Calculate the gain of power if power is increased 10 times. (iii) If the signal at the beginning of a cable with −0.3 dB per km has a power of 2 mW, what is the power of the signal at 5 km?',
+            answer: [
+              'The dB formula is taught in Ch 7.1 as a flagged lesson: $\\text{dB} = 10\\log_{10}(P_2/P_1)$.',
+              '(i) $P_2/P_1 = 0.5$ → $10\\log_{10}(0.5) = \\mathbf{-3.01\\ dB}$ (a loss of 3 dB).',
+              '(ii) $P_2/P_1 = 10$ → $10\\log_{10}(10) = \\mathbf{+10\\ dB}$.',
+              '(iii) Loss $= -0.3 \\times 5 = -1.5$ dB → $P_2 = 2 \\times 10^{-0.15} = \\mathbf{1.42\\ mW}$.',
+            ],
+          },
+          {
+            id: '2(g)', marks: 5, module: 'ch5-1', flagged: true, outOfSyllabus: true,
+            q: 'We have an analog signal channel with a 1-MHz bandwidth. (i) What are the appropriate bit rate and signal level if the SNR is 63? (ii) If a signal has a bit rate of 8000 bps and a baud rate of 1000 baud, how many data elements are carried by each signal element? How many signal elements do we need?',
+            answer: [
+              '**Out of syllabus question** for part (i) (the Nyquist formula is not in the current notes); part (ii) is taught in Ch 5.1.',
+              '(i) With SNR = 63 the usable levels are $L = \\text{SNR} + 1 = 64$, so $N = 2B\\log_2 L = 2 \\times 10^6 \\times 6 = \\mathbf{12\\ Mbps}$ (6 bits per signal element).',
+              '(ii) $r = N/S = 8000/1000 = \\mathbf{8}$ data elements per signal element ($L = 2^8 = 256$ levels); the number of signal elements needed for 8000 bits = **8000**.',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 3',
+        rule: 'Answer any 5 (5 × 5 = 25)',
+        items: [
+          {
+            id: '3(a)', marks: 5, module: 'ch4x', flagged: true, outOfSyllabus: true,
+            q: 'Draw the graph of the data stream 0011011001 using each of the following schemes, assuming the last signal level has been positive: (i) NRZ-L, (ii) AMI, (iii) 2B1Q, (iv) MLT-3, (v) 4D-PAM5.',
+            answer: [
+              '**Out of syllabus question** — only 4B/5B and differential Manchester are in the current notes (Ch 4).',
+              'NRZ-L: level = bit value. AMI: 1s alternate +/−, 0s are zero level. 2B1Q: two bits per level (00 → −1, 01 → −3, 11 → +3, 10 → +1) → for 0011011001: 00,11,01,10,01 → −1, +3, −3, +1, −3. MLT-3: four-level cycle +1, −1, 0, 0. 4D-PAM5: four bits → one of five levels.',
+            ],
+          },
+          {
+            id: '3(b)', marks: 5, module: 'ch10',
+            q: 'Calculate the Hamming code and identify the corrupted bit (at position 4) for the data 1001101.',
+            answer: [
+              '$k = 7$ data bits → $2^4 = 16 \\ge 7+4+1 = 12$ → $r = 4$, 11-bit codeword; parity at positions 1, 2, 4, 8.',
+              'Even parity gives the codeword **10011100101**.',
+              'Corrupting position 4 (the $r_4$ bit) gives 10011101101; the receiver recomputes the checks and the syndrome $r_8r_4r_2r_1 = 0100 = 4$ → **bit 4 is in error**, so flip it back.',
+            ],
+          },
+          {
+            id: '3(c)', marks: 5, module: 'ch10',
+            q: 'A bit stream of 10011101 is transmitted using the standard CRC method. The generator polynomial is x³ + 1. (i) Show the actual bit string transmitted. (ii) Suppose the third bit from the right is inverted during transmission. Show that the error is detected at the receiver.',
+            answer: [
+              'Generator $x^3+1$ = **1001** → append 3 zeros: 10011101000; mod-2 division gives quotient 10001100, remainder **100** → codeword **10011101100**.',
+              'Inverting the third bit from the right gives 10011101000; the receiver’s syndrome is **100** ≠ 0 → the error is detected.',
+            ],
+          },
+          {
+            id: '3(d)', marks: 5, module: 'ch10',
+            q: 'A sender needs to send the four data items 0x3456, 0xABCC, 0x02BC and 0xEEEE. (i) Find the checksum at the sender site. (ii) Find the checksum at the receiver site if the second data item is changed to 0xABCE and the third data item is changed to 0x02BA.',
+            answer: [
+              '(i) Sum the 16-bit words: $0x3456 + 0xABCC + 0x02BC + 0xEEEE = 0x1D1CC$; wrap the carry: $0xD1CC + 1 = 0xD1CD$; checksum = complement = **0x2E32**.',
+              '(ii) The altered items change the sum by $+2$ and $-2$ → the sum is unchanged (0x1D1CC → wrapped 0xD1CD), so the receiver computes the same complemented sum **0x2E32** ≠ 0 → the error is detected.',
+              'Note the teaching point: two compensating errors cancel in the sum — a checksum cannot catch them, which is why CRC is used when that matters.',
+            ],
+          },
+          {
+            id: '3(e)', marks: 5, module: 'ch10',
+            q: 'Given the dataword 10100111 and the divisor 10111: (i) show the generation of the codeword at the sender site (using binary division), (ii) show the checking of the codeword at the receiver site (assume no error).',
+            answer: [
+              'The divisor has 5 bits → append 4 zeros: 101001110000.',
+              'Mod-2 division by 10111 gives quotient 10011011 and remainder **0001** → codeword **101001110001**.',
+              'At the receiver, dividing 101001110001 by 10111 gives remainder **0000** → no error, accept.',
+            ],
+          },
+          {
+            id: '3(f)', marks: 5, module: 'ch10',
+            q: 'Consider an eight-bit checksum. Calculate the checksum for the data unit to be transmitted: 1001100101010101111000011000011',
+            answer: [
+              'The printed unit is 31 bits: three whole 8-bit words — 10011001, 01010101, 11100001 — with 7 bits left over.',
+              'Sum of the whole words: $153 + 85 + 225 = 463 = 0x1CF$; wrap the carry: $0xCF + 1 = 0xD0$.',
+              'Checksum = complement of 0xD0 = **00101111**. (If the unit is padded to 32 bits with zeros, the checksum would be 10101000.)',
+            ],
+          },
+          {
+            id: '3(g)', marks: 5, module: 'ch4x', flagged: true, outOfSyllabus: true,
+            q: 'What is the result of scrambling for the sequence 11100000000000 using each of the following scrambling techniques, assuming the last non-zero signal level has been positive and the number of nonzero pulses is odd after the last substitution? (i) B8ZS, (ii) HDB3.',
+            answer: [
+              '**Out of syllabus question** — scrambling is not in the current slides/notes.',
+              '**B8ZS** (8 zeros → 000VB0VB): **111 000VB0VB 000**.',
+              '**HDB3** (4 zeros → 000V if the nonzero-pulse count is odd, else 000VB): **111 000V 000VB 000**.',
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: 'Spring 2022 semester final',
+    meta: '3 hours, 70 marks. Seven questions of 14 marks each; answer any five. (Header date: 22/03/2023.)',
+    sets: [
+      {
+        name: 'Question 1',
+        rule: '14 marks',
+        items: [
+          {
+            id: '1(a)', marks: 7, module: 'ch10',
+            q: 'Consider an eight-bit checksum. Calculate the checksum for the data unit to be transmitted: 10011001111000100010010010000100',
+            answer: [
+              'Split into 8-bit words: 10011001, 11100010, 00100100, 10000100.',
+              'One’s-complement sum: $153 + 226 + 36 + 132 = 547 = 0x223$; wrap the carry: $0x23 + 2 = 0x25$.',
+              'Checksum = complement of 0x25 = **11011010**. The receiver adds data + checksum and complements; all zeros means no error.',
+            ],
+          },
+          {
+            id: '1(b)', marks: 7, module: 'ch1', flagged: true, outOfSyllabus: true,
+            q: 'A device is sending out data at the rate of 1000 bps. How long does it take to send out a single character? What is the phase shift for a sine wave with maximum amplitude after 1/4 cycle?',
+            answer: [
+              '**Out of syllabus question** for the phase part (the data-rate part is taught in Ch 1 and Ch 5.1).',
+              'A character is 8 bits: $8/1000 = \\mathbf{8\\ ms}$ (with a 7-bit ASCII character it would be 7 ms).',
+              'A sine wave reaches its maximum amplitude a **quarter cycle** after it starts, i.e. the phase shift is $90°$ (or $\\pi/2$ radians).',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 2',
+        rule: '14 marks',
+        items: [
+          {
+            id: '2(a)', marks: 7, module: 'ch10',
+            q: 'What is the polynomial representation of 101011? Calculate the polynomial representation if 101110 is shifted three bits to the right.',
+            answer: [
+              'Each bit is a coefficient: 101011 = $x^5 + x^3 + x + 1$.',
+              'Shifting 101110 three bits to the right gives 101.110 = $x^2 + 1 + x^{-1} + x^{-2}$ (the powers go down by three, so fractional powers appear).',
+              'The CRC polynomial method is taught in Ch 10 (see the “CRC polynomial” example).',
+            ],
+          },
+          {
+            id: '2(b)', marks: 7, module: 'ch8-2',
+            q: 'We need a three-stage space-division switch with N = 100. We use 10 crossbars at the first and third stages and 6 crossbars at the middle stage. Calculate the total number of crosspoints.',
+            answer: [
+              'Stage 1: $N/n = 10$ → $n = 10$, $k = 6$ → $10 \\times (10 \\times 6) = 600$ crosspoints.',
+              'Stage 2: $6 \\times (10 \\times 10) = 600$. Stage 3: $10 \\times (6 \\times 10) = 600$.',
+              'Total = **1800 crosspoints**.',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 3',
+        rule: '14 marks',
+        items: [
+          {
+            id: '3(a)', marks: 7, module: 'ch1', flagged: true,
+            q: 'Mention the types of sublayers in the Data Link Layer. What is the purpose of cladding in an optical fiber? How does sky propagation differ from line-of-sight propagation?',
+            answer: [
+              'The data link layer has two sublayers: **LLC** (logical link control — talks to the network layer) and **MAC** (media access control — frames, addresses, access to the medium).',
+              'The **cladding** is a layer of less-dense glass around the core: it keeps the light in the core by total internal reflection (above the critical angle) and reduces scattering. See Ch 7.1.',
+              '**Sky wave** (3–30 MHz) is reflected by the ionosphere, so it can travel far and hop between the ionosphere and the earth; **line of sight** (>30 MHz) travels straight, so the antennas must see each other (the ionosphere does not reflect it). See Ch 7.2.',
+            ],
+          },
+          {
+            id: '3(b)', marks: 7, module: 'ch6-1', flagged: true, outOfSyllabus: true,
+            q: 'Mention an example of a broadcast address. Assume there are 20 systems connected to the network (link): system A, system B, and 18 other systems. Assume system A has 10 datagrams to send to system B in one second. Determine the number of processing and discarding frames using Address Resolution Protocol.',
+            answer: [
+              '**Out of syllabus question** — ARP is not in the current slides/notes.',
+              'A **broadcast address** addresses every host on the link (in Ethernet, the destination MAC FF:FF:FF:FF:FF:FF).',
+              'ARP is used to map an IP address to a MAC address: the sender broadcasts an ARP request and every host on the link receives and processes it; only the target replies with its MAC address.',
+              'So for 10 datagrams: 10 ARP requests are broadcast → each is processed by all 20 stations ($10 \\times 20 = 200$ frame receptions) and discarded by all but A and B; the 10 replies are unicast and processed only by A.',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 4',
+        rule: '14 marks',
+        items: [
+          {
+            id: '4(a)', marks: 7, module: 'ch4x', flagged: true, outOfSyllabus: true,
+            q: 'Draw the graph of the 2B1Q scheme using each of the following data streams, assuming the last signal level has been positive: (i) 0000000000000000, (ii) 1111111111111111, (iii) 0101010101010101, (iv) 0011001100110011. From the graphs, guess the bandwidth for this scheme using the average number of changes in the signal level.',
+            answer: [
+              '**Out of syllabus question** — 2B1Q is not in the current slides/notes.',
+              '2B1Q mapping: 00 → −1, 01 → −3, 11 → +3, 10 → +1. The four streams give: (i) all −1; (ii) all +3; (iii) all −3; (iv) −1, +3, −1, +3, … (7 level changes).',
+              'Bandwidth estimate: the wider the average rate of level change, the wider the band. The three constant streams need the **least** bandwidth (0 changes), while the alternating stream (iv) needs the **most**; for random data the average number of changes per bit is about 1, giving a bandwidth roughly 2–4 times the bit rate for four levels.',
+            ],
+          },
+          {
+            id: '4(b)', marks: 7, module: 'ch10', flagged: true, outOfSyllabus: true,
+            q: 'Stations in a pure Aloha network send frames of size 1000 bits at the rate of 1 Mbps. What is the vulnerable time for this network?',
+            answer: [
+              '**Out of syllabus question** — random access is not in the current slides/notes.',
+              'Frame transmission time: $T = 1000/10^6 = 1$ ms.',
+              'In pure Aloha a frame can collide with one that starts up to one frame-time **before** it, so the vulnerable time = $2T = \\mathbf{2\\ ms}$.',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 5',
+        rule: '14 marks',
+        items: [
+          {
+            id: '5(a)', marks: 7, module: 'ch1', flagged: true, outOfSyllabus: true,
+            q: 'Explain the fundamental characteristics for an effective data communication system. Define PPP. Draw a diagram of the PPP frame.',
+            answer: [
+              '**Out of syllabus question** for the PPP half (the characteristics are taught in Ch 1).',
+              'Fundamental characteristics: **delivery**, **accuracy**, **timeliness** and **jitter**.',
+              '**PPP** (Point-to-Point Protocol) is a data link protocol for a link between two peers (dial-up, serial links): it negotiates the link (LCP), authenticates (PAP/CHAP), configures network-layer protocols (NCP) and carries frames with error detection.',
+              'PPP frame: flag (01111110) → address (8 bits, 11111111 for broadcast) → control (8 bits) → protocol (8 or 16 bits) → information → FCS (16/32-bit CRC) → flag; byte stuffing (01111110 → 011111010) and a magic number 0x7E at the start of each frame.',
+            ],
+          },
+          {
+            id: '5(b)', marks: 7, module: 'ch4x', flagged: true, outOfSyllabus: true,
+            q: 'We have a baseband channel with a 5-MHz bandwidth. What is the data rate for this channel if we use each of the following line coding schemes: i. NRZ-L, ii. AMI, iii. Manchester, iv. 8B6T, v. MLT-3, vi. 2B1Q, vii. 4D-PAM5?',
+            answer: [
+              '**Out of syllabus question** — only 4B/5B and differential Manchester are in the current notes (Ch 4).',
+              'NRZ-L ($B=N$): **5 Mbps**; AMI ($B=N/2$): **10 Mbps**; Manchester ($B=2N$): **2.5 Mbps**; 8B6T ($B=6N/8$): **6.67 Mbps**; MLT-3 ($B=4N/3$): **3.75 Mbps**; 2B1Q ($B=2N$): **2.5 Mbps**; 4D-PAM5 ($B=4N/5$): **6.25 Mbps**.',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 6',
+        rule: '14 marks',
+        items: [
+          {
+            id: '6(a)', marks: 7, module: 'ch5-1', flagged: true, outOfSyllabus: true,
+            q: 'We send a voice signal from a microphone to a recorder. Is this baseband or broadband transmission? Define statistical time-division multiplexing. Define the following protocols: i. SMTP, ii. SNMP.',
+            answer: [
+              '**Out of syllabus question** for the two protocols (the baseband/broadband and statistical-TDM halves are taught in Ch 5.1 and Ch 6.2).',
+              'Baseband: the analog voice signal is sent **without a carrier** over a low-pass channel.',
+              '**Statistical TDM**: slots are allocated dynamically — a line gets a slot only when it has data to send, and each slot carries the destination address (no sync bits needed).',
+              '**SMTP** (Simple Mail Transfer Protocol) — sends e-mail between mail servers. **SNMP** (Simple Network Management Protocol) — manages and monitors network devices.',
+            ],
+          },
+          {
+            id: '6(b)', marks: 7, module: 'ch5-1',
+            q: 'Draw the constellation diagram for the following cases. Find the peak amplitude value for each case and define the type of modulation (ASK, FSK, PSK or QAM). The numbers in parentheses define the values of I and Q respectively: (i) Two points at (2, 0) and (3, 0), (ii) Two points at (0, 2) and (0, −2).',
+            answer: [
+              '(i) Both points on the **I-axis**, different amplitudes (2 and 3) → **ASK**, peak amplitude **3 V**.',
+              '(ii) Both points on the **Q-axis**, opposite phases at the same amplitude 2 → **PSK** (BPSK), peak amplitude **2 V**.',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 7',
+        rule: '14 marks',
+        items: [
+          {
+            id: '7(a)', marks: 7, module: 'ch10',
+            q: 'A bit stream 1101011011 is transmitted using the standard CRC method. The generator polynomial is x⁴ + x + 1. (i) Show the actual bit string transmitted. (ii) Suppose the third bit from the right is inverted during transmission. Show that this error is detected at the receiver.',
+            answer: [
+              'Generator 1011 → append 3 zeros: 1101011011000; quotient 1111010100, remainder **100** → codeword **1101011011100**.',
+              'Inverting the third bit from the right gives 1101011011000; the receiver’s syndrome is **100** ≠ 0 → detected.',
+            ],
+          },
+          {
+            id: '7(b)', marks: 7, module: 'ch7-1', flagged: true, outOfSyllabus: true,
+            q: 'Define the spread spectrum and its goal. List the two spread spectrum techniques. A beam of light moves from one medium to another medium with less density. The critical angle is 60°. Do we have refraction or reflection for the 40° incident angle? Show the bending of the light ray.',
+            answer: [
+              '**Out of syllabus question** for the spread-spectrum half (the refraction half is taught in Ch 7.1).',
+              '**Spread spectrum**: spreading each data bit over a much wider band using a fast chip code. The goal is to survive interference and jamming, and to allow many users to share the band (each using a different code). The two techniques: **frequency hopping (FHSS)** and **direct-sequence spread spectrum (DSSS)**.',
+              'The light leaves the **denser** medium and $40° < 60°$ (the critical angle) → it **refracts** into the less dense medium, bending **away from the normal**. (Above 60° it would totally internally reflect.)',
             ],
           },
         ],
