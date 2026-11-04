@@ -1108,7 +1108,7 @@ export const paperScripts = {
       h('Digital hierarchy (TDM)'),
       table(['Level', 'Made of', 'Rate'], [['DS-1', '24 × 64 kbps', '1.544 Mbps'], ['DS-2', '4 × DS-1', '6.312 Mbps'], ['DS-3', '7 × DS-2', '44.736 Mbps'], ['DS-4', '6 × DS-3', '274.176 Mbps']]),
       dia('hierarchy', { kind: 'FDM', first: '4 kHz each', levels: [{ input: '12 × 16-QAM', name: 'Group', bw: '48 kHz' }, { input: '5 groups', name: 'Supergroup', bw: '240 kHz' }, { input: '10 supergroups', name: 'Master group', bw: '2.4 MHz' }, { input: '6 master groups', name: 'Jumbo group', bw: '14.4 MHz' }] }),
-      note('These are the slide figures (no guard bands). Raiyan’s notes use the nested-guard method instead: 59 kHz, 299 kHz, 2999 kHz and 17,999 kHz — show which method you are using.'),
+      note('These are the no-guard computed figures (48, 240 kHz, 2.4, 14.4 MHz). The slides quote 2.52 MHz and 16.984 MHz for the master and jumbo levels once guard bands are included, and Raiyan’s notes use the nested-guard method (59 kHz, 299 kHz, 2999 kHz, 17,999 kHz) — state which method you use.'),
       ans('Analog: group → supergroup → master → jumbo. Digital: DS-1 → DS-2 → DS-3 → DS-4, each level a multiplexer feeding the next.'),
     ],
     '2(a)': [
@@ -1308,8 +1308,8 @@ export const paperScripts = {
     '5(b)': [
       note('**Out of syllabus question.** Only 4B/5B and differential Manchester are in the current notes.'),
       given('baseband channel, B = 5 MHz'),
-      table(['Scheme', 'Relation', 'Data rate'], [['NRZ-L', '$B = N$', '5 Mbps'], ['AMI', '$B = N/2$', '10 Mbps'], ['Manchester', '$B = 2N$', '2.5 Mbps'], ['8B6T', '$B = 6N/8$', '6.67 Mbps'], ['MLT-3', '$B = 4N/3$', '3.75 Mbps'], ['2B1Q', '$B = 2N$', '2.5 Mbps'], ['4D-PAM5', '$B = 4N/5$', '6.25 Mbps']]),
-      ans('5, 10, 2.5, 6.67, 3.75, 2.5 and 6.25 Mbps respectively.'),
+      table(['Scheme', 'Relation', 'Data rate'], [['NRZ-L', '$B = N$', '5 Mbps'], ['AMI', '$B = N/2$', '10 Mbps'], ['Manchester', '$B = 2N$', '2.5 Mbps'], ['8B6T', '$B = 6N/8$', '6.67 Mbps'], ['MLT-3', '$B = 4N/3$', '3.75 Mbps'], ['2B1Q', '$B = N/2$', '10 Mbps'], ['4D-PAM5', '$B = 4N/5$', '6.25 Mbps']]),
+      ans('5, 10, 2.5, 6.67, 3.75, 10 and 6.25 Mbps respectively (2B1Q carries 2 bits per element).'),
     ],
     '6(a)': [
       note('**Out of syllabus question** for the two protocols (the baseband/broadband and statistical-TDM halves are taught in Ch 5.1 and Ch 6.2).'),
@@ -1389,8 +1389,8 @@ export const paperScripts = {
     '3(a)': [
       note('**Out of syllabus question.** Only 4B/5B and differential Manchester are in the current notes (Ch 4).'),
       given('baseband channel, B = 3 MHz'),
-      table(['Scheme', 'Relation', 'Maximum data rate'], [['NRZ-L', '$B = N$', '3 Mbps'], ['AMI', '$B = N/2$', '6 Mbps'], ['Manchester', '$B = 2N$', '1.5 Mbps'], ['8B6T', '$B = 6N/8$', '4 Mbps'], ['MLT-3', '$B = 4N/3$', '2.25 Mbps'], ['2B1Q', '$B = 2N$', '1.5 Mbps'], ['4D-PAM5', '$B = 4N/5$', '3.75 Mbps']]),
-      ans('NRZ-L 3 Mbps, AMI 6 Mbps, Manchester 1.5 Mbps, 8B6T 4 Mbps, MLT-3 2.25 Mbps, 2B1Q 1.5 Mbps, 4D-PAM5 3.75 Mbps.'),
+      table(['Scheme', 'Relation', 'Maximum data rate'], [['NRZ-L', '$B = N$', '3 Mbps'], ['AMI', '$B = N/2$', '6 Mbps'], ['Manchester', '$B = 2N$', '1.5 Mbps'], ['8B6T', '$B = 6N/8$', '4 Mbps'], ['MLT-3', '$B = 4N/3$', '2.25 Mbps'], ['2B1Q', '$B = N/2$', '6 Mbps'], ['4D-PAM5', '$B = 4N/5$', '3.75 Mbps']]),
+      ans('NRZ-L 3 Mbps, AMI 6 Mbps, Manchester 1.5 Mbps, 8B6T 4 Mbps, MLT-3 2.25 Mbps, 2B1Q 6 Mbps, 4D-PAM5 3.75 Mbps.'),
     ],
     '3(b)': [
       note('**Out of syllabus question.** Scrambling is not in the current slides/notes.'),

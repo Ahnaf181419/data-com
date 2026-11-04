@@ -29,9 +29,8 @@ export default [
     note: 'Word for word in three papers: $N = 100$, 10 crossbars in the first and third stages, 6 in the middle → $n = 10$, $k = 6$ → $600 + 600 + 600 = 1800$ crosspoints.',
   },
   {
-    title: '8-bit checksum of the same data unit',
+    title: '8-bit checksum of a 32-bit data unit',
     module: 'ch10',
-    exact: true,
     refs: [
       ['Fall 2021', '5(b)'],
       ['Fall 2022', '3(e)'],
@@ -44,7 +43,6 @@ export default [
   {
     title: 'PCM quantization tables',
     module: 'pcm',
-    exact: true,
     refs: [
       ['Fall 2024', '3(e)'],
       ['Spring 2024', '3(g)'],
@@ -67,7 +65,6 @@ export default [
   {
     title: 'Datagram arrival order',
     module: 'ch8',
-    exact: true,
     refs: [
       ['Spring 2025', '3(e)'],
       ['Spring 2024', '3(f)'],
@@ -84,7 +81,7 @@ export default [
       ['Fall 2022', '2(f)'],
       ['Spring 2022', '5(b)'],
     ],
-    note: 'Out of your notes, but the same standard table in all three papers: NRZ-L $B=N$, AMI $B=N/2$, Manchester $B=2N$, 8B6T $B=6N/8$, MLT-3 $B=4N/3$, 2B1Q $B=N/2$ (2 bits per element), 4D-PAM5 $B=4N/5$ — only the channel bandwidth changes (3 MHz, 5 MHz). Check the 2B1Q row against your own copy of Forouzan before the exam.',
+    note: 'Out of your notes, but the same standard table (Fall 2022 asks five of the seven schemes): NRZ-L $B=N$, AMI $B=N/2$, Manchester $B=2N$, 8B6T $B=6N/8$, MLT-3 $B=4N/3$, 2B1Q $B=N/2$ (2 bits per element), 4D-PAM5 $B=4N/5$ — only the channel bandwidth changes (3 MHz, 5 MHz). Check the 2B1Q row against your own copy of Forouzan before the exam.',
   },
   {
     title: '2B1Q signal-level graphs',
