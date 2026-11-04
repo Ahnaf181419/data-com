@@ -51,6 +51,7 @@ export default {
       heading: 'Frame synchronization',
       blocks: [
         { type: 'p', text: 'So the receiver knows the bit boundaries, a known bit pattern (synchronization bits) is placed between frames, usually alternating 1, 0, 1, … The receiver looks for the expected bit and counts bits to the end of the frame. If the pattern is wrong there is an error.' },
+        { type: 'diagram', id: 'syncbits' },
         { type: 'p', text: 'Sync bits are part of the transmission **overhead**: adding them raises the link data rate.' },
       ],
     },

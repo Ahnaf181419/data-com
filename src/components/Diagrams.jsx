@@ -163,4 +163,196 @@ function Multistage({ first = 'n × k', middle = 'N/n × N/n', last = 'k × n', 
   );
 }
 
-export const DIAGRAMS = { topologies: Topologies, muxdemux: MuxDemux, fiber: Fiber, multistage: Multistage, ...EXAM_DIAGRAMS };
+function Refraction() {
+  const panel = (x0, title, body) => {
+    const cx = x0 + 100;
+    return (
+      <g key={title}>
+        <rect x={x0} y="0" width="200" height="110" fill="none" />
+        <rect x={x0} y="110" width="200" height="72" fill="rgb(240 195 90 / 0.07)" stroke={L} />
+        <line x1={x0} y1="110" x2={x0 + 200} y2="110" stroke={G} strokeWidth="1.5" />
+        <line x1={cx} y1="18" x2={cx} y2="178" stroke={A} strokeDasharray="4 5" />
+        <text x={x0 + 6} y="14" fontSize="11" fill={A}>air (less dense)</text>
+        <text x={x0 + 6} y="126" fontSize="11" fill={A}>glass (denser)</text>
+        {body(cx)}
+        <text x={cx} y="196" textAnchor="middle" fontSize="13" fill={T}>{title}</text>
+      </g>
+    );
+  };
+  const ray = (x1, y1, x2, y2) => <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={G} strokeWidth="2" markerEnd="url(#arrow-g)" />;
+  return (
+    <Fig caption="Light leaving the denser glass: below the critical angle it refracts into the air; at the critical angle it bends along the interface; above it, it reflects back into the glass — the case fiber exploits." label="Refraction and the critical angle">
+      <svg viewBox="0 0 640 204" className="w-full">
+        <Arrows />
+        {panel(10, 'I < critical → refracts', (cx) => (<g key="a">{ray(cx - 46, 172, cx, 110)}{ray(cx, 110, cx + 62, 34)}</g>))}
+        {panel(220, 'I = critical → bends along', (cx) => (<g key="b">{ray(cx - 46, 172, cx, 110)}{ray(cx, 110, cx + 72, 110)}</g>))}
+        {panel(430, 'I > critical → reflects', (cx) => (<g key="c">{ray(cx - 46, 172, cx, 110)}{ray(cx, 110, cx + 46, 172)}</g>))}
+      </svg>
+    </Fig>
+  );
+}
+
+function Crossbar() {
+  const ins = [50, 95, 140], outs = [220, 340, 460, 570];
+  return (
+    <Fig caption="An n × m crossbar: one crosspoint (transistor) per intersection — 3 × 4 = 12 here, so any input can reach any output at once (non-blocking)." label="Crossbar switch grid with crosspoints">
+      <svg viewBox="0 0 640 190" className="w-full">
+        {ins.map((y) => (
+          <g key={y}>
+            <line x1="70" y1={y} x2="570" y2={y} stroke={A} strokeWidth="1.5" />
+            <text x="62" y={y + 4} fontSize="12" fill={A} textAnchor="end">in {ins.indexOf(y) + 1}</text>
+          </g>
+        ))}
+        {outs.map((x) => (
+          <g key={x}>
+            <line x1={x} y1="25" x2={x} y2="165" stroke={A} strokeWidth="1.5" />
+            <text x={x} y="18" fontSize="12" fill={A} textAnchor="middle">out {outs.indexOf(x) + 1}</text>
+          </g>
+        ))}
+        {ins.flatMap((y) => outs.map((x) => (
+          <circle key={`${x}${y}`} cx={x} cy={y} r="5" fill={G} />
+        )))}
+        <circle cx="340" cy="95" r="11" fill="none" stroke={R} strokeWidth="2" />
+        <line x1="350" y1="88" x2="420" y2="52" stroke={R} strokeWidth="1.2" />
+        <text x="426" y="50" fontSize="12" fill={R}>crosspoint (transistor)</text>
+        <text x="320" y="184" textAnchor="middle" fontSize="12" fill={A}>#crosspoints = n × m (3 × 4 = 12)</text>
+      </svg>
+    </Fig>
+  );
+}
+
+function BitErrors() {
+  const row = (bits, wrong, y, x0, cw) =>
+    [...bits].map((b, i) => (
+      <g key={i}>
+        <rect x={x0 + i * cw} y={y} width={cw - 3} height="30" rx="4" fill={wrong.includes(i) ? 'rgb(232 88 74 / 0.2)' : 'var(--color-raise)'} stroke={wrong.includes(i) ? R : L} />
+        <text x={x0 + (i + 0.5) * cw - 1.5} y={y + 20} textAnchor="middle" fontSize="13" fontFamily="var(--font-mono)" fill={wrong.includes(i) ? R : T}>{b}</text>
+      </g>
+    ));
+  const burstWrong = [3, 4, 7, 10];
+  return (
+    <Fig caption="Single-bit error: one bit flips. Burst error: the length runs from the first corrupted bit to the last, even if bits in between are fine (here 4 corrupted bits inside an 8-bit burst)." label="Single-bit and burst errors in bit strings">
+      <svg viewBox="0 0 640 250" className="w-full">
+        <text x="40" y="24" fontSize="12" fill={A}>single-bit (parallel)</text>
+        {row('00000010', [], 34, 40, 44)}
+        {row('00001010', [4], 70, 40, 44)}
+        <text x="40" y="136" fontSize="12" fill={A}>burst, length 8 (serial)</text>
+        {row('0100010001000011', [], 146, 40, 36)}
+        {row('0101110101100011', burstWrong, 182, 40, 36)}
+        <line x1="147" y1="176" x2="435" y2="176" stroke={R} strokeWidth="1.5" />
+        <line x1="147" y1="172" x2="147" y2="180" stroke={R} strokeWidth="1.5" />
+        <line x1="435" y1="172" x2="435" y2="180" stroke={R} strokeWidth="1.5" />
+        <text x="291" y="170" textAnchor="middle" fontSize="12" fill={R}>burst length 8 (first → last corrupted bit)</text>
+        <text x="40" y="238" fontSize="12" fill={A}>sent above, received below · changed bits in red</text>
+      </svg>
+    </Fig>
+  );
+}
+
+function CableSection({ rings = [] }) {
+  const rad = (i) => 82 - i * 15;
+  return (
+    <Fig caption="Cross-section, outside in: each layer surrounds the next." label="Cable cross-section">
+      <svg viewBox="0 0 640 200" className="w-full">
+        {rings.map(([label, fill], i) => (
+          <circle key={label} cx="170" cy="100" r={rad(i)} fill={fill} stroke={i === rings.length - 1 ? G : L} strokeWidth={i === rings.length - 1 ? 1.8 : 1} />
+        ))}
+        {rings.map(([label], i) => {
+          const r = rad(i), a = -Math.PI / 3;
+          const px = 170 + r * Math.cos(a), py = 100 + r * Math.sin(a);
+          const ly = 30 + i * 36;
+          return (
+            <g key={`l${label}`}>
+              <line x1={px} y1={py} x2="300" y2={ly} stroke={A} strokeWidth="1" />
+              <text x="308" y={ly + 4} fontSize="12" fill={T}>{label}</text>
+            </g>
+          );
+        })}
+      </svg>
+    </Fig>
+  );
+}
+
+function StoreForward() {
+  const boxes = [['Source', 30], ['Switch 1', 220], ['Switch 2', 410], ['Destination', 545]];
+  return (
+    <Fig caption="Message switching: each switch stores the entire message in its buffer, then forwards it when the next hop is free." label="Store-and-forward message switching">
+      <svg viewBox="0 0 640 140" className="w-full">
+        <Arrows />
+        {boxes.map(([t, x], i) => (
+          <g key={t}>
+            <rect x={x} y="52" width="72" height="36" rx="6" fill="var(--color-raise)" stroke={G} strokeWidth={i === 0 || i === 3 ? 1.2 : 1.6} />
+            <text x={x + 36} y="74" textAnchor="middle" fontSize="12" fill={T}>{t}</text>
+            {i > 0 && i < 3 && <rect x={x + 10} y="92" width="52" height="12" rx="3" fill="rgb(232 88 74 / 0.18)" stroke={R} strokeWidth="0.8" />}
+            {i > 0 && i < 3 && <text x={x + 36} y="118" textAnchor="middle" fontSize="10" fill={A}>buffer</text>}
+          </g>
+        ))}
+        {[[104, 'whole message'], [294, 'store, then forward'], [484, 'store, then forward']].map(([x, t]) => (
+          <g key={x}>
+            <line x1={x} y1="70" x2={x + 114} y2="70" stroke={A} markerEnd="url(#arrow-a)" />
+            <text x={x + 57} y="42" textAnchor="middle" fontSize="11" fill={A}>{t}</text>
+          </g>
+        ))}
+      </svg>
+    </Fig>
+  );
+}
+
+function SyncBits() {
+  const frames = [1, 0, 1];
+  return (
+    <Fig caption="A known sync-bit pattern (1, 0, 1, …) marks frame boundaries. It costs 1 bit per frame of overhead, so the link rate rises." label="Frame synchronization bits between TDM frames">
+      <svg viewBox="0 0 640 120" className="w-full">
+        {frames.map((s, f) => (
+          <g key={f}>
+            <rect x={40 + f * 210} y="34" width="42" height="44" rx="6" fill="rgb(232 88 74 / 0.2)" stroke={R} />
+            <text x={61 + f * 210} y="62" textAnchor="middle" fontSize="16" fill={R} fontFamily="var(--font-mono)">{s}</text>
+            {[0, 1, 2, 3].map((d) => (
+              <g key={d}>
+                <rect x={84 + f * 210 + d * 42} y="34" width="39" height="44" rx="6" fill="rgb(240 195 90 / 0.12)" stroke={G} strokeWidth="0.9" />
+                <text x={103.5 + f * 210 + d * 42} y="62" textAnchor="middle" fontSize="15" fill={G} fontFamily="var(--font-mono)">d</text>
+              </g>
+            ))}
+            <text x={140 + f * 210} y="98" textAnchor="middle" fontSize="11" fill={A}>frame {f + 1}</text>
+          </g>
+        ))}
+        <text x="40" y="18" fontSize="11" fill={A}>S = sync bit, d = data slot</text>
+      </svg>
+    </Fig>
+  );
+}
+
+function Antennas() {
+  const label = (x, t, s) => (
+    <g key={t}>
+      <text x={x} y="168" textAnchor="middle" fontSize="12" fill={T}>{t}</text>
+      <text x={x} y="182" textAnchor="middle" fontSize="10" fill={A}>{s}</text>
+    </g>
+  );
+  return (
+    <Fig caption="Isotropic (ideal sphere), Hertz half-wave dipole (λ/2), Marconi quarter-wave vertical (λ/4), and a parabolic reflector." label="Antenna types">
+      <svg viewBox="0 0 640 190" className="w-full">
+        <Arrows />
+        <circle cx="85" cy="85" r="30" fill="none" stroke={G} strokeWidth="1.5" />
+        {[[85, 85, 85, 35], [85, 85, 85, 135], [85, 85, 35, 85], [85, 85, 135, 85]].map(([x1, y1, x2, y2], i) => (
+          <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={G} markerEnd="url(#arrow-g)" />
+        ))}
+        <rect x="247" y="35" width="6" height="80" rx="3" fill={G} />
+        <text x="262" y="78" fontSize="11" fill={A}>λ/2</text>
+        <line x1="250" y1="115" x2="250" y2="135" stroke={A} />
+        <line x1="370" y1="130" x2="455" y2="130" stroke={A} strokeWidth="1.5" />
+        <rect x="408" y="55" width="6" height="75" rx="3" fill={G} />
+        <text x="423" y="98" fontSize="11" fill={A}>λ/4</text>
+        <path d="M540 40 Q580 85 540 130" fill="none" stroke={G} strokeWidth="2" />
+        <line x1="566" y1="85" x2="596" y2="85" stroke={A} markerEnd="url(#arrow-a)" />
+        <circle cx="566" cy="85" r="3.5" fill={G} />
+        {label(85, 'Isotropic', 'radiates equally (ideal)')}
+        {label(250, 'Hertz dipole', 'λ/2')}
+        {label(412, 'Marconi vertical', 'λ/4 over ground')}
+        {label(560, 'Parabolic dish', 'microwave + satellite')}
+      </svg>
+    </Fig>
+  );
+}
+
+export const DIAGRAMS = { topologies: Topologies, muxdemux: MuxDemux, fiber: Fiber, multistage: Multistage, refraction: Refraction, crossbar: Crossbar, biterrors: BitErrors, cablesection: CableSection, storeforward: StoreForward, syncbits: SyncBits, antennas: Antennas, ...EXAM_DIAGRAMS };

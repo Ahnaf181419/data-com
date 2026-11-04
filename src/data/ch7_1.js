@@ -27,6 +27,7 @@ export default {
       blocks: [
         { type: 'p', text: 'Coax carries higher frequency ranges than twisted pair. It has a solid central core conductor, an insulator, an outer conductor of metal foil and/or braid, and a plastic cover. The outer conductor is both a shield against noise and the second conductor that completes the circuit.' },
         { type: 'p', text: 'Connectors: **BNC** connector, BNC T connector, 50-Ω BNC terminator.' },
+        { type: 'diagram', id: 'cablesection', props: { rings: [['Plastic cover', 'rgb(240 195 90 / 0.05)'], ['Outer conductor (foil/braid) — shield + 2nd conductor', 'rgb(240 195 90 / 0.13)'], ['Insulator', 'rgb(240 195 90 / 0.22)'], ['Core conductor (solid)', 'rgb(240 195 90 / 0.5)']] } },
         { type: 'list', items: ['Analog telephone networks: one cable carried 10,000 voice signals; later digital telephone networks at 600 Mbps.', 'Cable TV: the traditional network used RG-59 coax throughout.', 'Traditional Ethernet: 10Base-2 (Thin Ethernet) uses RG-58 at 10 Mbps for 185 m; 10Base-5 (Thick Ethernet) uses RG-11 at 10 Mbps for 500 m.'] },
         { type: 'table', head: ['Advantages', 'Disadvantages'], rows: [['Higher bandwidth: 400–600 MHz, up to 10,800 voice conversations', 'More expensive to install than twisted pair'], ['Can be tapped easily (pros and cons)', 'The thicker the cable, the harder it is to work with'], ['Much less susceptible to interference than twisted pair', '']] },
       ],
@@ -36,6 +37,7 @@ export default {
       blocks: [
         { type: 'p', text: 'Fiber is glass or plastic and carries signals as light. Light travels straight through a uniform substance but changes direction when it enters a substance of different density:' },
         { type: 'list', items: ['Angle of incidence **less than** the critical angle → the ray **refracts** and moves closer to the surface.', 'Angle **equal to** the critical angle → the light bends along the interface.', 'Angle **greater than** the critical angle → the ray **reflects** and travels again in the denser substance.'] },
+        { type: 'diagram', id: 'refraction' },
         { type: 'p', text: 'Optical fibers use reflection: a glass or plastic **core** is surrounded by a less dense **cladding**, so a beam in the core reflects off the cladding instead of refracting into it.' },
       ],
     },
@@ -51,6 +53,7 @@ export default {
       heading: 'Fiber construction and connectors',
       blocks: [
         { type: 'p', text: 'From the outside in: outer jacket (PVC or Teflon), **Kevlar** strands for strength (the material used in bulletproof vests), a plastic buffer to cushion the fiber, then the cladding and core.' },
+        { type: 'diagram', id: 'cablesection', props: { rings: [['Outer jacket (PVC/Teflon)', 'rgb(240 195 90 / 0.05)'], ['Kevlar strands (strength)', 'rgb(240 195 90 / 0.11)'], ['Buffer', 'rgb(240 195 90 / 0.18)'], ['Cladding (less dense)', 'rgb(240 195 90 / 0.27)'], ['Core (light travels here)', 'rgb(240 195 90 / 0.5)']] } },
         { type: 'list', items: ['**SC** (subscriber channel) – cable TV.', '**ST** (straight-tip) – connecting cable to networking devices.', '**MT-RJ** – the same size as RJ-45.'] },
       ],
     },

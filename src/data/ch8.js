@@ -31,6 +31,7 @@ export default {
       heading: 'Message switching',
       blocks: [
         { type: 'p', text: 'No dedicated path. The destination address is appended to the message; each node receives the **entire message**, stores it in its buffer, then sends it to the next node when that hop and link are free (otherwise it waits indefinitely). This is a **store-and-forward** network.' },
+        { type: 'diagram', id: 'storeforward' },
       ],
     },
     {
@@ -67,6 +68,7 @@ export default {
         { type: 'p', text: 'Circuit switching uses **space-division** switches (crossbar, multistage) or **time-division** switches (TSI, TDM bus).' },
         { type: 'p', text: 'A **crossbar** connects $n$ inputs to $m$ outputs with a crosspoint (transistor) at each intersection. Any input can reach any output, and everyone can talk at once (**non-blocking**).' },
         { type: 'math', tex: '\\#\\text{crosspoints} = n \\times m \\quad (3\\times4 = 12,\\ 1000\\times1000 = 10^6)' },
+        { type: 'diagram', id: 'crossbar' },
         { type: 'p', text: 'It is inefficient: crosspoints (transistors) grow with the square of the number of users. Goals: keep the system non-blocking and reduce crosspoints. Solution: a **multistage switch**.' },
       ],
     },

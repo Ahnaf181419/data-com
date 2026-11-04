@@ -13,6 +13,7 @@ export default {
         { type: 'list', items: ['Least likely in **serial** transmission: at 1 Mbps each bit lasts 1 µs, and noise rarely lasts only 1 µs.', 'Can happen in **parallel** transmission: if one of eight wires is noisy, one bit of each byte is corrupted.'] },
         { type: 'p', text: '**Burst error** – two or more bits change. The burst length runs from the first corrupted bit to the last; bits in between may be fine.' },
         { type: 'list', items: ['Most likely in **serial** transmission: noise lasts longer than one bit, so it hits a set of bits.', 'The number of bits hit depends on the data rate and noise duration: 1/100 s of noise hits 10 bits at 1 kbps but 10,000 bits at 1 Mbps.'] },
+        { type: 'diagram', id: 'biterrors' },
         { type: 'note', text: 'A likely exam question: what is an error, what are its types, why does a single-bit error occur in parallel transmission and a burst error in serial transmission?' },
       ],
     },
