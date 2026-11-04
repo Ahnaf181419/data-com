@@ -355,4 +355,66 @@ function Antennas() {
   );
 }
 
-export const DIAGRAMS = { topologies: Topologies, muxdemux: MuxDemux, fiber: Fiber, multistage: Multistage, refraction: Refraction, crossbar: Crossbar, biterrors: BitErrors, cablesection: CableSection, storeforward: StoreForward, syncbits: SyncBits, antennas: Antennas, ...EXAM_DIAGRAMS };
+function Sampling() {
+  const sine = (yc, x0, w, amp, cycles) => {
+    let d = '';
+    for (let i = 0; i <= 120; i++) {
+      const t = i / 120;
+      d += `${i ? 'L' : 'M'}${(x0 + t * w).toFixed(1)} ${(yc - amp * Math.sin(2 * Math.PI * cycles * t)).toFixed(1)}`;
+    }
+    return d;
+  };
+  const stroke = (x, yTop, yBot, color) => <line key={x} x1={x} y1={yTop} x2={x} y2={yBot} stroke={color} strokeWidth="2" />;
+  return (
+    <Fig caption="Sampling too slowly loses the signal: one sample per cycle lands on every peak, and those samples fit a constant line just as well (aliasing). At fs = 2f_h the samples pin the sine down." label="Nyquist sampling rate">
+      <svg viewBox="0 0 640 300" className="w-full">
+        <text x="40" y="20" fontSize="12" fill={R}>too slow: 1 sample per cycle</text>
+        <line x1="40" y1="70" x2="600" y2="70" stroke={L} />
+        <path d={sine(70, 40, 560, 38, 2)} fill="none" stroke={G} strokeWidth="1.8" />
+        {stroke(130, 32, 108, R)}
+        {stroke(410, 32, 108, R)}
+        <line x1="130" y1="32" x2="410" y2="32" stroke={R} strokeDasharray="6 5" strokeWidth="1.5" />
+        <text x="330" y="24" textAnchor="middle" fontSize="11" fill={R}>the samples also fit this flat line</text>
+        <text x="40" y="165" fontSize="12" fill={G}>at fs = 2f_h: 2 samples per cycle</text>
+        <line x1="40" y1="215" x2="600" y2="215" stroke={L} />
+        <path d={sine(215, 40, 560, 38, 2)} fill="none" stroke={G} strokeWidth="1.8" />
+        {[180, 320, 460].map((x) => stroke(x, 177, 253, G))}
+        {[180, 320, 460].map((x) => <circle key={`d${x}`} cx={x} cy={215 - 38 * Math.sin(2 * Math.PI * 2 * ((x - 40) / 560))} r="4" fill={G} />)}
+      </svg>
+    </Fig>
+  );
+}
+
+function Zones() {
+  const y = (v) => 10 + (20 - v) * 5;
+  const codes = ['000', '001', '010', '011', '100', '101', '110', '111'];
+  return (
+    <Fig caption="Fall 2024's table as a picture: 8 zones of Δ = 5 V over −20…+20 V, zone codes numbered from 0 at the bottom. The 5.3 V sample snaps to the middle of zone 5 (code 101), with error +0.44." label="Quantization zones and normalized error">
+      <svg viewBox="0 0 640 230" className="w-full">
+        {codes.map((_, i) => (
+          <g key={i}>
+            <rect x="120" y={y(20 - i * 5)} width="240" height="50" fill={i % 2 ? 'rgb(240 195 90 / 0.02)' : 'rgb(240 195 90 / 0.09)'} stroke={L} strokeWidth="0.7" />
+            <text x="368" y={y(20 - i * 5) + 30} fontSize="11" fontFamily="var(--font-mono)" fill={i === 5 ? G : A}>{codes[i]}</text>
+            <text x="390" y={y(20 - i * 5) + 30} fontSize="11" fill={A}>zone {i}</text>
+          </g>
+        ))}
+        {[-17.5, -12.5, -7.5, -2.5, 2.5, 7.5, 12.5, 17.5].map((v) => (
+          <line key={v} x1="120" y1={y(v)} x2="360" y2={y(v)} stroke={A} strokeDasharray="3 5" strokeWidth="0.8" />
+        ))}
+        {[20, 10, 0, -10, -20].map((v) => (
+          <g key={v}>
+            <text x="112" y={y(v) + 4} fontSize="11" fill={A} textAnchor="end">{v} V</text>
+          </g>
+        ))}
+        <line x1="120" y1={y(10)} x2="120" y2={y(5)} stroke={G} strokeWidth="2" markerEnd="url(#arrow-g)" />
+        <text x="86" y={y(7.5) + 4} fontSize="10" fill={G}>Δ = 5 V</text>
+        <circle cx="245" cy={y(5.3)} r="5" fill={G} />
+        <text x="258" y={y(5.3) - 8} fontSize="11" fill={G}>sample 5.3 V</text>
+        <line x1="252" y1={y(5.3)} x2="330" y2={y(7.5)} stroke={R} strokeWidth="1.6" markerEnd="url(#arrow-r)" />
+        <text x="330" y={y(7.5) - 8} fontSize="11" fill={R}>midpoint 7.5 V (error +0.44)</text>
+      </svg>
+    </Fig>
+  );
+}
+
+export const DIAGRAMS = { topologies: Topologies, muxdemux: MuxDemux, fiber: Fiber, multistage: Multistage, refraction: Refraction, crossbar: Crossbar, biterrors: BitErrors, cablesection: CableSection, storeforward: StoreForward, syncbits: SyncBits, antennas: Antennas, sampling: Sampling, zones: Zones, ...EXAM_DIAGRAMS };

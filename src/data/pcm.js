@@ -18,6 +18,7 @@ export default {
         { type: 'p', text: 'By the Nyquist theorem, the sampling rate is twice the highest frequency of the signal.' },
         { type: 'math', tex: 'f_s = 2 \\times f_h' },
         { type: 'p', text: 'Voice bandwidth is 0–4 kHz, so $f_h = 4$ kHz and $f_s = 2 \\times 4\\text{ k} = 8000$ samples/s.' },
+        { type: 'diagram', id: 'sampling' },
       ],
     },
     {
@@ -34,6 +35,7 @@ export default {
         { type: 'note', text: '**Not in your slides or notes.** Fall 2024 Q3(e) asked it, so it is taught here using the standard textbook (Forouzan) method. Check with your teacher.' },
         { type: 'p', text: 'Split the amplitude range into $L = 2^{n_b}$ equal zones of height $\\Delta$. Every sample is replaced by the **middle** of its zone, and the zone number (counted from 0 at the bottom) is sent as an $n_b$-bit code word.' },
         { type: 'math', tex: '\\Delta = \\frac{V_{max} - V_{min}}{L}' },
+        { type: 'diagram', id: 'zones' },
         { type: 'list', ordered: true, items: ['Normalize: divide the sample by $\\Delta$.', 'Quantized value: the middle of the zone, also divided by $\\Delta$ (e.g. $\\pm0.5, \\pm1.5, \\dots$).', 'Normalized error = quantized − normalized. It always lies between $-0.5$ and $+0.5$.', 'Quantization code = zone number; the code word is that number in $n_b$ bits.'] },
         { type: 'table', head: ['Sample (V)', 'Normalized', 'Quantized', 'Error', 'Code', 'Word'], rows: [['5.3', '1.06', '1.5', '+0.44', '5', '101'], ['12.7', '2.54', '2.5', '−0.04', '6', '110'], ['−5.8', '−1.16', '−1.5', '−0.34', '2', '010'], ['−17.4', '−3.48', '−3.5', '−0.02', '0', '000'], ['18.5', '3.70', '3.5', '−0.20', '7', '111']] },
         { type: 'p', text: 'This is the Fall 2024 table: 3-bit codes, −20 V to +20 V, so $L = 8$ and $\\Delta = 5$ V.' },
