@@ -73,7 +73,7 @@ export default function Learn({ module, index, learned, onIndex, onLearned, onDo
             [false, 'Step by step'],
             [true, 'Whole chapter'],
           ].map(([v, l]) => (
-            <button key={l} role="radio" aria-checked={whole === v} onClick={() => setWhole(v)} className={`press min-h-10 rounded-lg px-4 font-medium ${whole === v ? 'bg-raise text-text' : 'text-ash'}`}>
+            <button key={l} role="radio" aria-checked={whole === v} onClick={() => setWhole(v)} className={`press min-h-11 rounded-lg px-4 font-medium ${whole === v ? 'bg-raise text-text' : 'text-ash'}`}>
               {l}
             </button>
           ))}

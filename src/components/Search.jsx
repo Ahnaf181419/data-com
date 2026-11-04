@@ -68,7 +68,7 @@ export default function Search({ open, onClose, modules, onGo }) {
           aria-label="Search lessons and formulas"
           className="min-h-14 flex-1 bg-transparent text-base text-text outline-none placeholder:text-ash/70"
         />
-        <button onClick={onClose} className="press min-h-10 rounded-lg px-3 text-sm text-ash">
+        <button onClick={onClose} className="press min-h-11 rounded-lg px-3 text-sm text-ash">
           Close
         </button>
       </div>
@@ -76,7 +76,7 @@ export default function Search({ open, onClose, modules, onGo }) {
         {terms.length > 0 && !hits.length && <p className="p-6 text-center text-ash">No lessons or formulas mention “{q}”. Try a shorter word.</p>}
         {!terms.length && <p className="p-6 text-center text-ash">Type a topic to jump straight to its lesson.</p>}
         {hits.map((h, k) => (
-          <button key={k} onClick={() => onGo(h.m.id, h.i)} className="press block w-full rounded-xl px-4 py-3 text-left hover:bg-panel">
+          <button key={k} onClick={() => onGo(h.m.id, h.i)} className="press block w-full rounded-xl border border-line bg-raise/40 px-4 py-3 text-left hover:bg-panel">
             <span className="flex items-baseline justify-between gap-3">
               <span className="font-semibold text-text">{h.title}</span>
               <span className="shrink-0 text-xs text-ash">

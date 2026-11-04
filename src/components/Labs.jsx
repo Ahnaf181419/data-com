@@ -24,7 +24,7 @@ function Seg({ value, options, onChange, label }) {
           role="radio"
           aria-checked={value === o}
           onClick={() => onChange(o)}
-          className={`press min-h-10 rounded-lg px-3.5 text-sm font-medium ${value === o ? 'bg-gold text-ink' : 'text-ash'}`}
+          className={`press min-h-11 rounded-lg px-3.5 text-sm font-medium ${value === o ? 'bg-gold text-ink' : 'text-ash'}`}
         >
           {o}
         </button>
@@ -41,15 +41,15 @@ function BitToggles({ bits, setBits, max = 12 }) {
           key={i}
           onClick={() => setBits(bits.slice(0, i) + (b === '1' ? '0' : '1') + bits.slice(i + 1))}
           aria-label={`Bit ${i + 1} is ${b}, tap to flip`}
-          className={`press size-10 rounded-lg border font-mono text-lg ${b === '1' ? 'border-gold/60 bg-gold/15 text-gold' : 'border-line text-ash'}`}
+          className={`press size-11 rounded-lg border font-mono text-lg ${b === '1' ? 'border-gold/60 bg-gold/15 text-gold' : 'border-line text-ash'}`}
         >
           {b}
         </button>
       ))}
-      <button onClick={() => bits.length < max && setBits(bits + '0')} disabled={bits.length >= max} aria-label="Add a bit" className="press size-10 rounded-lg border border-dashed border-line text-ash disabled:opacity-30">
+      <button onClick={() => bits.length < max && setBits(bits + '0')} disabled={bits.length >= max} aria-label="Add a bit" className="press size-11 rounded-lg border border-dashed border-line text-ash disabled:opacity-30">
         +
       </button>
-      <button onClick={() => bits.length > 2 && setBits(bits.slice(0, -1))} disabled={bits.length <= 2} aria-label="Remove last bit" className="press size-10 rounded-lg border border-dashed border-line text-ash disabled:opacity-30">
+      <button onClick={() => bits.length > 2 && setBits(bits.slice(0, -1))} disabled={bits.length <= 2} aria-label="Remove last bit" className="press size-11 rounded-lg border border-dashed border-line text-ash disabled:opacity-30">
         −
       </button>
     </div>
@@ -110,7 +110,7 @@ export function ModulationLab() {
     <LabFrame title="Modulation lab" hint="Tap bits to flip them. Watch which carrier property changes: amplitude (ASK), frequency (FSK) or phase (PSK/QPSK).">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <Seg label="Scheme" value={scheme} options={['ASK', 'BFSK', 'BPSK', 'QPSK']} onChange={setScheme} />
-        <button onClick={() => setPlay(!play)} aria-pressed={play} className="press min-h-10 rounded-xl border border-line px-4 text-sm text-ash">
+        <button onClick={() => setPlay(!play)} aria-pressed={play} className="press min-h-11 rounded-xl border border-line px-4 text-sm text-ash">
           {play ? 'Stop playhead' : 'Play playhead'}
         </button>
       </div>
@@ -279,7 +279,7 @@ export function TdmLab({ mode: initial = 'sync' }) {
                 key={t}
                 onClick={() => toggle(l, t)}
                 aria-label={`Line ${L} unit ${t + 1}: ${data[l][t] === '1' ? 'has data' : 'idle'}`}
-                className={`press h-10 flex-1 rounded-lg border font-mono text-sm ${data[l][t] === '1' ? 'border-gold/60 bg-gold/15 text-gold' : 'border-dashed border-line text-ash/50'}`}
+                className={`press h-11 flex-1 rounded-lg border font-mono text-sm ${data[l][t] === '1' ? 'border-gold/60 bg-gold/15 text-gold' : 'border-dashed border-line text-ash/50'}`}
               >
                 {data[l][t] === '1' ? `${L}${t + 1}` : 'idle'}
               </button>
@@ -434,7 +434,7 @@ export function HammingLab() {
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <span className="text-sm text-ash">Show coverage of</span>
         {parities.map((p) => (
-          <button key={p} onClick={() => setFocus(p)} aria-pressed={focus === p} className={`press min-h-10 rounded-lg px-3 text-sm ${focus === p ? 'bg-gold text-ink' : 'border border-line text-ash'}`}>
+          <button key={p} onClick={() => setFocus(p)} aria-pressed={focus === p} className={`press min-h-11 rounded-lg px-3 text-sm ${focus === p ? 'bg-gold text-ink' : 'border border-line text-ash'}`}>
             <InlineMath math={`r_{${p}}`} />
           </button>
         ))}
@@ -517,7 +517,7 @@ export function CodingLab() {
             <Seg label="Starting level" value={startHigh ? 'Start high' : 'Start low'} options={['Start high', 'Start low']} onChange={(v) => setStartHigh(v === 'Start high')} />
             <label className="flex items-center gap-2">
               Draw first
-              <input type="number" min="2" max="30" value={count} onChange={(e) => setCount(Math.max(2, Math.min(30, +e.target.value || 2)))} className="min-h-10 w-16 rounded-lg border border-line bg-ink px-2 text-base text-text" />
+              <input type="number" min="2" max="30" value={count} onChange={(e) => setCount(Math.max(2, Math.min(30, +e.target.value || 2)))} className="min-h-11 w-16 rounded-lg border border-line bg-ink px-2 text-base text-text" />
               bits
             </label>
           </div>

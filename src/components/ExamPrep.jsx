@@ -15,7 +15,7 @@ function Likely({ q, mod, onOpen }) {
           {q.id && <span className="display rounded-md bg-red/15 px-2 py-0.5 text-base text-red">{q.id}</span>}
           {q.flag}
         </span>
-        <button onClick={() => onOpen(mod.id)} className="press min-h-9 rounded-lg px-2 text-ash underline-offset-4 hover:underline">
+        <button onClick={() => onOpen(mod.id)} className="press min-h-11 rounded-lg px-2 text-ash underline decoration-line underline-offset-4 hover:decoration-gold">
           Ch {mod.chapter}: {mod.title}
         </button>
       </div>
@@ -28,7 +28,7 @@ function Likely({ q, mod, onOpen }) {
             ['script', 'Exam answer'],
             ['points', 'Key points'],
           ].map(([v, l]) => (
-            <button key={v} role="radio" aria-checked={view === v} onClick={() => setView(v)} className={`press min-h-10 rounded-lg px-4 font-medium ${view === v ? 'bg-raise text-text' : 'text-ash'}`}>
+            <button key={v} role="radio" aria-checked={view === v} onClick={() => setView(v)} className={`press min-h-11 rounded-lg px-4 font-medium ${view === v ? 'bg-raise text-text' : 'text-ash'}`}>
               {l}
             </button>
           ))}
@@ -137,7 +137,7 @@ function Group({ g, byId, onOpen }) {
           In {n} of {papers.length} papers
         </span>
         {g.exact && <span className="rounded-md bg-red/15 px-2 py-0.5 font-medium text-red">Word for word</span>}
-        <button onClick={() => onOpen(g.module)} className="press ml-auto min-h-9 rounded-lg px-2 text-ash underline-offset-4 hover:underline">
+        <button onClick={() => onOpen(g.module)} className="press ml-auto min-h-11 rounded-lg px-2 text-ash underline decoration-line underline-offset-4 hover:decoration-gold">
           Ch {byId[g.module].chapter}: {byId[g.module].title}
         </button>
       </div>
@@ -272,7 +272,7 @@ export default function ExamPrep({ modules, progress, onOpen, onMockFinish }) {
         {tab === 'paper' && (
           <div role="radiogroup" aria-label="Paper" className="mb-6 inline-flex flex-wrap gap-1 rounded-xl border border-line bg-panel p-1">
             {papers.map((p, i) => (
-              <button key={p.title} role="radio" aria-checked={paperIdx === i} onClick={() => setPaperIdx(i)} className={`press min-h-10 rounded-lg px-4 text-sm font-medium ${paperIdx === i ? 'bg-red text-ink' : 'text-ash'}`}>
+              <button key={p.title} role="radio" aria-checked={paperIdx === i} onClick={() => setPaperIdx(i)} className={`press min-h-11 rounded-lg px-4 text-sm font-medium ${paperIdx === i ? 'bg-red text-ink' : 'text-ash'}`}>
                 {p.title.replace(' semester final', '')}
               </button>
             ))}
