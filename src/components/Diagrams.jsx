@@ -1,5 +1,5 @@
 // Static teaching diagrams redrawn from the slide figures.
-import { Fig, G, A, L, T, R } from './Fig.jsx';
+import { Fig, G, A, L, T, R, Arrows } from './Fig.jsx';
 import EXAM_DIAGRAMS from './ExamDiagrams.jsx';
 
 const node = (x, y, k) => <circle key={k} cx={x} cy={y} r="7" fill="var(--color-raise)" stroke={G} strokeWidth="1.5" />;
@@ -300,23 +300,24 @@ function StoreForward() {
 
 function SyncBits() {
   const frames = [1, 0, 1];
+  const base = (f) => 35 + f * 195;
   return (
     <Fig caption="A known sync-bit pattern (1, 0, 1, …) marks frame boundaries. It costs 1 bit per frame of overhead, so the link rate rises." label="Frame synchronization bits between TDM frames">
       <svg viewBox="0 0 640 120" className="w-full">
         {frames.map((s, f) => (
           <g key={f}>
-            <rect x={40 + f * 210} y="34" width="42" height="44" rx="6" fill="rgb(232 88 74 / 0.2)" stroke={R} />
-            <text x={61 + f * 210} y="62" textAnchor="middle" fontSize="16" fill={R} fontFamily="var(--font-mono)">{s}</text>
+            <rect x={base(f)} y="34" width="38" height="44" rx="6" fill="rgb(232 88 74 / 0.2)" stroke={R} />
+            <text x={base(f) + 19} y="62" textAnchor="middle" fontSize="16" fill={R} fontFamily="var(--font-mono)">{s}</text>
             {[0, 1, 2, 3].map((d) => (
               <g key={d}>
-                <rect x={84 + f * 210 + d * 42} y="34" width="39" height="44" rx="6" fill="rgb(240 195 90 / 0.12)" stroke={G} strokeWidth="0.9" />
-                <text x={103.5 + f * 210 + d * 42} y="62" textAnchor="middle" fontSize="15" fill={G} fontFamily="var(--font-mono)">d</text>
+                <rect x={base(f) + 38 + d * 38} y="34" width="35" height="44" rx="6" fill="rgb(240 195 90 / 0.12)" stroke={G} strokeWidth="0.9" />
+                <text x={base(f) + 55.5 + d * 38} y="62" textAnchor="middle" fontSize="15" fill={G} fontFamily="var(--font-mono)">d</text>
               </g>
             ))}
-            <text x={140 + f * 210} y="98" textAnchor="middle" fontSize="11" fill={A}>frame {f + 1}</text>
+            <text x={base(f) + 95} y="98" textAnchor="middle" fontSize="11" fill={A}>frame {f + 1}</text>
           </g>
         ))}
-        <text x="40" y="18" fontSize="11" fill={A}>S = sync bit, d = data slot</text>
+        <text x="35" y="18" fontSize="11" fill={A}>S = sync bit, d = data slot</text>
       </svg>
     </Fig>
   );
@@ -386,25 +387,24 @@ function Sampling() {
 }
 
 function Zones() {
-  const y = (v) => 10 + (20 - v) * 5;
+  const y = (v) => 5 + (20 - v) * 5; // 5 px per volt, top margin 5
   const codes = ['000', '001', '010', '011', '100', '101', '110', '111'];
   return (
     <Fig caption="Fall 2024's table as a picture: 8 zones of Δ = 5 V over −20…+20 V, zone codes numbered from 0 at the bottom. The 5.3 V sample snaps to the middle of zone 5 (code 101), with error +0.44." label="Quantization zones and normalized error">
-      <svg viewBox="0 0 640 230" className="w-full">
+      <svg viewBox="0 0 640 242" className="w-full">
+        <Arrows />
         {codes.map((_, i) => (
           <g key={i}>
-            <rect x="120" y={y(20 - i * 5)} width="240" height="50" fill={i % 2 ? 'rgb(240 195 90 / 0.02)' : 'rgb(240 195 90 / 0.09)'} stroke={L} strokeWidth="0.7" />
-            <text x="368" y={y(20 - i * 5) + 30} fontSize="11" fontFamily="var(--font-mono)" fill={i === 5 ? G : A}>{codes[i]}</text>
-            <text x="390" y={y(20 - i * 5) + 30} fontSize="11" fill={A}>zone {i}</text>
+            <rect x="120" y={y(20 - i * 5)} width="240" height="25" fill={i % 2 ? 'rgb(240 195 90 / 0.02)' : 'rgb(240 195 90 / 0.09)'} stroke={L} strokeWidth="0.7" />
+            <text x="368" y={y(20 - i * 5) + 17} fontSize="11" fontFamily="var(--font-mono)" fill={i === 5 ? G : A}>{codes[i]}</text>
+            <text x="390" y={y(20 - i * 5) + 17} fontSize="11" fill={A}>zone {i}</text>
           </g>
         ))}
         {[-17.5, -12.5, -7.5, -2.5, 2.5, 7.5, 12.5, 17.5].map((v) => (
           <line key={v} x1="120" y1={y(v)} x2="360" y2={y(v)} stroke={A} strokeDasharray="3 5" strokeWidth="0.8" />
         ))}
         {[20, 10, 0, -10, -20].map((v) => (
-          <g key={v}>
-            <text x="112" y={y(v) + 4} fontSize="11" fill={A} textAnchor="end">{v} V</text>
-          </g>
+          <text key={v} x="112" y={y(v) + 4} fontSize="11" fill={A} textAnchor="end">{v} V</text>
         ))}
         <line x1="120" y1={y(10)} x2="120" y2={y(5)} stroke={G} strokeWidth="2" markerEnd="url(#arrow-g)" />
         <text x="86" y={y(7.5) + 4} fontSize="10" fill={G}>Δ = 5 V</text>

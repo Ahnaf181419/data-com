@@ -35,6 +35,7 @@ export default {
       heading: 'Interleaving',
       blocks: [
         { type: 'p', text: 'Taking a group of bits from each input line in turn is called **interleaving**. TDM can be pictured as two fast-rotating switches, one on each side, synchronized and rotating at the same speed in opposite directions. As the MUX switch opens in front of a connection, that connection can send one unit onto the path.' },
+        { type: 'lab', id: 'tdm' },
       ],
     },
     {
