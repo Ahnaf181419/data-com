@@ -14,6 +14,9 @@ function Likely({ q, mod, onOpen }) {
         <span className={`flex flex-wrap items-center gap-2 font-medium ${q.id && !q.flagged ? 'text-ash' : 'text-red'}`}>
           {q.id && <span className="display rounded-md bg-red/15 px-2 py-0.5 text-base text-red">{q.id}</span>}
           {q.flag}
+          {q.outOfSyllabus && (
+            <span className="rounded-md bg-raise px-2 py-0.5 text-xs font-medium text-ash">out of syllabus</span>
+          )}
         </span>
         <button onClick={() => onOpen(mod.id)} className="press min-h-11 rounded-lg px-2 text-ash underline decoration-line underline-offset-4 hover:decoration-gold">
           Ch {mod.chapter}: {mod.title}
@@ -175,12 +178,13 @@ function Bank({ byId, onOpen }) {
   const repeats = new Set(groups.flatMap((g) => g.refs.map((r) => r.join(' ')))).size;
   const sorted = [...groups].sort((a, b) => paperCount(b) - paperCount(a));
   const flagged = allItems.filter((it) => it.flagged);
+  const outOfSyllabus = allItems.filter((it) => it.outOfSyllabus);
   return (
     <div className="grid grid-cols-[minmax(0,1fr)] gap-10">
       <section>
         <h2 className="display text-3xl">What the papers ask</h2>
         <p className="mt-1 max-w-prose text-ash">
-          {papers.length} finals ({papers.map(short).join(', ')}), {allItems.length} questions. {repeats} of them come back in another paper in the same or a similar form.
+          {papers.length} finals ({papers.map(short).join(', ')}), {allItems.length} questions. {repeats} of them come back in another paper in the same or a similar form. {outOfSyllabus.length} are outside the current syllabus.
         </p>
       </section>
 
@@ -240,6 +244,29 @@ function Bank({ byId, onOpen }) {
           ))}
         </ul>
       </section>
+
+      <section aria-labelledby="bank-out-of-syllabus" className="grid grid-cols-[minmax(0,1fr)] gap-4">
+        <div>
+          <h3 id="bank-out-of-syllabus" className="display border-b border-line pb-2 text-2xl text-ash">
+            Outside the current syllabus
+          </h3>
+          <p className="mt-2 text-sm text-ash">
+            These came up in the older papers, but the slides for this course do not teach them. The answers are still here so you can recognise one if it appears — but your revision time is better spent on the chapters above.
+          </p>
+        </div>
+        <ul className="mt-4 grid gap-2">
+          {outOfSyllabus.map((it) => (
+            <li key={`${it.paper}${it.id}`} className="flex gap-3 rounded-xl border border-line bg-panel p-4">
+              <span className="display h-fit shrink-0 rounded-md bg-raise px-2 py-0.5 text-sm text-ash">
+                {it.paper} {it.id}
+              </span>
+              <span className="prose-read min-w-0 text-[1rem] leading-snug text-text/85">
+                <Rich text={it.q} />
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }
@@ -286,6 +313,7 @@ export default function ExamPrep({ modules, progress, onOpen, onMockFinish }) {
                 <p className="mt-1 text-ash">
                   {paper.meta}
                   {paper.sets.some((set) => set.items.some((it) => it.flagged)) && ' Questions marked in red need the textbook method because your slides and notes don’t cover them.'}
+                  {paper.sets.some((set) => set.items.some((it) => it.outOfSyllabus)) && ' Questions marked “out of syllabus” are not taught in this course’s slides — read them for recognition, not for revision.'}
                 </p>
               </div>
               {paper.sets.map((set) => (

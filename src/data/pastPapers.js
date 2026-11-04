@@ -551,6 +551,219 @@ const papers = [
       },
     ],
   },
+  {
+    title: 'Spring 2023 semester final',
+    meta: '3 hours, 70 marks. Answer any 4 from Question 1 (20 marks) and any 5 from each of Questions 2 and 3 (25 marks each).',
+    sets: [
+      {
+        name: 'Question 1',
+        rule: 'Answer any 4 (5 × 4 = 20)',
+        items: [
+          {
+            id: '1(a)', marks: 5, module: 'ch1', flagged: true, outOfSyllabus: true,
+            q: 'A host communicates with another host using the TCP/IP protocol suite. Explain the unit of data sent or received at each of the layers.',
+            answer: [
+              '**Out of syllabus question** — the current slides/notes do not cover the TCP/IP layer set.',
+              'TCP/IP has four layers. Application: data = **message**. Transport (TCP/UDP): TCP passes a **segment**, UDP a **datagram**. Internet: the transport unit becomes a **datagram** (IP packet). Network access (data link): the datagram is wrapped in a **frame**; on the way down each layer adds its header, on the way up each layer removes it.',
+              'So the data unit goes message → segment → datagram → frame (and back).',
+            ],
+          },
+          {
+            id: '1(b)', marks: 5, module: 'ch6-1', flagged: true, outOfSyllabus: true,
+            q: 'Explain the use of guard bands. Draw the diagram of an Address Resolution Protocol (ARP) packet.',
+            answer: [
+              '**Out of syllabus question** for the ARP part (the guard-band half is taught in Ch 6.1).',
+              'Guard band: an unused strip of bandwidth left between FDM channels so that adjacent signals do not overlap and each can be separated by a bandpass filter. It also absorbs small drifts in the carrier frequencies.',
+              'ARP packet (Ethernet/IPv4): preamble (7 B) + SFD (1 B) + destination MAC (6 B) + source MAC (6 B) + type/length (2 B) + ARP payload + FCS (4 B).',
+              'ARP payload: hardware type (2 B), protocol type (2 B), hardware-address length (1 B), protocol-address length (1 B), opcode (2 B — request or reply), sender hardware address (6 B), sender IP address (4 B), target hardware address (6 B), target IP address (4 B).',
+            ],
+          },
+          {
+            id: '1(c)', marks: 5, module: 'ch10', flagged: true, outOfSyllabus: true,
+            q: 'Explain the authentication protocols used in the DLC sublayer.',
+            answer: [
+              '**Out of syllabus question** — the current slides/notes do not cover link-layer authentication.',
+              'The DLC sublayer may offer an **authentication service**: before accepting a frame, the receiver checks that the sender really is who it claims to be.',
+              'Methods: a shared secret known to both ends (simple but weak if the key travels); a **challenge–response** exchange, where the receiver sends a random challenge and the sender must answer with a keyed hash (as in IEEE 802.11 shared-key authentication and 802.1X/EAP); or a certificate/key proving the sender’s identity.',
+              'Authentication is different from error control: it proves identity, not integrity of the data.',
+            ],
+          },
+          {
+            id: '1(d)', marks: 5, module: 'ch1', flagged: true, outOfSyllabus: true,
+            q: 'Explain how the source and destination link-layer addresses are determined for each link.',
+            answer: [
+              '**Out of syllabus question** — link-layer addressing is only mentioned in passing in Ch 1.',
+              'A link-layer (MAC) address identifies one interface on one link: the source address is the sender’s own MAC address; the destination address is the MAC address of the next-hop interface on that link.',
+              'Addresses are **hop-by-hop**: they change at every router, and a router replaces the source/destination MACs of the frame it forwards while the IP addresses stay end-to-end.',
+              'The destination MAC is found from the destination IP using the ARP cache (or by broadcasting an ARP request) when the frame is first sent.',
+            ],
+          },
+          {
+            id: '1(e)', marks: 5, module: 'ch1',
+            q: 'Explain the components of a data communications system.',
+            answer: [
+              'Five components: **sender**, **receiver**, **transmission medium**, **message**, and **protocol** (the rules both sides follow).',
+              'The sender creates the message, the medium carries it, the receiver reads it; the protocol defines the format and the rules so both ends understand each other.',
+              'See Ch 1, “Five components”.',
+            ],
+          },
+          {
+            id: '1(f)', marks: 5, module: 'ch10', flagged: true, outOfSyllabus: true,
+            q: 'Explain the HDLC protocol. Draw a diagram of the HDLC frames.',
+            answer: [
+              '**Out of syllabus question** — HDLC is not in the current slides/notes (Ch 10 teaches error-control methods only).',
+              'HDLC (High-Level Data Link Control) is a bit-oriented protocol: the frame is a sequence of bits, not bytes, and it supports three frame types.',
+              '**I-frame** (information): carries user data, with Send and Receive sequence numbers for reliable transfer. **S-frame** (supervisory): flow and error control only (RR, RNR, REJ). **U-frame** (unnumbered): link management and setup (SABM, DISC).',
+              'Frame format: flag (01111110) → address field (8 or 16 bits, usually omitted) → control field (8 or 16 bits) → information → FCS (16- or 32-bit CRC) → flag. Bit stuffing inserts a 0 after every five consecutive 1s so the flag pattern cannot appear inside the frame.',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 2',
+        rule: 'Answer any 5 (5 × 5 = 25)',
+        items: [
+          {
+            id: '2(a)', marks: 5, module: 'ch7-1', flagged: true,
+            q: 'Calculate the power at the end of each frequency if the power at the beginning of a 1 km 18-gauge UTP cable is 200 mW and (i) the attenuation is −3 for frequency 1 kHz, (ii) the attenuation is −7 for a frequency of 100 kHz.',
+            answer: [
+              'Loss in dB converts to a power ratio: $P_2 = P_1 \\times 10^{\\text{dB}/10}$. (The dB formula itself is not in the slides — it is taught in Ch 7.1 as a flagged lesson.)',
+              '(i) $200 \\times 10^{-3/10} = 200 \\times 0.5012 \\approx 100.24$ mW.',
+              '(ii) $200 \\times 10^{-7/10} = 200 \\times 0.1995 \\approx 39.91$ mW.',
+            ],
+          },
+          {
+            id: '2(b)', marks: 5, module: 'ch1', flagged: true, outOfSyllabus: true,
+            q: 'Assume the number of hosts connected to the Internet in the year 2010 was five hundred million. If the number of hosts increases only 20 percent per year, calculate the number of hosts in the year 2020.',
+            answer: [
+              '**Out of syllabus question** — compound growth is not in the current slides/notes.',
+              'Each year multiplies the count by 1.2, so after 10 years: $N = 500\\,\\text{million} \\times 1.2^{10}$.',
+              '$1.2^{10} = 6.1917$ → $N \\approx 3.096\\times10^9$ hosts, about **3.1 billion**.',
+            ],
+          },
+          {
+            id: '2(c)', marks: 5, module: 'ch7-1', flagged: true, outOfSyllabus: true,
+            q: 'We have a digital medium with a data rate of 10 Mbps. Calculate the number of 64-kbps voice channels that this medium can carry if we use DSSS with the Barker sequence.',
+            answer: [
+              '**Out of syllabus question** — spread spectrum / CDMA is not in the current slides/notes.',
+              'In DSSS each bit is multiplied by a fast chip code (the Barker sequence); the bandwidth used is much larger than the data rate, so the number of channels is limited by the spreading factor.',
+              'For a Barker code of length $m$ the processing gain is $m$ (the bandwidth is $m$ times the bit rate), so $m$ simultaneous 64 kbps channels need $m \\times 64$ kbps of the spread bandwidth.',
+              'Exact figures depend on the Barker code length and the assumed chip rate given in the full question statement — check the original paper’s numbers before using this in the exam.',
+            ],
+          },
+          {
+            id: '2(d)', marks: 5, module: 'ch5-1',
+            q: 'A corporation has a medium with a 1-MHz bandwidth (lowpass). The corporation needs to create 10 separate independent channels, each capable of sending at least 10 Mbps. The company has decided to use QAM technology. Calculate the minimum number of bits per baud for each channel and the number of points in the constellation diagram for each channel. Assume d = 0.',
+            answer: [
+              '1 MHz split into 10 channels → 100 kHz per channel.',
+              'With $d = 0$, $B_{min} = S$ → $S = 100$ kbaud.',
+              '$r = N/S = 10\\,\\text{Mbps} / 100\\,\\text{kbaud} = 100$ bits per signal element; $L = 2^{100}$ constellation points.',
+            ],
+          },
+          {
+            id: '2(e)', marks: 5, module: 'ch1', flagged: true, outOfSyllabus: true,
+            q: 'Assume a system uses five protocol layers. If the application program creates a message of 100 bytes and each layer, including the fifth and the first, adds a header of 10 bytes to the data unit, calculate the efficiency of the system.',
+            answer: [
+              '**Out of syllabus question** — header overhead across layers is not in the current slides/notes.',
+              'Each of the 5 layers adds 10 bytes: overhead $= 5 \\times 10 = 50$ bytes.',
+              'Total transmitted = $100 + 50 = 150$ bytes → efficiency $= 100/150 = 0.667 \\approx \\mathbf{66.7\\%}$.',
+            ],
+          },
+          {
+            id: '2(f)', marks: 5, module: 'ch10', flagged: true, outOfSyllabus: true,
+            q: 'In a pure Aloha network with load G = 1/2, calculate the maximum throughput if (i) G is increased to 1, (ii) G is decreased to 1/4.',
+            answer: [
+              '**Out of syllabus question** — random access / Aloha is not in the current slides/notes.',
+              'Pure Aloha throughput: $S = G e^{-2G}$ (successful frames per frame time).',
+              '(i) $G = 1$: $S = e^{-2} \\approx 0.135$ → **13.5%**.',
+              '(ii) $G = 1/4$: $S = 0.25 e^{-0.5} \\approx 0.152$ → **15.2%** (the peak of the curve is at $G = 1/2$, so moving away from it lowers throughput).',
+            ],
+          },
+          {
+            id: '2(g)', marks: 5, module: 'ch8-2',
+            q: 'We need a three-stage space-division switch with N = 100. We use 10 crossbars at the first and third stages and 6 crossbars at the middle stage. Calculate the total number of crosspoints.',
+            answer: [
+              'Stage 1: $N/n = 10$ crossbars → $n = 10$ inputs each; $k = 6$ → 10 crossbars of $10 \\times 6 = 600$ crosspoints.',
+              'Stage 2: 6 crossbars of $10 \\times 10 = 600$ crosspoints. Stage 3: 10 crossbars of $6 \\times 10 = 600$ crosspoints.',
+              'Total $= 600 + 600 + 600 = \\mathbf{1800}$ crosspoints (vs 10,000 for a single 100 × 100 crossbar).',
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Question 3',
+        rule: 'Answer any 5 (5 × 5 = 25)',
+        items: [
+          {
+            id: '3(a)', marks: 5, module: 'ch4x', flagged: true, outOfSyllabus: true,
+            q: 'Draw and analyse the graph of the 2B1Q scheme using each of the following data streams, assuming that the last signal level has been positive: (i) 0110011001100110, (ii) 0011001100110011.',
+            answer: [
+              '**Out of syllabus question** — 2B1Q is not in the current slides/notes (Ch 4 teaches 4B/5B and differential Manchester only).',
+              '2B1Q maps every **two** bits to one **quaternary** signal level: 00 → −1, 01 → −3, 11 → +3, 10 → +1 (the usual assignment).',
+              'Each pair therefore produces one signal element, so a 16-bit stream gives 8 signal elements; the signal level sequence for (i) is −3, +1, +1, −3, +3, −3, −1, +1 and for (ii) −1, +3, +3, −1, −1, +3, +1, −1 (with the given level ordering).',
+              'The graph is a staircase of these levels; the “last level positive” assumption sets the sign of the first level.',
+            ],
+          },
+          {
+            id: '3(b)', marks: 5, module: 'ch7-1',
+            q: 'A beam of light moves from one medium to another with less density. The critical angle is 60°. Analyse refraction or reflection for an 80° incident angle. Show the bending of the light ray.',
+            answer: [
+              'The light is moving from the **denser** medium to the less dense one, so the critical angle applies to it.',
+              '$80° > 60°$ (the critical angle) → **total internal reflection**: no refracted ray leaves, and the ray reflects back into the denser medium at the same angle to the normal.',
+              'This is exactly how fiber optics works: light in the core (denser) hits the core–cladding boundary above the critical angle and is reflected onward. See the refraction figure in Ch 7.1.',
+            ],
+          },
+          {
+            id: '3(c)', marks: 5, module: 'ch10',
+            q: 'A bit stream 1101011011 is transmitted using the standard CRC method. The generator polynomial is x⁴ + x + 1. (i) Find the actual bit string transmitted. (ii) Suppose the third bit from the right is inverted during transmission. Analyse and find that this error is detected at the receiver.',
+            answer: [
+              'Generator $x^4+x+1$ = **1011** (4 bits) → append **3 zeros**: 1101011011000.',
+              'Mod-2 division by 1011: quotient **1111010100**, remainder **100** → codeword **1101011011100** (13 bits).',
+              'Error case: invert the third bit from the right of the codeword → 1101011011000; the receiver divides by 1011 and gets the non-zero syndrome **100** → the error is detected (discard).',
+            ],
+          },
+          {
+            id: '3(d)', marks: 5, module: 'ch5-1', flagged: true, outOfSyllabus: true,
+            q: 'Analyse the phase of a sine wave which starts at time 0 with zero amplitude and increases as the amplitude increases. Also draw the sine wave.',
+            answer: [
+              '**Out of syllabus question** — general sinusoid/phase analysis is not in the current slides/notes (Ch 5.1 only uses phase 0°/180° for carriers).',
+              '$s(t) = A \\sin(2\\pi f t + \\varphi)$ with $A$ = amplitude, $f$ = frequency, $\\varphi$ = phase.',
+              'Starting at zero and rising means the wave is a **sine** (not a cosine): $\\varphi = 0$. The amplitude at any instant is $A\\sin(2\\pi f t)$; it peaks at $A$ after a quarter period, returns to zero after half a period, goes negative after three-quarters, and repeats every period $T = 1/f$.',
+              'Sketch: one full period with 0 → +A → 0 → −A → 0, marking $T/4, T/2, 3T/4$.',
+            ],
+          },
+          {
+            id: '3(e)', marks: 5, module: 'ch10',
+            q: 'Consider an eight-bit checksum. Analyse the checksum for the data unit to be transmitted and find the final bit stream received by the receiver.',
+            answer: [
+              'Split the data into 8-bit words and add them with one’s-complement arithmetic (end-around carry).',
+              'Sender: the wrapped sum is complemented to give the checksum; the checksum is appended to the data.',
+              'Receiver: it adds the data **and** the checksum with the same arithmetic and complements the result — a result of all zeros means no error.',
+              'See the worked 8-bit checksum in Ch 10 (the numbers there are the slide’s example; the same method applies to this data unit).',
+            ],
+          },
+          {
+            id: '3(f)', marks: 5, module: 'pcm', flagged: true,
+            q: 'Assume that we have a sampled signal and the sample amplitudes are between −20 and +20 V. We decide to have eight levels (L = 8). After sampling, the actual amplitudes are −6.1, 7.5, 16.2, 19.7, 11.0, −5.5, −11.3, −9.4 and −6.0 V. Analyse the values of normalized PAM values, quantization values, normalized quantized values, normalized errors, quantization codes and encoded words.',
+            answer: [
+              '$L = 8$ levels over −20…+20 V → $\\Delta = 40/8 = 5$ V. Normalized value = sample / $\\Delta$; the zone is counted from 0 at the bottom; the quantized value is the zone midpoint.',
+              '−6.1 → norm −1.22, zone 2, quantized −1.5, error −0.28, word **010**. 7.5 → 1.50, zone 5, 1.5, 0.00, **101**. 16.2 → 3.24, zone 7, 3.5, +0.26, **111**. 19.7 → 3.94, zone 7, 3.5, −0.44, **111**.',
+              '11.0 → 2.20, zone 6, 2.5, +0.30, **110**. −5.5 → −1.10, zone 2, −1.5, −0.40, **010**. −11.3 → −2.26, zone 1, −2.5, −0.24, **001**. −9.4 → −1.88, zone 2, −1.5, +0.38, **010**. −6.0 → −1.20, zone 2, −1.5, −0.30, **010**.',
+            ],
+          },
+          {
+            id: '3(g)', marks: 5, module: 'ch8',
+            q: 'Three equal-size datagrams belonging to the same message leave for the destination one after another. However, they travel through different paths as stated in the table. We assume that the delay for each switch (including waiting and processing) is 3, 10, 20, 7 and 20 ms, respectively. Assuming that the propagation speed is 2 × 10⁸ m/s, find the order in which the datagrams arrive at the destination and the delay for each. Ignore any other delays in transmission.',
+            answer: [
+              'Every 1000 km costs 5 ms of propagation ($1000\\times10^3 / 2\\times10^8$); each datagram’s delay = propagation + the switch delays on its path.',
+              'D1 (3200 km, 1-3-5): 16 + (3+20+20) = **59 ms**. D2 (11,700 km, 1-2-5): 58.5 + (3+10+20) = **91.5 ms**. D3 (12,200 km, 1-2-3-5): 61 + (3+10+20+20) = **114 ms**. D4 (10,200 km, 1-4-5): 51 + (3+7+20) = **81 ms**. D5 (10,700 km, 1-4-3-5): 53.5 + (3+7+20+20) = **103.5 ms**.',
+              'Arrival order: **1 → 4 → 2 → 5 → 3**.',
+            ],
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 export default papers.map((paper) => {
