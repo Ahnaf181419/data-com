@@ -50,6 +50,7 @@ export default {
       heading: 'The full T-1 chain',
       blocks: [
         { type: 'p', text: '24 voice channels (4 kHz each) → PCM (8000 samples/s × 8 bits = 64 kbps each) → TDM → T-1 at 1.544 Mbps = 24 × 64 kbps + 8 kbps overhead.' },
+        { type: 'diagram', id: 'hierarchy', props: { kind: 'PCM', first: '4 kHz analog voice', levels: [{ input: '24 analog lines', name: 'PCM', bw: '8000/s × 8 bits = 64 kbps each' }, { input: '24 × 64 kbps + sync', name: 'TDM → T-1', bw: '1.544 Mbps' }], caption: 'Analog voice becomes digital (PCM) before TDM can interleave it into a T-1.' } },
         { type: 'note', text: '$1544/24 = 64.33$ kbps per channel. The fraction above 64 is the overhead.' },
       ],
     },

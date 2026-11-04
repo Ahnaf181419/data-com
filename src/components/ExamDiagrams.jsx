@@ -518,7 +518,7 @@ function Waveform({ bits = '01011010', startHigh = true, caption = 'Differential
 
 // ---------- TDM frame (multiple-slot, multilevel, pulse stuffing) ----------
 // inputs: [{ rate, tag, slots = 1, group, stuff }]; inputs sharing a group go through a first-level MUX at groupRate.
-function TdmFrame({ inputs, groupRate, out, frame, caption }) {
+function TdmFrame({ inputs, groupRate, out, frame, caption, expandGroups }) {
   const n = inputs.length;
   const gap = n > 6 ? 21 : 30;
   const ys = inputs.map((_, i) => 26 + i * gap);
@@ -530,7 +530,11 @@ function TdmFrame({ inputs, groupRate, out, frame, caption }) {
   const slots = [];
   inputs.forEach((p, i) => {
     if (p.group != null) {
-      if (groups[p.group][0] === i) slots.push(groups[p.group].map((k) => inputs[k].tag).join('/'));
+      // expandGroups: each grouped member still gets its own slot (e.g. the 24 channels of a T-1 frame).
+      if (groups[p.group][0] === i) {
+        if (expandGroups) groups[p.group].forEach((k) => slots.push(inputs[k].tag));
+        else slots.push(groups[p.group].map((k) => inputs[k].tag).join('/'));
+      }
     } else for (let k = 0; k < (p.slots ?? 1); k++) slots.push(p.tag);
   });
   const sw = Math.min(30, 210 / slots.length);

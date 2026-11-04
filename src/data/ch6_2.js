@@ -69,6 +69,11 @@ export default {
       blocks: [
         { type: 'p', text: 'T lines are digital but can carry analog telephone signals if the signals are first sampled (PCM) and then time-division multiplexed. Instead of 24 twisted pairs to the exchange, an organization runs one T-1 line.' },
         { type: 'math', tex: '\\text{frame} = 24 \\times 8 + 1 = 193\\text{ bits}, \\quad 193 \\times 8000 = 1.544\\text{ Mbps}' },
+        { type: 'diagram', id: 'tdmframe', props: {
+          inputs: [...Array.from({ length: 12 }, (_, i) => ({ rate: '64 kbps', tag: `${i + 1}`, group: 0 })), ...Array.from({ length: 12 }, (_, i) => ({ rate: '64 kbps', tag: `${i + 13}`, group: 1 })), { rate: 'sync', tag: 'S' }],
+          groupRate: '12 voice lines each', expandGroups: true, out: '1.544 Mbps', frame: '24 × 8 + 1 = 193 bits',
+          caption: 'One T-1 frame: 24 channels each contribute an 8-bit PCM sample (slots 1–24), plus 1 sync bit (S) — 193 bits, 8000 times a second.',
+        } },
         { type: 'p', text: 'Each slot holds one 8-bit sample from each channel, plus 1 sync bit; there are 8000 frames per second (one per sampling period).' },
       ],
     },
