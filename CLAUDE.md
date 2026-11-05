@@ -25,6 +25,8 @@ Live at https://ahnaf181419.github.io/data-com/ (GitHub Pages, deployed on every
 
 ## Layout
 
+- `docs/prd.md` — the as-built product specification (problem, user stories, decisions, testing, scope);
+  `docs/source-transcript.md` — the full text of the slides and notes, the source of truth for content.
 - `src/data/*.js` — one module per chapter; `syllabusData.js` lists them in study order.
   Module shape: `{ id, chapter, title, wave, sources, sections: [{ heading, blocks }], formulas, examples,
   flashcards, quiz, solvers }`. Block types: `p`, `list`, `math`, `table`, `note`, `constellation`,
